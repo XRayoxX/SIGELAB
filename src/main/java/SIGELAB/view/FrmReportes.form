@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="SIGELAB.view.FrmReportes">
-  <grid id="c0009" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="c0009" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
       <xy x="20" y="20" width="900" height="650"/>
@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="c000a" class="javax.swing.JLabel">
+      <component id="c000a" class="javax.swing.JLabel" binding="lblTitulo">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -33,7 +33,7 @@
               <text value="Tipo de reporte:"/>
             </properties>
           </component>
-          <component id="c0002" class="javax.swing.JComboBox">
+          <component id="c0002" class="javax.swing.JComboBox" binding="cmbTipoReporte">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -58,7 +58,7 @@
               <text value="Laboratorio:"/>
             </properties>
           </component>
-          <component id="c0004" class="javax.swing.JComboBox">
+          <component id="c0004" class="javax.swing.JComboBox" binding="cmbLaboratorio">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -72,7 +72,7 @@
               <text value="Fecha desde:"/>
             </properties>
           </component>
-          <component id="c0006" class="javax.swing.JTextField">
+          <component id="c0006" class="javax.swing.JTextField" binding="txtFechaDesde">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -90,7 +90,7 @@
               <text value="Fecha hasta:"/>
             </properties>
           </component>
-          <component id="c0008" class="javax.swing.JTextField">
+          <component id="c0008" class="javax.swing.JTextField" binding="txtFechaHasta">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -110,7 +110,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c000d" class="javax.swing.JButton">
+          <component id="c000d" class="javax.swing.JButton" binding="btnGenerar">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -118,7 +118,7 @@
               <text value="Generar reporte"/>
             </properties>
           </component>
-          <component id="c000e" class="javax.swing.JButton">
+          <component id="c000e" class="javax.swing.JButton" binding="btnExportarPdf">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -126,7 +126,7 @@
               <text value="Exportar a PDF"/>
             </properties>
           </component>
-          <component id="c000f" class="javax.swing.JButton">
+          <component id="c000f" class="javax.swing.JButton" binding="btnExportarExcel">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -134,7 +134,7 @@
               <text value="Exportar a Excel"/>
             </properties>
           </component>
-          <component id="c0010" class="javax.swing.JButton">
+          <component id="c0010" class="javax.swing.JButton" binding="btnImprimir">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -142,7 +142,7 @@
               <text value="Imprimir"/>
             </properties>
           </component>
-          <component id="c0011" class="javax.swing.JButton">
+          <component id="c0011" class="javax.swing.JButton" binding="btnLimpiar">
             <constraints>
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -150,7 +150,7 @@
               <text value="Limpiar"/>
             </properties>
           </component>
-          <component id="c0012" class="javax.swing.JButton">
+          <component id="c0012" class="javax.swing.JButton" binding="btnRegresar">
             <constraints>
               <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -174,13 +174,13 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c0015" class="javax.swing.JTable">
+          <component id="c0015" class="javax.swing.JTable" binding="tblResultados">
             <constraints/>
             <properties/>
           </component>
         </children>
       </scrollpane>
-      <component id="c0016" class="javax.swing.JLabel">
+      <component id="c0016" class="javax.swing.JLabel" binding="lblTotalRegistros">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
