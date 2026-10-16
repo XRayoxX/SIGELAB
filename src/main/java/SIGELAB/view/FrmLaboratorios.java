@@ -1,6 +1,10 @@
 package SIGELAB.view;
 
+import SIGELAB.util.TablaUtil;
+
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FrmLaboratorios {
 
@@ -8,19 +12,48 @@ public class FrmLaboratorios {
     private JPanel panelPrincipal;
     private JLabel lblTitulo;
     private JTextField txtId;
+    private JTextField txtCodigo;
     private JTextField txtNombre;
     private JTextField txtUbicacion;
     private JSpinner spnCapacidad;
-    private JTextField txtResponsable;
-    private JTextField txtTelefono;
     private JComboBox cmbEstado;
     private JButton btnNuevo;
     private JButton btnGuardar;
     private JButton btnActualizar;
-    private JButton btnEliminar;
+    private JButton btnDesactivar;
     private JButton btnLimpiar;
     private JButton btnRegresar;
     private JTextField txtBuscar;
     private JButton btnBuscar;
     private JTable tblLaboratorios;
+
+    private final JFrame ventana;
+
+    public FrmLaboratorios(JFrame menuPrincipal) {
+        ventana = new JFrame("SIGELAB - Gestión de Laboratorios");
+        ventana.setContentPane(panelPrincipal);
+        ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Encabezados de las tablas (los datos se cargarán desde el Controller)
+        TablaUtil.configurar(tblLaboratorios, "ID", "Código", "Nombre", "Ubicación", "Capacidad", "Estado");
+
+        // La capacidad siempre debe ser un número positivo
+        spnCapacidad.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
+
+        ventana.pack();
+        ventana.setLocationRelativeTo(null);
+
+        // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
+        ventana.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                menuPrincipal.setVisible(true);
+            }
+        });
+        btnRegresar.addActionListener(e -> ventana.dispose());
+    }
+
+    public void mostrar() {
+        ventana.setVisible(true);
+    }
 }

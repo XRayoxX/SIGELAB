@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="SIGELAB.view.FrmAuditoria">
-  <grid id="c000b" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="c0000" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="900" height="650"/>
+      <xy x="20" y="20" width="950" height="650"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="c000c" class="javax.swing.JLabel" binding="lblTitulo">
+      <component id="c0001" class="javax.swing.JLabel" binding="lblTitulo">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -17,7 +17,7 @@
           <text value="Auditoría del Sistema"/>
         </properties>
       </component>
-      <grid id="c000d" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="c0002" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="5"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -25,7 +25,7 @@
         <properties/>
         <border type="etched" title="Filtros de búsqueda"/>
         <children>
-          <component id="c0001" class="javax.swing.JLabel">
+          <component id="c0003" class="javax.swing.JLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -33,39 +33,38 @@
               <text value="Usuario:"/>
             </properties>
           </component>
-          <component id="c0002" class="javax.swing.JComboBox" binding="cmbUsuario">
+          <component id="c0004" class="javax.swing.JComboBox" binding="cmbUsuario">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
           </component>
-          <component id="c0003" class="javax.swing.JLabel">
+          <component id="c0005" class="javax.swing.JLabel">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Módulo:"/>
+              <text value="Entidad:"/>
             </properties>
           </component>
-          <component id="c0004" class="javax.swing.JComboBox" binding="cmbModulo">
+          <component id="c0006" class="javax.swing.JComboBox" binding="cmbEntidad">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <model>
-                <item value="TODOS"/>
-                <item value="USUARIOS"/>
-                <item value="EQUIPOS"/>
-                <item value="TIPOS_EQUIPO"/>
-                <item value="LABORATORIOS"/>
-                <item value="SOLICITANTES"/>
-                <item value="PRESTAMOS"/>
-                <item value="DEVOLUCIONES"/>
-                <item value="MANTENIMIENTO"/>
+                <item value="TODAS"/>
+                <item value="Usuario"/>
+                <item value="Laboratorio"/>
+                <item value="TipoEquipo"/>
+                <item value="Equipo"/>
+                <item value="Prestamo"/>
+                <item value="Devolucion"/>
+                <item value="Mantenimiento"/>
               </model>
             </properties>
           </component>
-          <component id="c0005" class="javax.swing.JLabel">
+          <component id="c0007" class="javax.swing.JLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -73,22 +72,32 @@
               <text value="Acción:"/>
             </properties>
           </component>
-          <component id="c0006" class="javax.swing.JComboBox" binding="cmbAccion">
+          <component id="c0008" class="javax.swing.JComboBox" binding="cmbAccion">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <model>
                 <item value="TODAS"/>
-                <item value="INICIO_SESION"/>
-                <item value="CIERRE_SESION"/>
-                <item value="CREAR"/>
-                <item value="ACTUALIZAR"/>
-                <item value="ELIMINAR"/>
+                <item value="LOGIN_EXITOSO"/>
+                <item value="LOGIN_FALLIDO"/>
+                <item value="LOGIN_FACIAL_FALLIDO"/>
+                <item value="USUARIO_CREADO"/>
+                <item value="USUARIO_MODIFICADO"/>
+                <item value="USUARIO_DESACTIVADO"/>
+                <item value="LABORATORIO_CREADO"/>
+                <item value="LABORATORIO_MODIFICADO"/>
+                <item value="EQUIPO_CREADO"/>
+                <item value="EQUIPO_MODIFICADO"/>
+                <item value="PRESTAMO_CREADO"/>
+                <item value="PRESTAMO_FINALIZADO"/>
+                <item value="EQUIPO_DEVUELTO"/>
+                <item value="EQUIPO_ENVIADO_MANTENIMIENTO"/>
+                <item value="MANTENIMIENTO_FINALIZADO"/>
               </model>
             </properties>
           </component>
-          <component id="c0007" class="javax.swing.JLabel">
+          <component id="c0009" class="javax.swing.JLabel">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -96,17 +105,17 @@
               <text value="Fecha desde:"/>
             </properties>
           </component>
-          <component id="c0008" class="javax.swing.JTextField" binding="txtFechaDesde">
+          <component id="c000a" class="javax.swing.JTextField" binding="txtFechaDesde">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <toolTipText value="Formato: dd/mm/aaaa"/>
+              <toolTipText value="Formato: dd/MM/yyyy"/>
             </properties>
           </component>
-          <component id="c0009" class="javax.swing.JLabel">
+          <component id="c000b" class="javax.swing.JLabel">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -114,19 +123,19 @@
               <text value="Fecha hasta:"/>
             </properties>
           </component>
-          <component id="c000a" class="javax.swing.JTextField" binding="txtFechaHasta">
+          <component id="c000c" class="javax.swing.JTextField" binding="txtFechaHasta">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
             <properties>
-              <toolTipText value="Formato: dd/mm/aaaa"/>
+              <toolTipText value="Formato: dd/MM/yyyy"/>
             </properties>
           </component>
         </children>
       </grid>
-      <grid id="c000e" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="c000d" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="5"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -134,7 +143,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c000f" class="javax.swing.JButton" binding="btnBuscar">
+          <component id="c000e" class="javax.swing.JButton" binding="btnBuscar">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -142,7 +151,7 @@
               <text value="Buscar"/>
             </properties>
           </component>
-          <component id="c0010" class="javax.swing.JButton" binding="btnLimpiar">
+          <component id="c000f" class="javax.swing.JButton" binding="btnLimpiar">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -150,7 +159,7 @@
               <text value="Limpiar filtros"/>
             </properties>
           </component>
-          <component id="c0011" class="javax.swing.JButton" binding="btnExportar">
+          <component id="c0010" class="javax.swing.JButton" binding="btnExportar">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -158,7 +167,7 @@
               <text value="Exportar"/>
             </properties>
           </component>
-          <component id="c0012" class="javax.swing.JButton" binding="btnRegresar">
+          <component id="c0011" class="javax.swing.JButton" binding="btnRegresar">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -166,29 +175,29 @@
               <text value="Regresar"/>
             </properties>
           </component>
-          <hspacer id="c0013">
+          <hspacer id="c0012">
             <constraints>
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
         </children>
       </grid>
-      <scrollpane id="c0014">
+      <scrollpane id="c0013">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="250"/>
+            <preferred-size width="-1" height="300"/>
           </grid>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c0015" class="javax.swing.JTable" binding="tblAuditoria">
+          <component id="c0014" class="javax.swing.JTable" binding="tblAuditoria">
             <constraints/>
             <properties/>
           </component>
         </children>
       </scrollpane>
-      <component id="c0016" class="javax.swing.JLabel" binding="lblTotalRegistros">
+      <component id="c0015" class="javax.swing.JLabel" binding="lblTotalRegistros">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
