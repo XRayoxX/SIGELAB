@@ -26,7 +26,7 @@ public class FrmAuditoria {
     private final JFrame ventana;
 
     public FrmAuditoria(JFrame menuPrincipal) {
-        ventana = new JFrame("SIGELAB - Auditoría del Sistema");
+        ventana = new JFrame("Auditoría del Sistema ");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
