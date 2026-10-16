@@ -36,7 +36,7 @@ public class FrmPrestamos {
     private final JFrame ventana;
 
     public FrmPrestamos(JFrame menuPrincipal) {
-        ventana = new JFrame("SIGELAB - Préstamos de Equipo");
+        ventana = new JFrame("SIGELAB - Préstamos de Equipo De Computo");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
