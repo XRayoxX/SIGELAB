@@ -41,7 +41,7 @@ public class FrmPrestamos {
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Encabezados de las tablas (los datos se cargarán desde el Controller)
-        TablaUtil.configurar(tblDetalle, "ID", "Código", "Equipo", "Tipo", "Laboratorio", "Estado");
+        TablaUtil.configurar(tblDetalle, "ID", "Código largo", "Equipo", "Tipo", "Laboratorio", "Estado");
         TablaUtil.configurar(tblPrestamos, "No.", "Solicitante", "Fecha préstamo", "Fecha esperada", "Registrado por", "Estado", "Pendientes");
 
         ventana.pack();

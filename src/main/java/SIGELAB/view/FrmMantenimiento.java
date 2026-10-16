@@ -40,7 +40,7 @@ public class FrmMantenimiento {
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Encabezados de las tablas (los datos se cargarán desde el Controller)
-        TablaUtil.configurar(tblMantenimientos, "ID", "Código", "Equipo", "Tipo", "Responsable", "Fecha ingreso", "Fecha salida", "Resultado", "Estado");
+        TablaUtil.configurar(tblMantenimientos, "ID", "Código", "Equipo compumto", "Tipo", "Responsable", "Fecha ingreso", "Fecha salida", "Resultado", "Estado");
 
         ventana.pack();
         ventana.setLocationRelativeTo(null);
