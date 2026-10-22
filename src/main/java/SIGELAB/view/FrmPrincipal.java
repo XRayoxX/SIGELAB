@@ -1,6 +1,16 @@
 package SIGELAB.view;
 
+import SIGELAB.controller.DashboardController;
+import SIGELAB.controller.LoginController;
+import SIGELAB.enums.RolUsuario;
+import SIGELAB.model.ResumenDashboard;
+import SIGELAB.model.Usuario;
+import SIGELAB.util.Dialogos;
+import SIGELAB.util.Sesion;
+
 import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class FrmPrincipal {
 
@@ -31,18 +41,29 @@ public class FrmPrincipal {
     private JButton btnSalir;
 
     private final JFrame ventana;
+    private final DashboardController dashboard = new DashboardController();
 
-    public FrmPrincipal(String usuario) {
+    public FrmPrincipal() {
         ventana = new JFrame("SIGELAB - Menú principal");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Usuario usuario = Sesion.getUsuarioActual();
+        lblUsuarioActual.setText("Usuario: " + usuario.getNombreCompleto()
+                + " (" + usuario.getNombreUsuario() + ") - Rol: " + usuario.getRol());
+        adaptarMenuAlRol();
+
         ventana.pack();
         ventana.setLocationRelativeTo(null);
 
-        lblUsuarioActual.setText("Usuario: " + usuario);
-
-        // TODO: cargar los contadores del dashboard desde la vista vw_Dashboard (vía Controller/Service)
-        //       y ocultar los módulos que el rol del usuario no puede usar
+        // Dashboard: se recarga cada vez que el menú vuelve a mostrarse (al regresar de otro formulario)
+        ventana.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                cargarResumen();
+            }
+        });
+        btnActualizarResumen.addActionListener(e -> cargarResumen());
 
         // Cada botón oculta el menú y abre su formulario; al regresar, el menú vuelve a aparecer
         btnPrestamos.addActionListener(e -> abrir(new FrmPrestamos(ventana)::mostrar));
@@ -57,10 +78,47 @@ public class FrmPrincipal {
         btnAuditoria.addActionListener(e -> abrir(new FrmAuditoria(ventana)::mostrar));
 
         btnCerrarSesion.addActionListener(e -> {
+            new LoginController().cerrarSesion();
             ventana.dispose();
             new Login().mostrar();
         });
         btnSalir.addActionListener(e -> System.exit(0));
+    }
+
+    /*
+     * ADMIN: todo. ENCARGADO: equipos, préstamos, devoluciones, mantenimiento y consultas.
+     * DOCENTE: solo consultas. Ocultar botones es solo visual; los Service también deben validar permisos.
+     */
+    private void adaptarMenuAlRol() {
+        boolean admin = Sesion.tieneRol(RolUsuario.ADMIN);
+        boolean operador = Sesion.tieneRol(RolUsuario.ADMIN, RolUsuario.ENCARGADO);
+
+        btnUsuarios.setVisible(admin);
+        btnAuditoria.setVisible(admin);
+        btnTiposEquipo.setVisible(admin);
+        btnLaboratorios.setVisible(admin);
+
+        btnPrestamos.setVisible(operador);
+        btnDevoluciones.setVisible(operador);
+        btnEquipos.setVisible(operador);
+        btnSolicitantes.setVisible(operador);
+        btnMantenimiento.setVisible(operador);
+
+        btnReportes.setVisible(true);
+    }
+
+    private void cargarResumen() {
+        Dialogos.ejecutar(ventana, () -> {
+            ResumenDashboard r = dashboard.resumen();
+            lblTotalEquipos.setText(String.valueOf(r.totalEquipos()));
+            lblDisponibles.setText(String.valueOf(r.disponibles()));
+            lblPrestados.setText(String.valueOf(r.prestados()));
+            lblDanados.setText(String.valueOf(r.danados()));
+            lblMantenimiento.setText(String.valueOf(r.enMantenimiento()));
+            lblBaja.setText(String.valueOf(r.deBaja()));
+            lblPrestamosActivos.setText(String.valueOf(r.prestamosActivos()));
+            lblPrestamosVencidos.setText(String.valueOf(r.prestamosVencidos()));
+        });
     }
 
     private void abrir(Runnable mostrarFormulario) {

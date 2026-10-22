@@ -1,10 +1,22 @@
 package SIGELAB.view;
 
+import SIGELAB.controller.MantenimientoController;
+import SIGELAB.enums.EstadoEquipo;
+import SIGELAB.enums.EstadoMantenimiento;
+import SIGELAB.enums.ResultadoMantenimiento;
+import SIGELAB.enums.TipoMantenimiento;
+import SIGELAB.model.Equipo;
+import SIGELAB.model.Mantenimiento;
+import SIGELAB.util.Dialogos;
+import SIGELAB.util.Fechas;
 import SIGELAB.util.TablaUtil;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class FrmMantenimiento {
 
@@ -33,14 +45,17 @@ public class FrmMantenimiento {
     private JTable tblMantenimientos;
 
     private final JFrame ventana;
+    private final DefaultTableModel modeloTabla;
+    private final MantenimientoController controller = new MantenimientoController();
+    private List<Mantenimiento> mantenimientosEnTabla = List.of();
 
     public FrmMantenimiento(JFrame menuPrincipal) {
         ventana = new JFrame("SIGELAB - Mantenimiento de Equipos");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Encabezados de las tablas (los datos se cargarán desde el Controller)
-        TablaUtil.configurar(tblMantenimientos, "ID", "Código", "Equipo", "Tipo", "Responsable", "Fecha ingreso", "Fecha salida", "Resultado", "Estado");
+        modeloTabla = TablaUtil.configurar(tblMantenimientos, "ID", "Código", "Equipo", "Tipo", "Responsable",
+                "Fecha ingreso", "Fecha salida", "Resultado", "Estado");
 
         ventana.pack();
         ventana.setLocationRelativeTo(null);
@@ -53,9 +68,134 @@ public class FrmMantenimiento {
             }
         });
         btnRegresar.addActionListener(e -> ventana.dispose());
+
+        btnNuevo.addActionListener(e -> ejecutar(this::nuevo));
+        btnLimpiar.addActionListener(e -> ejecutar(this::nuevo));
+        cmbEquipo.addActionListener(e -> {
+            if (cmbEquipo.getSelectedItem() instanceof Equipo equipo) {
+                txtEstadoEquipo.setText(equipo.getEstado().name());
+            }
+        });
+        btnEnviarMantenimiento.addActionListener(e -> ejecutar(this::enviar));
+        btnFinalizar.addActionListener(e -> ejecutar(this::finalizar));
+        btnBuscar.addActionListener(e -> ejecutar(this::buscar));
+        txtBuscar.addActionListener(e -> btnBuscar.doClick());
+        tblMantenimientos.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarSeleccionado();
+            }
+        });
+
+        ejecutar(() -> {
+            nuevo();
+            buscar();
+        });
     }
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // Prepara el formulario para enviar un equipo a mantenimiento
+    private void nuevo() {
+        tblMantenimientos.clearSelection();
+        DefaultComboBoxModel<Object> equipos = new DefaultComboBoxModel<>();
+        controller.equiposParaMantenimiento().forEach(equipos::addElement);
+        cmbEquipo.setModel(equipos);
+        cmbEquipo.setSelectedIndex(equipos.getSize() > 0 ? 0 : -1);
+        txtEstadoEquipo.setText(cmbEquipo.getSelectedItem() instanceof Equipo e ? e.getEstado().name() : "");
+        txtId.setText("");
+        txtResponsable.setText("");
+        txtFechaIngreso.setText(Fechas.formatear(LocalDateTime.now()));
+        txtFechaSalida.setText("");
+        txaDescripcion.setText("");
+        txaObservaciones.setText("");
+        cmbTipoMantenimiento.setSelectedItem(TipoMantenimiento.CORRECTIVO.name());
+        cmbEstado.setSelectedItem(EstadoMantenimiento.EN_PROCESO.name());
+        cmbResultado.setSelectedItem(ResultadoMantenimiento.REPARADO.name());
+        habilitarIngreso(true);
+    }
+
+    private void enviar() {
+        Mantenimiento m = new Mantenimiento();
+        m.setEquipo((Equipo) cmbEquipo.getSelectedItem());
+        m.setTipo(TipoMantenimiento.valueOf(String.valueOf(cmbTipoMantenimiento.getSelectedItem())));
+        m.setResponsable(txtResponsable.getText());
+        m.setDescripcion(txaDescripcion.getText());
+        int id = controller.enviar(m);
+        Dialogos.info(ventana, "Mantenimiento No. " + id + " registrado.\nEl equipo "
+                + m.getEquipo().getCodigoInventario() + " pasó a MANTENIMIENTO.");
+        nuevo();
+        buscar();
+    }
+
+    private void finalizar() {
+        int id = txtId.getText().isBlank() ? 0 : Integer.parseInt(txtId.getText());
+        ResultadoMantenimiento resultado = ResultadoMantenimiento.valueOf(String.valueOf(cmbResultado.getSelectedItem()));
+        if (id > 0 && resultado == ResultadoMantenimiento.NO_REPARABLE
+                && !Dialogos.confirmar(ventana, "El equipo quedará dado de BAJA y no podrá volver a prestarse. ¿Continuar?")) {
+            return;
+        }
+        EstadoEquipo estadoFinal = controller.finalizar(id, resultado, txaObservaciones.getText());
+        Dialogos.info(ventana, "Mantenimiento finalizado. El equipo quedó " + estadoFinal + ".");
+        nuevo();
+        buscar();
+    }
+
+    private void buscar() {
+        Object filtro = cmbFiltroEstado.getSelectedItem();
+        EstadoMantenimiento estado = filtro == null || "TODOS".equals(filtro.toString())
+                ? null : EstadoMantenimiento.valueOf(filtro.toString());
+        mantenimientosEnTabla = controller.listar(txtBuscar.getText(), estado);
+        modeloTabla.setRowCount(0);
+        for (Mantenimiento m : mantenimientosEnTabla) {
+            modeloTabla.addRow(new Object[]{m.getIdMantenimiento(), m.getEquipo().getCodigoInventario(),
+                    m.getEquipo().getNombre(), m.getTipo(), m.getResponsable(), Fechas.formatear(m.getFechaIngreso()),
+                    Fechas.formatear(m.getFechaSalida()), m.getResultado() == null ? "" : m.getResultado(), m.getEstado()});
+        }
+    }
+
+    // Muestra el mantenimiento seleccionado; si está EN_PROCESO se puede finalizar
+    private void cargarSeleccionado() {
+        int fila = tblMantenimientos.getSelectedRow();
+        if (fila < 0) {
+            return;
+        }
+        Mantenimiento m = mantenimientosEnTabla.get(fila);
+        DefaultComboBoxModel<Object> equipo = new DefaultComboBoxModel<>();
+        equipo.addElement(m.getEquipo());
+        cmbEquipo.setModel(equipo);
+        txtId.setText(String.valueOf(m.getIdMantenimiento()));
+        txtEstadoEquipo.setText(m.getEquipo().getEstado().name());
+        cmbTipoMantenimiento.setSelectedItem(m.getTipo().name());
+        txtResponsable.setText(m.getResponsable());
+        txtFechaIngreso.setText(Fechas.formatear(m.getFechaIngreso()));
+        cmbEstado.setSelectedItem(m.getEstado().name());
+        txaDescripcion.setText(m.getDescripcion());
+        boolean enProceso = m.getEstado() == EstadoMantenimiento.EN_PROCESO;
+        txtFechaSalida.setText(enProceso ? Fechas.formatear(LocalDateTime.now()) : Fechas.formatear(m.getFechaSalida()));
+        if (m.getResultado() != null) {
+            cmbResultado.setSelectedItem(m.getResultado().name());
+        }
+        txaObservaciones.setText(m.getObservaciones() == null ? "" : m.getObservaciones());
+        habilitarIngreso(false);
+        btnFinalizar.setEnabled(enProceso);
+        cmbResultado.setEnabled(enProceso);
+        txaObservaciones.setEditable(enProceso);
+    }
+
+    private void habilitarIngreso(boolean ingreso) {
+        cmbEquipo.setEnabled(ingreso);
+        cmbTipoMantenimiento.setEnabled(ingreso);
+        txtResponsable.setEditable(ingreso);
+        txaDescripcion.setEditable(ingreso);
+        btnEnviarMantenimiento.setEnabled(ingreso);
+        btnFinalizar.setEnabled(!ingreso);
+        cmbResultado.setEnabled(!ingreso);
+        txaObservaciones.setEditable(!ingreso);
+    }
+
+    private void ejecutar(Runnable accion) {
+        Dialogos.ejecutar(ventana, accion);
     }
 }

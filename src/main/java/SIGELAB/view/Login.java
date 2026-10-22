@@ -1,5 +1,9 @@
 package SIGELAB.view;
 
+import SIGELAB.controller.LoginController;
+import SIGELAB.util.BusinessException;
+import SIGELAB.util.DataAccessException;
+
 import javax.swing.*;
 
 public class Login {
@@ -14,6 +18,7 @@ public class Login {
     private JButton btnSalir;
 
     private final JFrame ventana;
+    private final LoginController controller = new LoginController();
 
     public Login() {
         // panelPrincipal y los demás componentes ya fueron creados por el GUI Designer
@@ -23,14 +28,23 @@ public class Login {
         ventana.pack();
         ventana.setLocationRelativeTo(null);
 
-        btnIngresar.addActionListener(e -> {
-            // TODO: validar usuario/contraseña y que el usuario esté ACTIVO (RN-01)
-            // TODO: si las credenciales son válidas, llamar al servicio facial y mostrar
-            //       el resultado en lblEstadoFacial; si el rostro no coincide, negar el acceso (RN-02)
-            new FrmPrincipal(txtUsuario.getText()).mostrar();
-            ventana.dispose();
-        });
+        btnIngresar.addActionListener(e -> ingresar());
+        pwdContrasena.addActionListener(e -> ingresar());   // Enter en la contraseña también ingresa
         btnSalir.addActionListener(e -> System.exit(0));
+    }
+
+    private void ingresar() {
+        try {
+            controller.iniciarSesion(txtUsuario.getText(), pwdContrasena.getPassword());
+            new FrmPrincipal().mostrar();
+            ventana.dispose();
+        } catch (BusinessException ex) {
+            pwdContrasena.setText("");
+            JOptionPane.showMessageDialog(ventana, ex.getMessage(), "Inicio de sesión", JOptionPane.WARNING_MESSAGE);
+        } catch (DataAccessException ex) {
+            ex.printStackTrace();   // el detalle técnico queda en consola, no en la pantalla
+            JOptionPane.showMessageDialog(ventana, ex.getMessage(), "Error de base de datos", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void mostrar() {

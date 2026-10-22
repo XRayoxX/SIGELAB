@@ -1,10 +1,16 @@
 package SIGELAB.view;
 
+import SIGELAB.controller.LaboratorioController;
+import SIGELAB.enums.EstadoRegistro;
+import SIGELAB.model.Laboratorio;
+import SIGELAB.util.Dialogos;
 import SIGELAB.util.TablaUtil;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 public class FrmLaboratorios {
 
@@ -28,14 +34,19 @@ public class FrmLaboratorios {
     private JTable tblLaboratorios;
 
     private final JFrame ventana;
+    private final DefaultTableModel modeloTabla;
+    private final LaboratorioController controller = new LaboratorioController();
+
+    // Laboratorios que se están mostrando en la tabla (misma posición que cada fila)
+    private List<Laboratorio> laboratoriosEnTabla = List.of();
 
     public FrmLaboratorios(JFrame menuPrincipal) {
         ventana = new JFrame("SIGELAB - Gestión de Laboratorios");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Encabezados de las tablas (los datos se cargarán desde el Controller)
-        TablaUtil.configurar(tblLaboratorios, "ID", "Código", "Nombre", "Ubicación", "Capacidad", "Estado");
+        // Encabezados de las tablas (los datos se cargan desde el Controller)
+        modeloTabla = TablaUtil.configurar(tblLaboratorios, "ID", "Código", "Nombre", "Ubicación", "Capacidad", "Estado");
 
         // La capacidad siempre debe ser un número positivo
         spnCapacidad.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
@@ -51,9 +62,110 @@ public class FrmLaboratorios {
             }
         });
         btnRegresar.addActionListener(e -> ventana.dispose());
+
+        btnNuevo.addActionListener(e -> limpiar());
+        btnLimpiar.addActionListener(e -> limpiar());
+        btnGuardar.addActionListener(e -> guardar());
+        btnActualizar.addActionListener(e -> actualizar());
+        btnDesactivar.addActionListener(e -> desactivar());
+        btnBuscar.addActionListener(e -> ejecutar(() -> mostrarEnTabla(controller.buscar(txtBuscar.getText()))));
+        txtBuscar.addActionListener(e -> btnBuscar.doClick());   // Enter en el buscador
+        tblLaboratorios.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarSeleccionado();
+            }
+        });
+
+        ejecutar(() -> mostrarEnTabla(controller.listar()));
     }
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    private void guardar() {
+        ejecutar(() -> {
+            Laboratorio lab = controller.guardar(leerFormulario());
+            JOptionPane.showMessageDialog(ventana, "Laboratorio " + lab.getCodigo() + " guardado correctamente.");
+            limpiar();
+            mostrarEnTabla(controller.listar());
+        });
+    }
+
+    private void actualizar() {
+        ejecutar(() -> {
+            controller.actualizar(leerFormulario());
+            JOptionPane.showMessageDialog(ventana, "Laboratorio actualizado correctamente.");
+            limpiar();
+            mostrarEnTabla(controller.listar());
+        });
+    }
+
+    private void desactivar() {
+        int id = idSeleccionado();
+        if (id > 0 && JOptionPane.showConfirmDialog(ventana, "¿Desea desactivar el laboratorio seleccionado?",
+                "Confirmar", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+        ejecutar(() -> {
+            controller.desactivar(id);
+            limpiar();
+            mostrarEnTabla(controller.listar());
+        });
+    }
+
+    // Convierte lo escrito en el formulario en un objeto Laboratorio
+    private Laboratorio leerFormulario() {
+        Laboratorio lab = new Laboratorio();
+        lab.setIdLaboratorio(idSeleccionado());
+        lab.setCodigo(txtCodigo.getText());
+        lab.setNombre(txtNombre.getText());
+        lab.setUbicacion(txtUbicacion.getText());
+        lab.setCapacidad((Integer) spnCapacidad.getValue());
+        lab.setEstado(EstadoRegistro.valueOf(String.valueOf(cmbEstado.getSelectedItem())));
+        return lab;
+    }
+
+    private int idSeleccionado() {
+        return txtId.getText().isBlank() ? 0 : Integer.parseInt(txtId.getText());
+    }
+
+    private void mostrarEnTabla(List<Laboratorio> laboratorios) {
+        laboratoriosEnTabla = laboratorios;
+        modeloTabla.setRowCount(0);
+        for (Laboratorio lab : laboratorios) {
+            modeloTabla.addRow(new Object[]{
+                    lab.getIdLaboratorio(), lab.getCodigo(), lab.getNombre(),
+                    lab.getUbicacion(), lab.getCapacidad(), lab.getEstado()});
+        }
+    }
+
+    private void cargarSeleccionado() {
+        int fila = tblLaboratorios.getSelectedRow();
+        if (fila < 0) {
+            return;
+        }
+        Laboratorio lab = laboratoriosEnTabla.get(fila);
+        txtId.setText(String.valueOf(lab.getIdLaboratorio()));
+        txtCodigo.setText(lab.getCodigo());
+        txtNombre.setText(lab.getNombre());
+        txtUbicacion.setText(lab.getUbicacion());
+        spnCapacidad.setValue(lab.getCapacidad());
+        cmbEstado.setSelectedItem(lab.getEstado().name());
+    }
+
+    private void ejecutar(Runnable accion) {
+        Dialogos.ejecutar(ventana, accion);
+    }
+
+    private void limpiar() {
+        tblLaboratorios.clearSelection();
+        txtId.setText("");
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtUbicacion.setText("");
+        spnCapacidad.setValue(1);
+        cmbEstado.setSelectedItem(EstadoRegistro.ACTIVO.name());
+        txtCodigo.requestFocus();
     }
 }

@@ -3,7 +3,7 @@
   <grid id="c0000" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="20" left="20" bottom="20" right="20"/>
     <constraints>
-      <xy x="20" y="20" width="460" height="330"/>
+      <xy x="20" y="20" width="460" height="333"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -15,14 +15,6 @@
         <properties>
           <font size="24" style="1"/>
           <text value="SIGELAB"/>
-        </properties>
-      </component>
-      <component id="c0002" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Sistema de Gestión y Control de Laboratorios Universitarios"/>
         </properties>
       </component>
       <grid id="c0003" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -124,6 +116,14 @@
           </hspacer>
         </children>
       </grid>
+      <component id="c0002" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Sistema de Gestión y Control de Laboratorios Universitarios"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
