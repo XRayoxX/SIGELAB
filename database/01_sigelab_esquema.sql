@@ -49,6 +49,8 @@ CREATE TABLE dbo.Usuario (
     IdUsuario       INT IDENTITY(1,1) NOT NULL,
     Nombre          VARCHAR(60)       NOT NULL,
     Apellido        VARCHAR(60)       NOT NULL,
+    SegundoNombre   NVARCHAR(100)     NULL,       -- opcional
+    SegundoApellido NVARCHAR(100)     NULL,       -- opcional
     NombreUsuario   VARCHAR(30)       NOT NULL,
     ContrasenaHash  VARCHAR(64)       NOT NULL,   -- SHA-256 en hexadecimal (64 caracteres)
     Correo          VARCHAR(100)      NOT NULL,

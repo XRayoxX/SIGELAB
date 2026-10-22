@@ -52,8 +52,11 @@ public class FrmUsuarios {
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        modeloTabla = TablaUtil.configurar(tblUsuarios, "ID", "Usuario", "Nombre", "Apellido", "Correo", "Rol", "Estado");
+        modeloTabla = TablaUtil.configurar(tblUsuarios, "ID", "Usuario", "Nombre completo", "Correo", "Rol", "Estado");
         pwdContrasena.setToolTipText("Al actualizar, déjela vacía para conservar la contraseña actual");
+        // El nombre de usuario lo genera la base de datos a partir del nombre completo
+        txtUsuario.setEditable(false);
+        txtUsuario.setToolTipText("Se genera automáticamente al guardar (ejemplo: Juan Carlos Pérez López -> jperez; si ya existe: jcperez, jcperezl, jcperezl2...)");
 
         ventana.pack();
         ventana.setLocationRelativeTo(null);
@@ -72,7 +75,7 @@ public class FrmUsuarios {
         btnSeleccionarFoto.addActionListener(e -> seleccionarFoto());
         btnGuardar.addActionListener(e -> ejecutar(() -> {
             Usuario u = controller.guardar(leerFormulario(), pwdContrasena.getPassword(), pwdConfirmarContrasena.getPassword());
-            Dialogos.info(ventana, "Usuario " + u.getNombreUsuario() + " creado correctamente.");
+            Dialogos.info(ventana, "Usuario creado correctamente.\nNombre de usuario generado: " + u.getNombreUsuario());
             limpiar();
             mostrarEnTabla(controller.listar());
         }));
@@ -122,7 +125,9 @@ public class FrmUsuarios {
         u.setIdUsuario(idSeleccionado());
         u.setNombreUsuario(txtUsuario.getText());
         u.setNombre(txtNombre.getText());
+        u.setSegundoNombre(Txt_Segundo_nombre.getText());
         u.setApellido(txtApellido.getText());
+        u.setSegundoApellido(TXT_segundoApellido.getText());
         u.setCorreo(txtCorreo.getText());
         u.setRol(RolUsuario.valueOf(String.valueOf(cmbRol.getSelectedItem())));
         u.setEstado(EstadoRegistro.valueOf(String.valueOf(cmbEstado.getSelectedItem())));
@@ -138,7 +143,7 @@ public class FrmUsuarios {
         usuariosEnTabla = usuarios;
         modeloTabla.setRowCount(0);
         for (Usuario u : usuarios) {
-            modeloTabla.addRow(new Object[]{u.getIdUsuario(), u.getNombreUsuario(), u.getNombre(), u.getApellido(),
+            modeloTabla.addRow(new Object[]{u.getIdUsuario(), u.getNombreUsuario(), u.getNombreCompleto(),
                     u.getCorreo(), u.getRol(), u.getEstado()});
         }
     }
@@ -152,7 +157,9 @@ public class FrmUsuarios {
         txtId.setText(String.valueOf(u.getIdUsuario()));
         txtUsuario.setText(u.getNombreUsuario());
         txtNombre.setText(u.getNombre());
+        Txt_Segundo_nombre.setText(u.getSegundoNombre() == null ? "" : u.getSegundoNombre());
         txtApellido.setText(u.getApellido());
+        TXT_segundoApellido.setText(u.getSegundoApellido() == null ? "" : u.getSegundoApellido());
         txtCorreo.setText(u.getCorreo());
         cmbRol.setSelectedItem(u.getRol().name());
         cmbEstado.setSelectedItem(u.getEstado().name());
@@ -166,14 +173,16 @@ public class FrmUsuarios {
         txtId.setText("");
         txtUsuario.setText("");
         txtNombre.setText("");
+        Txt_Segundo_nombre.setText("");
         txtApellido.setText("");
+        TXT_segundoApellido.setText("");
         txtCorreo.setText("");
         txtRutaFotoRostro.setText("");
         pwdContrasena.setText("");
         pwdConfirmarContrasena.setText("");
         cmbRol.setSelectedItem(RolUsuario.ENCARGADO.name());
         cmbEstado.setSelectedItem(EstadoRegistro.ACTIVO.name());
-        txtUsuario.requestFocus();
+        txtNombre.requestFocus();
     }
 
     private void ejecutar(Runnable accion) {

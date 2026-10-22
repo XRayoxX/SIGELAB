@@ -10,7 +10,9 @@ public class Usuario {
 
     private int idUsuario;
     private String nombre;
+    private String segundoNombre;     // opcional
     private String apellido;
+    private String segundoApellido;   // opcional
     private String nombreUsuario;
     private String contrasenaHash;
     private String correo;
@@ -39,12 +41,28 @@ public class Usuario {
         this.nombre = nombre;
     }
 
+    public String getSegundoNombre() {
+        return segundoNombre;
+    }
+
+    public void setSegundoNombre(String segundoNombre) {
+        this.segundoNombre = segundoNombre;
+    }
+
     public String getApellido() {
         return apellido;
     }
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public String getSegundoApellido() {
+        return segundoApellido;
+    }
+
+    public void setSegundoApellido(String segundoApellido) {
+        this.segundoApellido = segundoApellido;
     }
 
     public String getNombreUsuario() {
@@ -103,8 +121,15 @@ public class Usuario {
         this.rutaFotoRostro = rutaFotoRostro;
     }
 
+    // Une los nombres y apellidos, saltando los que estén vacíos
     public String getNombreCompleto() {
-        return nombre + " " + apellido;
+        StringBuilder completo = new StringBuilder();
+        for (String parte : new String[]{nombre, segundoNombre, apellido, segundoApellido}) {
+            if (parte != null && !parte.isBlank()) {
+                completo.append(completo.length() == 0 ? "" : " ").append(parte.trim());
+            }
+        }
+        return completo.toString();
     }
 
     @Override

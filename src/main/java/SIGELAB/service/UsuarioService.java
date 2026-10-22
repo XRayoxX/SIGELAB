@@ -12,9 +12,7 @@ import SIGELAB.util.Sesion;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Administración de usuarios (solo ADMIN). La contraseña se guarda como hash SHA-256.
- */
+
 public class UsuarioService {
 
     private static final int LARGO_MINIMO_CONTRASENA = 6;
@@ -40,7 +38,10 @@ public class UsuarioService {
         }
         u.setContrasenaHash(hashValidado(contrasena, confirmacion));
         validarUnicos(u);
-        u.setIdUsuario(repository.insertar(u));
+        // El nombre de usuario NO se escribe: lo genera la base con el nombre completo
+        // (trigger TR_Usuario_GenerarNombreUsuario). El repositorio lo devuelve en u.
+        u.setNombreUsuario(null);
+        repository.insertar(u);
         auditoria.registrar(AccionAuditoria.USUARIO_CREADO, "Usuario", u.getIdUsuario(),
                 "Usuario " + u.getNombreUsuario() + " creado con rol " + u.getRol());
         return u;
@@ -81,19 +82,28 @@ public class UsuarioService {
 
     private void validarDatos(Usuario u) {
         u.setNombre(limpio(u.getNombre()));
+        u.setSegundoNombre(limpio(u.getSegundoNombre()));       // vacío -> NULL en la base
         u.setApellido(limpio(u.getApellido()));
-        u.setNombreUsuario(limpio(u.getNombreUsuario()));
+        u.setSegundoApellido(limpio(u.getSegundoApellido()));
         u.setCorreo(limpio(u.getCorreo()));
         u.setRutaFotoRostro(limpio(u.getRutaFotoRostro()));
 
-        if (u.getNombreUsuario() == null) {
-            throw new BusinessException("El nombre de usuario es obligatorio.");
-        }
-        if (!u.getNombreUsuario().matches("^[A-Za-z0-9._-]{3,30}$")) {
-            throw new BusinessException("El nombre de usuario debe tener de 3 a 30 caracteres, sin espacios (letras, números, punto, guion).");
-        }
         if (u.getNombre() == null || u.getApellido() == null) {
-            throw new BusinessException("El nombre y el apellido son obligatorios.");
+            throw new BusinessException("El primer nombre y el primer apellido son obligatorios.");
+        }
+        // Mismas letras que acepta dbo.GenerarNombreUsuario; así el usuario ve un mensaje claro
+        // en lugar de un error técnico de la base al generar el nombre de usuario
+        validarLetras(u.getNombre(), "primer nombre");
+        validarLetras(u.getSegundoNombre(), "segundo nombre");
+        validarLetras(u.getApellido(), "primer apellido");
+        validarLetras(u.getSegundoApellido(), "segundo apellido");
+        if (u.getNombre().length() > 60 || u.getApellido().length() > 60) {
+            throw new BusinessException("El primer nombre y el primer apellido no pueden tener más de 60 caracteres.");
+        }
+        // Segundo nombre y segundo apellido son opcionales, pero con límite de largo
+        if ((u.getSegundoNombre() != null && u.getSegundoNombre().length() > 100)
+                || (u.getSegundoApellido() != null && u.getSegundoApellido().length() > 100)) {
+            throw new BusinessException("El segundo nombre y el segundo apellido no pueden tener más de 100 caracteres.");
         }
         if (u.getCorreo() == null || !u.getCorreo().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
             throw new BusinessException("Ingrese un correo electrónico válido.");
@@ -116,11 +126,15 @@ public class UsuarioService {
         return Seguridad.sha256(contrasena);
     }
 
-    private void validarUnicos(Usuario u) {
-        Optional<Usuario> mismoUsuario = repository.buscarPorNombreUsuario(u.getNombreUsuario());
-        if (mismoUsuario.isPresent() && mismoUsuario.get().getIdUsuario() != u.getIdUsuario()) {
-            throw new BusinessException("Ya existe un usuario con el nombre " + u.getNombreUsuario() + ".");
+    // Solo letras (con tildes y ñ), espacios y guiones; null = campo opcional vacío
+    private void validarLetras(String texto, String campo) {
+        if (texto != null && !texto.matches("^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ \\-]+$")) {
+            throw new BusinessException("El " + campo + " solo puede contener letras, espacios y guiones.");
         }
+    }
+
+    // El nombre de usuario no se revisa aquí: la base genera uno que no se repite
+    private void validarUnicos(Usuario u) {
         Optional<Usuario> mismoCorreo = repository.buscarPorCorreo(u.getCorreo());
         if (mismoCorreo.isPresent() && mismoCorreo.get().getIdUsuario() != u.getIdUsuario()) {
             throw new BusinessException("Ya existe un usuario con el correo " + u.getCorreo() + ".");
