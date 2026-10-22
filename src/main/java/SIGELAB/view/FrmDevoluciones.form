@@ -65,7 +65,7 @@
           </grid>
         </constraints>
         <properties/>
-        <border type="etched" title="Préstamos activos"/>
+        <border type="etched" title="Préstamos activos:"/>
         <children>
           <component id="c0008" class="javax.swing.JTable" binding="tblPrestamosActivos">
             <constraints/>
