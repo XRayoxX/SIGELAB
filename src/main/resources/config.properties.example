@@ -11,5 +11,5 @@ db.contrasena=SU_CONTRASENA
 
 # --- SQL Server local (para trabajar sin internet) ---
 # db.url=jdbc:sqlserver://localhost:1433;databaseName=Sigelab;encrypt=true;trustServerCertificate=true
-# db.usuario=sigelab_app
-# db.contrasena=SU_CONTRASENA
+# db.usuario=sigelabumg
+# db.contrasena=sigelab123
