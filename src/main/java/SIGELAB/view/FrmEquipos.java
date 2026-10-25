@@ -8,6 +8,7 @@ import SIGELAB.model.TipoEquipo;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.Dialogos;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.EstiloFormulario;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -61,10 +62,40 @@ public class FrmEquipos {
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        modeloTabla = TablaUtil.configurar(tblEquipos, "ID", "Código", "Nombre", "Tipo", "Marca", "Modelo", "No. serie", "Laboratorio", "Estado");
+
+        modeloTabla = TablaUtil.configurar(
+                tblEquipos,
+                "ID",
+                "Código",
+                "Nombre",
+                "Tipo",
+                "Marca",
+                "Modelo",
+                "No. serie",
+                "Laboratorio",
+                "Estado"
+        );
+
+// =====================================
+// APLICAR TEMA SIGELAB DARK TECH
+// =====================================
+
+        EstiloFormulario.aplicar(
+                panelPrincipal
+        );
+
+// =====================================
+// CONFIGURAR VENTANA
+// =====================================
 
         ventana.pack();
-        ventana.setLocationRelativeTo(null);
+
+// Abrir maximizada respetando la
+// barra de tareas de Windows.
+        ventana.setExtendedState(
+                JFrame.MAXIMIZED_BOTH
+        );
+
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {

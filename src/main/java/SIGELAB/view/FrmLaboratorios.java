@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import SIGELAB.util.EstiloFormulario;
 
 public class FrmLaboratorios {
 
@@ -51,9 +52,14 @@ public class FrmLaboratorios {
         // La capacidad siempre debe ser un número positivo
         spnCapacidad.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        // Aplicar la paleta oficial SIGELAB.
+        EstiloFormulario.aplicar(panelPrincipal);
 
+// Calcular tamaño inicial.
+        ventana.pack();
+
+// Maximizar respetando la barra de tareas.
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
             @Override

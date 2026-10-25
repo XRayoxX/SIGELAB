@@ -4,14 +4,19 @@ package SIGELAB.view;
 import SIGELAB.controller.LoginController;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.DataAccessException;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
+import java.awt.*;
 import java.util.Arrays;
 
 public class Login {
 
     // ========================================
-    // COMPONENTES VINCULADOS A LOGIN.FORM
+    // COMPONENTES DEL LOGIN.FORM
     // ========================================
 
     private JPanel panelPrincipal;
@@ -36,6 +41,7 @@ public class Login {
     private JPasswordField pwdContrasena;
 
     private JCheckBox chkMostrarContrasena;
+    private JCheckBox chkModoOscuro;
 
     private JButton btnIngresar;
     private JButton btnSalir;
@@ -65,15 +71,22 @@ public class Login {
                 JFrame.EXIT_ON_CLOSE
         );
 
+        // Calcular inicialmente el tamaño de los componentes.
         ventana.pack();
 
-        ventana.setMinimumSize(
-                ventana.getSize()
-        );
-
-        ventana.setLocationRelativeTo(null);
+// Maximizar dentro del área de trabajo de Windows.
+// La barra de tareas permanece visible.
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         configurarEventos();
+
+        // Recuperar tema guardado.
+        chkModoOscuro.setSelected(
+                TemaSIGELAB.esOscuro()
+        );
+
+        // Aplicar los colores al iniciar.
+        aplicarTema();
 
         ventana.getRootPane().setDefaultButton(
                 btnIngresar
@@ -81,7 +94,7 @@ public class Login {
     }
 
     // ========================================
-    // EVENTOS
+    // CONFIGURACIÓN DE EVENTOS
     // ========================================
 
     private void configurarEventos() {
@@ -99,6 +112,8 @@ public class Login {
         );
 
         configurarMostrarContrasena();
+
+        configurarSelectorTema();
     }
 
     // ========================================
@@ -125,6 +140,195 @@ public class Login {
                 );
             }
         });
+    }
+
+    // ========================================
+    // SELECTOR DE TEMA
+    // ========================================
+
+    private void configurarSelectorTema() {
+
+        chkModoOscuro.addActionListener(e -> {
+
+            boolean oscuro =
+                    chkModoOscuro.isSelected();
+
+            TemaSIGELAB.establecerModoOscuro(
+                    oscuro
+            );
+
+            aplicarTema();
+        });
+    }
+
+    // ========================================
+    // APLICAR TEMA A LA INTERFAZ
+    // ========================================
+
+    private void aplicarTema() {
+
+        Color fondo = TemaSIGELAB.fondo();
+        Color panel = TemaSIGELAB.panel();
+        Color texto = TemaSIGELAB.texto();
+        Color secundario = TemaSIGELAB.textoSecundario();
+        Color primario = TemaSIGELAB.primario();
+        Color borde = TemaSIGELAB.borde();
+        Color campo = TemaSIGELAB.campo();
+
+        // ------------------------------------
+        // PANEL PRINCIPAL
+        // ------------------------------------
+
+        panelPrincipal.setBackground(fondo);
+
+        panelBotones.setBackground(fondo);
+
+        // ------------------------------------
+        // PANELES INTERNOS
+        // ------------------------------------
+
+        panelCredenciales.setBackground(panel);
+
+        panelFacial.setBackground(panel);
+
+        // ------------------------------------
+        // ENCABEZADO
+        // ------------------------------------
+
+        lblEncabezado.setForeground(texto);
+
+        lblTitulo.setForeground(texto);
+
+        lblSubtitulo.setForeground(secundario);
+
+        chkModoOscuro.setForeground(texto);
+        chkModoOscuro.setOpaque(false);
+
+        // ------------------------------------
+        // ETIQUETAS
+        // ------------------------------------
+
+        lblUsuario.setForeground(texto);
+
+        lblContrasena.setForeground(texto);
+
+        lblAyuda.setForeground(secundario);
+
+        lblFacialTitulo.setForeground(texto);
+
+        lblEstadoFacial.setForeground(secundario);
+
+        lblPiePagina.setForeground(secundario);
+
+        // ------------------------------------
+        // CAMPOS DE TEXTO
+        // ------------------------------------
+
+        txtUsuario.setBackground(campo);
+        txtUsuario.setForeground(texto);
+        txtUsuario.setCaretColor(texto);
+
+        txtUsuario.setBorder(
+                BorderFactory.createLineBorder(
+                        borde,
+                        1
+                )
+        );
+
+        pwdContrasena.setBackground(campo);
+        pwdContrasena.setForeground(texto);
+        pwdContrasena.setCaretColor(texto);
+
+        pwdContrasena.setBorder(
+                BorderFactory.createLineBorder(
+                        borde,
+                        1
+                )
+        );
+
+        // ------------------------------------
+        // MOSTRAR CONTRASEÑA
+        // ------------------------------------
+
+        chkMostrarContrasena.setBackground(panel);
+        chkMostrarContrasena.setForeground(texto);
+
+        // ------------------------------------
+        // BOTÓN INGRESAR
+        // ------------------------------------
+
+        btnIngresar.setBackground(primario);
+
+        btnIngresar.setForeground(
+                TemaSIGELAB.textoSobrePrimario()
+        );
+
+        btnIngresar.setFocusPainted(false);
+
+        // ------------------------------------
+        // BOTÓN SALIR
+        // ------------------------------------
+
+        btnSalir.setBackground(panel);
+        btnSalir.setForeground(texto);
+        btnSalir.setFocusPainted(false);
+
+        // ------------------------------------
+        // BORDES DE LOS PANELES
+        // ------------------------------------
+
+        actualizarBorde(
+                panelCredenciales,
+                "Credenciales de acceso"
+        );
+
+        actualizarBorde(
+                panelFacial,
+                "Segundo factor de autenticación"
+        );
+
+        // ------------------------------------
+        // ACTUALIZAR INTERFAZ
+        // ------------------------------------
+
+        panelPrincipal.revalidate();
+        panelPrincipal.repaint();
+    }
+
+    // ========================================
+    // BORDES CON TÍTULO
+    // ========================================
+
+    private void actualizarBorde(
+            JPanel panel,
+            String titulo
+    ) {
+
+        Border linea =
+                BorderFactory.createLineBorder(
+                        TemaSIGELAB.borde(),
+                        1
+                );
+
+        TitledBorder bordeTitulo =
+                BorderFactory.createTitledBorder(
+                        linea,
+                        titulo
+                );
+
+        bordeTitulo.setTitleColor(
+                TemaSIGELAB.texto()
+        );
+
+        bordeTitulo.setTitleFont(
+                new Font(
+                        "Arial",
+                        Font.BOLD,
+                        12
+                )
+        );
+
+        panel.setBorder(bordeTitulo);
     }
 
     // ========================================
