@@ -1,163 +1,199 @@
-
 package SIGELAB.view;
 
 import SIGELAB.controller.DashboardController;
 import SIGELAB.controller.LoginController;
-
 import SIGELAB.enums.RolUsuario;
-
 import SIGELAB.model.ResumenDashboard;
 import SIGELAB.model.Usuario;
-
 import SIGELAB.util.Dialogos;
 import SIGELAB.util.Sesion;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class FrmPrincipal {
 
-    // ==========================================
-    // COMPONENTES DEL FORMULARIO
-    // ==========================================
+    // =====================================================
+    // CONTENEDORES DEFINIDOS EN EL .FORM
+    // =====================================================
 
     private JPanel panelPrincipal;
     private JPanel panelNavegacion;
     private JPanel panelContenido;
-    private JPanel panelResumen;
+    private JPanel panelEncabezado;
+    private JPanel panelIndicadores;
+    private JPanel panelInventario;
+    private JPanel panelIndicadoresSecundarios;
+
+    // Nuevos contenedores desplazables
+    private JScrollPane scrollNavegacion;
+    private JScrollPane scrollContenido;
+
+    // Tarjetas individuales
+    private JPanel cardTotal;
+    private JPanel cardDisponibles;
+    private JPanel cardPrestados;
+    private JPanel cardMantenimiento;
+
+    private JPanel cardDanados;
+    private JPanel cardBaja;
+    private JPanel cardPrestamosActivos;
+    private JPanel cardPrestamosVencidos;
+
+    // =====================================================
+    // ETIQUETAS
+    // =====================================================
 
     private JLabel lblMarca;
+    private JLabel lblSubMarca;
+    private JLabel lblGeneral;
+    private JLabel lblDashboardMenu;
+    private JLabel lblOperaciones;
+    private JLabel lblCatalogos;
+    private JLabel lblGestion;
+
     private JLabel lblTitulo;
     private JLabel lblUsuarioActual;
+    private JLabel lblTituloResumen;
+    private JLabel lblTituloInventario;
+    private JLabel lblDescripcionInventario;
+    private JLabel lblTituloSecundarios;
 
-    // ==========================================
-    // INDICADORES DEL DASHBOARD
-    // ==========================================
-
+    // Los ocho indicadores originales
     private JLabel lblTotalEquipos;
     private JLabel lblDisponibles;
     private JLabel lblPrestados;
     private JLabel lblDanados;
-
     private JLabel lblMantenimiento;
     private JLabel lblBaja;
-
     private JLabel lblPrestamosActivos;
     private JLabel lblPrestamosVencidos;
 
-    // ==========================================
-    // BOTONES DE NAVEGACIÓN
-    // ==========================================
+    // =====================================================
+    // BOTONES
+    // =====================================================
 
     private JButton btnPrestamos;
     private JButton btnDevoluciones;
-
     private JButton btnEquipos;
     private JButton btnTiposEquipo;
-
     private JButton btnLaboratorios;
     private JButton btnSolicitantes;
-
     private JButton btnMantenimiento;
     private JButton btnReportes;
-
     private JButton btnUsuarios;
     private JButton btnAuditoria;
-
-    // ==========================================
-    // BOTONES GENERALES
-    // ==========================================
 
     private JButton btnActualizarResumen;
     private JButton btnCerrarSesion;
     private JButton btnSalir;
 
-    private JCheckBox chkModoOscuro;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
 
-    // ==========================================
-    // CONTROLADORES
-    // ==========================================
+    // =====================================================
+    // INVENTARIO
+    // =====================================================
+
+    private JProgressBar barDisponibles;
+    private JProgressBar barPrestados;
+    private JProgressBar barDanados;
+    private JProgressBar barMantenimiento;
+    private JProgressBar barBaja;
+
+    // =====================================================
+    // VENTANA Y CONTROLADOR
+    // =====================================================
 
     private final JFrame ventana;
 
     private final DashboardController dashboard =
             new DashboardController();
 
-    // ==========================================
+    // =====================================================
+    // PALETA OFICIAL FORMAL
+    // =====================================================
+
+    private static final Color OSCURO_FONDO =
+            new Color(13, 20, 32);
+
+    private static final Color OSCURO_LATERAL =
+            new Color(17, 28, 43);
+
+    private static final Color OSCURO_TARJETA =
+            new Color(24, 35, 51);
+
+    private static final Color OSCURO_BORDE =
+            new Color(42, 58, 76);
+
+    private static final Color OSCURO_TEXTO =
+            new Color(227, 234, 242);
+
+    private static final Color OSCURO_SECUNDARIO =
+            new Color(151, 167, 184);
+
+    private static final Color CLARO_FONDO =
+            new Color(244, 247, 250);
+
+    private static final Color CLARO_LATERAL =
+            new Color(236, 242, 247);
+
+    private static final Color CLARO_TARJETA =
+            Color.WHITE;
+
+    private static final Color CLARO_BORDE =
+            new Color(215, 224, 233);
+
+    private static final Color CLARO_TEXTO =
+            new Color(35, 51, 67);
+
+    private static final Color CLARO_SECUNDARIO =
+            new Color(100, 117, 135);
+
+    private static final Color AZUL_FORMAL =
+            new Color(54, 125, 170);
+
+    // =====================================================
     // CONSTRUCTOR
-    // ==========================================
+    // =====================================================
 
     public FrmPrincipal() {
 
         ventana = new JFrame(
-                "SIGELAB - Panel principal"
+                "SIGELAB - Centro de control"
         );
 
-        ventana.setContentPane(
-                panelPrincipal
-        );
+        ventana.setContentPane(panelPrincipal);
 
         ventana.setDefaultCloseOperation(
                 JFrame.EXIT_ON_CLOSE
         );
 
-        // --------------------------------------
-        // USUARIO ACTUAL
-        // --------------------------------------
-
-        Usuario usuario =
-                Sesion.getUsuarioActual();
-
-        lblUsuarioActual.setText(
-                "Usuario: "
-                        + usuario.getNombreCompleto()
-                        + " ("
-                        + usuario.getNombreUsuario()
-                        + ") - Rol: "
-                        + usuario.getRol()
+        // Permite reducir la ventana sin perder acceso
+        // a los módulos.
+        ventana.setMinimumSize(
+                new Dimension(800, 500)
         );
 
-        // --------------------------------------
-        // PERMISOS POR ROL
-        // --------------------------------------
-
-        adaptarMenuAlRol();
-
-        // --------------------------------------
-        // CONFIGURAR VENTANA
-        // --------------------------------------
-
-        ventana.pack();
-
+        // Maximiza respetando la barra de tareas.
         ventana.setExtendedState(
                 JFrame.MAXIMIZED_BOTH
         );
 
-        // --------------------------------------
-        // EVENTOS
-        // --------------------------------------
+        configurarScroll();
+
+        cargarUsuarioActual();
+
+        adaptarMenuAlRol();
 
         configurarEventos();
 
-        // --------------------------------------
-        // TEMA GUARDADO
-        // --------------------------------------
-
-        chkModoOscuro.setSelected(
-                TemaSIGELAB.esOscuro()
-        );
-
         aplicarTema();
-
-        // --------------------------------------
-        // ACTUALIZACIÓN DEL DASHBOARD
-        // --------------------------------------
 
         ventana.addComponentListener(
                 new ComponentAdapter() {
@@ -166,26 +202,131 @@ public class FrmPrincipal {
                     public void componentShown(
                             ComponentEvent e
                     ) {
-
                         cargarResumen();
                     }
                 }
         );
     }
 
-    // ==========================================
-    // CONFIGURAR EVENTOS
-    // ==========================================
+    // =====================================================
+    // SCROLL AUTOMÁTICO
+    // =====================================================
+
+    private void configurarScroll() {
+
+        // MENÚ LATERAL
+
+        scrollNavegacion.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
+
+        scrollNavegacion.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        scrollNavegacion.getVerticalScrollBar()
+                .setUnitIncrement(20);
+
+        scrollNavegacion.setBorder(null);
+
+        scrollNavegacion.getViewport()
+                .setScrollMode(
+                        JViewport.BLIT_SCROLL_MODE
+                );
+
+        // ÁREA CENTRAL
+
+        scrollContenido.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
+
+        scrollContenido.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
+
+        scrollContenido.getVerticalScrollBar()
+                .setUnitIncrement(20);
+
+        scrollContenido.getHorizontalScrollBar()
+                .setUnitIncrement(20);
+
+        scrollContenido.setBorder(null);
+    }
+
+    // =====================================================
+    // USUARIO ACTUAL
+    // =====================================================
+
+    private void cargarUsuarioActual() {
+
+        Usuario usuario =
+                Sesion.getUsuarioActual();
+
+        if (usuario == null) {
+
+            lblUsuarioActual.setText(
+                    "Sin sesión activa"
+            );
+
+            return;
+        }
+
+        lblUsuarioActual.setText(
+                "Usuario: "
+                        + usuario.getNombreCompleto()
+                        + "  |  "
+                        + usuario.getNombreUsuario()
+                        + "  |  Rol: "
+                        + usuario.getRol()
+        );
+    }
+
+    // =====================================================
+    // PERMISOS ORIGINALES
+    // =====================================================
+
+    private void adaptarMenuAlRol() {
+
+        boolean admin =
+                Sesion.tieneRol(
+                        RolUsuario.ADMIN
+                );
+
+        boolean operador =
+                Sesion.tieneRol(
+                        RolUsuario.ADMIN,
+                        RolUsuario.ENCARGADO
+                );
+
+        btnUsuarios.setVisible(admin);
+        btnAuditoria.setVisible(admin);
+        btnTiposEquipo.setVisible(admin);
+        btnLaboratorios.setVisible(admin);
+
+        btnPrestamos.setVisible(operador);
+        btnDevoluciones.setVisible(operador);
+        btnEquipos.setVisible(operador);
+        btnSolicitantes.setVisible(operador);
+        btnMantenimiento.setVisible(operador);
+
+        btnReportes.setVisible(true);
+
+        lblOperaciones.setVisible(operador);
+
+        lblCatalogos.setVisible(
+                admin || operador
+        );
+    }
+
+    // =====================================================
+    // EVENTOS
+    // =====================================================
 
     private void configurarEventos() {
 
         btnActualizarResumen.addActionListener(
                 e -> cargarResumen()
         );
-
-        // --------------------------------------
-        // NAVEGACIÓN
-        // --------------------------------------
 
         btnPrestamos.addActionListener(
                 e -> abrir(
@@ -202,6 +343,12 @@ public class FrmPrincipal {
         btnEquipos.addActionListener(
                 e -> abrir(
                         new FrmEquipos(ventana)::mostrar
+                )
+        );
+
+        btnMantenimiento.addActionListener(
+                e -> abrir(
+                        new FrmMantenimiento(ventana)::mostrar
                 )
         );
 
@@ -223,12 +370,6 @@ public class FrmPrincipal {
                 )
         );
 
-        btnMantenimiento.addActionListener(
-                e -> abrir(
-                        new FrmMantenimiento(ventana)::mostrar
-                )
-        );
-
         btnReportes.addActionListener(
                 e -> abrir(
                         new FrmReportes(ventana)::mostrar
@@ -247,341 +388,488 @@ public class FrmPrincipal {
                 )
         );
 
-        // --------------------------------------
-        // CERRAR SESIÓN
-        // --------------------------------------
+        // TEMA
 
-        btnCerrarSesion.addActionListener(e -> {
-
-            new LoginController().cerrarSesion();
-
-            ventana.dispose();
-
-            new Login().mostrar();
-        });
-
-        // --------------------------------------
-        // SALIR
-        // --------------------------------------
-
-        btnSalir.addActionListener(
-                e -> System.exit(0)
+        btnModoClaro.addActionListener(
+                e -> cambiarTema(false)
         );
 
-        // --------------------------------------
-        // CAMBIAR TEMA
-        // --------------------------------------
+        btnModoOscuro.addActionListener(
+                e -> cambiarTema(true)
+        );
 
-        chkModoOscuro.addActionListener(e -> {
+        // SESIÓN
 
-            TemaSIGELAB.establecerModoOscuro(
-                    chkModoOscuro.isSelected()
-            );
+        btnCerrarSesion.addActionListener(
+                e -> cerrarSesion()
+        );
 
-            aplicarTema();
-        });
+        btnSalir.addActionListener(
+                e -> salirSistema()
+        );
     }
 
-    // ==========================================
-    // APLICAR TEMA DARK TECH
-    // ==========================================
+    // =====================================================
+    // TEMA CLARO / OSCURO
+    // =====================================================
+
+    private void cambiarTema(
+            boolean modoOscuro
+    ) {
+
+        TemaSIGELAB.establecerModoOscuro(
+                modoOscuro
+        );
+
+        aplicarTema();
+    }
 
     private void aplicarTema() {
 
-        Color fondo =
-                TemaSIGELAB.fondo();
+        boolean oscuro =
+                TemaSIGELAB.esOscuro();
 
-        Color panel =
-                TemaSIGELAB.panel();
+        Color fondo = oscuro
+                ? OSCURO_FONDO
+                : CLARO_FONDO;
 
-        Color navegacion =
-                TemaSIGELAB.navegacion();
+        Color lateral = oscuro
+                ? OSCURO_LATERAL
+                : CLARO_LATERAL;
 
-        Color texto =
-                TemaSIGELAB.texto();
+        Color tarjeta = oscuro
+                ? OSCURO_TARJETA
+                : CLARO_TARJETA;
 
-        Color secundario =
-                TemaSIGELAB.textoSecundario();
+        Color borde = oscuro
+                ? OSCURO_BORDE
+                : CLARO_BORDE;
 
-        Color primario =
-                TemaSIGELAB.primario();
+        Color texto = oscuro
+                ? OSCURO_TEXTO
+                : CLARO_TEXTO;
 
-        Color acento =
-                TemaSIGELAB.acento();
+        Color secundario = oscuro
+                ? OSCURO_SECUNDARIO
+                : CLARO_SECUNDARIO;
 
-        Color borde =
-                TemaSIGELAB.borde();
-
-        // --------------------------------------
-        // PANELES PRINCIPALES
-        // --------------------------------------
+        // FONDOS
 
         panelPrincipal.setBackground(fondo);
 
-        panelNavegacion.setBackground(
-                navegacion
+        panelNavegacion.setBackground(lateral);
+
+        panelContenido.setBackground(fondo);
+
+        panelEncabezado.setBackground(fondo);
+
+        panelIndicadores.setBackground(fondo);
+
+        panelIndicadoresSecundarios.setBackground(fondo);
+
+        scrollNavegacion.setBackground(lateral);
+
+        scrollContenido.setBackground(fondo);
+
+        scrollNavegacion.getViewport()
+                .setBackground(lateral);
+
+        scrollContenido.getViewport()
+                .setBackground(fondo);
+
+        // SCROLLBARS
+
+        scrollNavegacion.getVerticalScrollBar()
+                .setBackground(lateral);
+
+        scrollContenido.getVerticalScrollBar()
+                .setBackground(fondo);
+
+        scrollContenido.getHorizontalScrollBar()
+                .setBackground(fondo);
+
+        // TEXTO GENERAL DENTRO DE LOS PANELES
+
+        aplicarTextoBase(
+                panelContenido,
+                secundario
         );
 
-        panelContenido.setBackground(
-                fondo
+        aplicarTextoBase(
+                panelNavegacion,
+                secundario
         );
 
-        panelResumen.setBackground(
-                panel
+        // TARJETAS PRINCIPALES
+
+        JPanel[] tarjetasPrincipales = {
+                cardTotal,
+                cardDisponibles,
+                cardPrestados,
+                cardMantenimiento
+        };
+
+        for (JPanel panel : tarjetasPrincipales) {
+
+            configurarTarjeta(
+                    panel,
+                    tarjeta,
+                    borde
+            );
+        }
+
+        // TARJETAS SECUNDARIAS
+
+        JPanel[] tarjetasSecundarias = {
+                cardDanados,
+                cardBaja,
+                cardPrestamosActivos,
+                cardPrestamosVencidos
+        };
+
+        for (JPanel panel : tarjetasSecundarias) {
+
+            configurarTarjeta(
+                    panel,
+                    tarjeta,
+                    borde
+            );
+        }
+
+        configurarTarjeta(
+                panelInventario,
+                tarjeta,
+                borde
         );
 
-        // --------------------------------------
-        // ENCABEZADOS
-        // --------------------------------------
+        // MARCA
 
-        lblMarca.setForeground(
-                Color.WHITE
+        lblMarca.setFont(
+                fuente(Font.BOLD, 29)
         );
 
-        lblTitulo.setForeground(
-                texto
+        lblMarca.setForeground(texto);
+
+        lblSubMarca.setFont(
+                fuente(Font.PLAIN, 10)
+        );
+
+        lblSubMarca.setForeground(
+                secundario
+        );
+
+        // CATEGORÍAS LATERALES
+
+        JLabel[] categorias = {
+                lblGeneral,
+                lblOperaciones,
+                lblCatalogos,
+                lblGestion
+        };
+
+        for (JLabel categoria : categorias) {
+
+            categoria.setFont(
+                    fuente(Font.BOLD, 10)
+            );
+
+            categoria.setForeground(
+                    secundario
+            );
+
+            categoria.setBorder(
+                    new EmptyBorder(
+                            13, 7, 5, 0
+                    )
+            );
+        }
+
+        // OPCIÓN ACTIVA
+
+        lblDashboardMenu.setOpaque(true);
+
+        lblDashboardMenu.setBackground(
+                oscuro
+                        ? new Color(32, 69, 96)
+                        : new Color(216, 231, 241)
+        );
+
+        lblDashboardMenu.setForeground(
+                oscuro
+                        ? Color.WHITE
+                        : new Color(38, 89, 122)
+        );
+
+        lblDashboardMenu.setFont(
+                fuente(Font.BOLD, 13)
+        );
+
+        lblDashboardMenu.setBorder(
+                new EmptyBorder(
+                        10, 11, 10, 11
+                )
+        );
+
+        // BOTONES DE NAVEGACIÓN
+
+        JButton[] botones = {
+                btnPrestamos,
+                btnDevoluciones,
+                btnEquipos,
+                btnMantenimiento,
+                btnTiposEquipo,
+                btnLaboratorios,
+                btnSolicitantes,
+                btnReportes,
+                btnUsuarios,
+                btnAuditoria,
+                btnCerrarSesion,
+                btnSalir
+        };
+
+        for (JButton boton : botones) {
+
+            configurarBotonMenu(
+                    boton,
+                    lateral,
+                    texto
+            );
+        }
+
+        btnSalir.setForeground(
+                oscuro
+                        ? new Color(219, 158, 158)
+                        : new Color(156, 70, 70)
+        );
+
+        // TÍTULOS
+
+        lblTitulo.setFont(
+                fuente(Font.BOLD, 28)
+        );
+
+        lblTitulo.setForeground(texto);
+
+        lblUsuarioActual.setFont(
+                fuente(Font.PLAIN, 12)
         );
 
         lblUsuarioActual.setForeground(
                 secundario
         );
 
-        // --------------------------------------
-        // CHECKBOX TEMA
-        // --------------------------------------
+        lblTituloResumen.setFont(
+                fuente(Font.BOLD, 12)
+        );
 
-        chkModoOscuro.setForeground(
+        // Contraste corregido
+        lblTituloResumen.setForeground(
                 texto
         );
 
-        chkModoOscuro.setOpaque(false);
-
-        // --------------------------------------
-        // INDICADORES DEL DASHBOARD
-        // --------------------------------------
-
-        configurarIndicador(
-                lblTotalEquipos,
-                acento
+        lblTituloInventario.setFont(
+                fuente(Font.BOLD, 18)
         );
 
-        configurarIndicador(
-                lblDisponibles,
-                TemaSIGELAB.exito()
+        lblTituloInventario.setForeground(
+                texto
         );
 
-        configurarIndicador(
-                lblPrestados,
-                TemaSIGELAB.advertencia()
+        lblDescripcionInventario.setFont(
+                fuente(Font.PLAIN, 12)
         );
 
-        configurarIndicador(
-                lblDanados,
-                TemaSIGELAB.error()
-        );
-
-        configurarIndicador(
-                lblMantenimiento,
-                TemaSIGELAB.informacion()
-        );
-
-        configurarIndicador(
-                lblBaja,
+        lblDescripcionInventario.setForeground(
                 secundario
         );
 
-        configurarIndicador(
-                lblPrestamosActivos,
-                TemaSIGELAB.exito()
+        lblTituloSecundarios.setFont(
+                fuente(Font.BOLD, 16)
         );
 
-        configurarIndicador(
-                lblPrestamosVencidos,
-                TemaSIGELAB.error()
-        );
-
-        // --------------------------------------
-        // ETIQUETAS DEL RESUMEN
-        // --------------------------------------
-
-        for (Component componente :
-                panelResumen.getComponents()) {
-
-            if (componente instanceof JLabel etiqueta) {
-
-                if (!esIndicador(etiqueta)) {
-
-                    etiqueta.setForeground(
-                            texto
-                    );
-                }
-            }
-        }
-
-        // --------------------------------------
-        // BOTONES DE NAVEGACIÓN
-        // --------------------------------------
-
-        JButton[] botonesNavegacion = {
-
-                btnPrestamos,
-                btnDevoluciones,
-                btnEquipos,
-                btnTiposEquipo,
-                btnLaboratorios,
-                btnSolicitantes,
-                btnMantenimiento,
-                btnReportes,
-                btnUsuarios,
-                btnAuditoria
-
-        };
-
-        for (JButton boton : botonesNavegacion) {
-
-            configurarBotonNavegacion(
-                    boton,
-                    navegacion
-            );
-        }
-
-        // --------------------------------------
-        // BOTONES GENERALES
-        // --------------------------------------
-
-        configurarBotonPrimario(
-                btnActualizarResumen,
-                primario
-        );
-
-        configurarBotonNavegacion(
-                btnCerrarSesion,
-                navegacion
-        );
-
-        btnSalir.setBackground(
-                new Color(153, 40, 55)
-        );
-
-        btnSalir.setForeground(
-                Color.WHITE
-        );
-
-        btnSalir.setFocusPainted(false);
-
-        btnSalir.setOpaque(true);
-
-        // --------------------------------------
-        // BORDE DEL DASHBOARD
-        // --------------------------------------
-
-        Border linea =
-                BorderFactory.createLineBorder(
-                        borde,
-                        1
-                );
-
-        TitledBorder bordeTitulo =
-                BorderFactory.createTitledBorder(
-                        linea,
-                        "Resumen general del sistema"
-                );
-
-        bordeTitulo.setTitleColor(
+        lblTituloSecundarios.setForeground(
                 texto
         );
 
-        bordeTitulo.setTitleFont(
-                new Font(
-                        "Arial",
-                        Font.BOLD,
-                        14
+        // VALORES NUMÉRICOS
+
+        JLabel[] valores = {
+                lblTotalEquipos,
+                lblDisponibles,
+                lblPrestados,
+                lblMantenimiento,
+                lblDanados,
+                lblBaja,
+                lblPrestamosActivos,
+                lblPrestamosVencidos
+        };
+
+        for (JLabel valor : valores) {
+
+            valor.setFont(
+                    fuente(Font.BOLD, 30)
+            );
+
+            valor.setForeground(texto);
+        }
+
+        // BOTÓN ACTUALIZAR
+
+        btnActualizarResumen.setOpaque(true);
+
+        btnActualizarResumen.setBackground(
+                AZUL_FORMAL
+        );
+
+        btnActualizarResumen.setForeground(
+                Color.WHITE
+        );
+
+        btnActualizarResumen.setFont(
+                fuente(Font.BOLD, 12)
+        );
+
+        btnActualizarResumen.setFocusPainted(
+                false
+        );
+
+        btnActualizarResumen.setBorder(
+                new EmptyBorder(
+                        9, 16, 9, 16
                 )
         );
 
-        panelResumen.setBorder(
-                bordeTitulo
+        // SOL Y LUNA
+
+        configurarBotonTema(
+                btnModoClaro,
+                !oscuro,
+                tarjeta,
+                texto,
+                borde
         );
 
-        // --------------------------------------
-        // ACTUALIZAR VENTANA
-        // --------------------------------------
+        configurarBotonTema(
+                btnModoOscuro,
+                oscuro,
+                tarjeta,
+                texto,
+                borde
+        );
+
+        // DISTRIBUCIÓN DEL INVENTARIO
+
+        JProgressBar[] barras = {
+                barDisponibles,
+                barPrestados,
+                barDanados,
+                barMantenimiento,
+                barBaja
+        };
+
+        for (JProgressBar barra : barras) {
+
+            barra.setForeground(
+                    AZUL_FORMAL
+            );
+
+            barra.setBackground(
+                    oscuro
+                            ? new Color(41, 56, 73)
+                            : new Color(228, 235, 242)
+            );
+
+            barra.setStringPainted(true);
+
+            barra.setFont(
+                    fuente(Font.PLAIN, 11)
+            );
+
+            barra.setBorderPainted(false);
+
+            barra.setPreferredSize(
+                    new Dimension(250, 18)
+            );
+        }
+
+        // Actualización visual
 
         panelPrincipal.revalidate();
+
         panelPrincipal.repaint();
     }
 
-    // ==========================================
-    // CONFIGURAR INDICADORES
-    // ==========================================
+    // =====================================================
+    // FUENTE
+    // =====================================================
 
-    private void configurarIndicador(
-            JLabel etiqueta,
-            Color color
+    private Font fuente(
+            int estilo,
+            int tamano
     ) {
 
-        etiqueta.setForeground(
-                color
+        return new Font(
+                "Segoe UI",
+                estilo,
+                tamano
         );
+    }
 
-        etiqueta.setFont(
-                new Font(
-                        "Arial",
-                        Font.BOLD,
-                        22
+    // =====================================================
+    // TARJETAS
+    // =====================================================
+
+    private void configurarTarjeta(
+            JPanel panel,
+            Color fondo,
+            Color borde
+    ) {
+
+        panel.setOpaque(true);
+
+        panel.setBackground(fondo);
+
+        panel.setBorder(
+                new LineBorder(
+                        borde,
+                        1,
+                        true
                 )
         );
     }
 
-    // ==========================================
-    // IDENTIFICAR INDICADORES
-    // ==========================================
+    // =====================================================
+    // BOTONES DE MENÚ
+    // =====================================================
 
-    private boolean esIndicador(
-            JLabel etiqueta
-    ) {
-
-        return etiqueta == lblTotalEquipos
-                || etiqueta == lblDisponibles
-                || etiqueta == lblPrestados
-                || etiqueta == lblDanados
-                || etiqueta == lblMantenimiento
-                || etiqueta == lblBaja
-                || etiqueta == lblPrestamosActivos
-                || etiqueta == lblPrestamosVencidos;
-    }
-
-    // ==========================================
-    // BOTONES DE NAVEGACIÓN
-    // ==========================================
-
-    private void configurarBotonNavegacion(
+    private void configurarBotonMenu(
             JButton boton,
-            Color fondo
+            Color fondo,
+            Color texto
     ) {
 
-        boton.setBackground(
-                fondo
-        );
+        boton.setBackground(fondo);
 
-        boton.setForeground(
-                Color.WHITE
-        );
+        boton.setForeground(texto);
 
         boton.setFont(
-                new Font(
-                        "Arial",
-                        Font.BOLD,
-                        12
+                fuente(Font.PLAIN, 13)
+        );
+
+        boton.setHorizontalAlignment(
+                SwingConstants.LEFT
+        );
+
+        boton.setOpaque(true);
+
+        boton.setContentAreaFilled(true);
+
+        boton.setFocusPainted(false);
+
+        boton.setBorder(
+                new EmptyBorder(
+                        8, 11, 8, 11
                 )
-        );
-
-        boton.setFocusPainted(
-                false
-        );
-
-        boton.setOpaque(
-                true
         );
 
         boton.setCursor(
@@ -591,37 +879,50 @@ public class FrmPrincipal {
         );
     }
 
-    // ==========================================
-    // BOTÓN PRIMARIO
-    // ==========================================
+    // =====================================================
+    // BOTONES DE TEMA
+    // =====================================================
 
-    private void configurarBotonPrimario(
+    private void configurarBotonTema(
             JButton boton,
-            Color color
+            boolean activo,
+            Color fondo,
+            Color texto,
+            Color borde
     ) {
-
-        boton.setBackground(
-                color
-        );
-
-        boton.setForeground(
-                Color.WHITE
-        );
 
         boton.setFont(
                 new Font(
-                        "Arial",
-                        Font.BOLD,
-                        12
+                        "Segoe UI Symbol",
+                        Font.PLAIN,
+                        21
                 )
         );
 
-        boton.setFocusPainted(
-                false
+        boton.setOpaque(true);
+
+        boton.setFocusPainted(false);
+
+        boton.setBackground(
+                activo
+                        ? AZUL_FORMAL
+                        : fondo
         );
 
-        boton.setOpaque(
-                true
+        boton.setForeground(
+                activo
+                        ? Color.WHITE
+                        : texto
+        );
+
+        boton.setBorder(
+                new LineBorder(
+                        activo
+                                ? AZUL_FORMAL
+                                : borde,
+                        1,
+                        true
+                )
         );
 
         boton.setCursor(
@@ -631,104 +932,184 @@ public class FrmPrincipal {
         );
     }
 
-    // ==========================================
-    // PERMISOS POR ROL
-    // ==========================================
+    // =====================================================
+    // ETIQUETAS SECUNDARIAS
+    // =====================================================
 
-    private void adaptarMenuAlRol() {
+    private void aplicarTextoBase(
+            Container contenedor,
+            Color secundario
+    ) {
 
-        boolean admin =
-                Sesion.tieneRol(
-                        RolUsuario.ADMIN
+        for (Component componente
+                : contenedor.getComponents()) {
+
+            if (componente instanceof JLabel) {
+
+                JLabel etiqueta =
+                        (JLabel) componente;
+
+                etiqueta.setForeground(
+                        secundario
                 );
 
-        boolean operador =
-                Sesion.tieneRol(
-                        RolUsuario.ADMIN,
-                        RolUsuario.ENCARGADO
+                etiqueta.setFont(
+                        fuente(Font.PLAIN, 12)
                 );
+            }
 
-        // ADMINISTRACIÓN
-        btnUsuarios.setVisible(admin);
-        btnAuditoria.setVisible(admin);
-        btnTiposEquipo.setVisible(admin);
-        btnLaboratorios.setVisible(admin);
+            if (componente instanceof Container) {
 
-        // OPERACIÓN
-        btnPrestamos.setVisible(operador);
-        btnDevoluciones.setVisible(operador);
-        btnEquipos.setVisible(operador);
-        btnSolicitantes.setVisible(operador);
-        btnMantenimiento.setVisible(operador);
-
-        // CONSULTAS
-        btnReportes.setVisible(true);
+                aplicarTextoBase(
+                        (Container) componente,
+                        secundario
+                );
+            }
+        }
     }
 
-    // ==========================================
-    // CARGAR DATOS DEL DASHBOARD
-    // ==========================================
+    // =====================================================
+    // DATOS DEL DASHBOARD
+    // =====================================================
 
     private void cargarResumen() {
 
-        Dialogos.ejecutar(ventana, () -> {
+        Dialogos.ejecutar(
+                ventana,
+                () -> {
 
-            ResumenDashboard r =
-                    dashboard.resumen();
+                    ResumenDashboard r =
+                            dashboard.resumen();
 
-            lblTotalEquipos.setText(
-                    String.valueOf(
-                            r.totalEquipos()
-                    )
-            );
+                    // 4 TARJETAS PRINCIPALES
 
-            lblDisponibles.setText(
-                    String.valueOf(
-                            r.disponibles()
-                    )
-            );
+                    lblTotalEquipos.setText(
+                            String.valueOf(
+                                    r.totalEquipos()
+                            )
+                    );
 
-            lblPrestados.setText(
-                    String.valueOf(
-                            r.prestados()
-                    )
-            );
+                    lblDisponibles.setText(
+                            String.valueOf(
+                                    r.disponibles()
+                            )
+                    );
 
-            lblDanados.setText(
-                    String.valueOf(
-                            r.danados()
-                    )
-            );
+                    lblPrestados.setText(
+                            String.valueOf(
+                                    r.prestados()
+                            )
+                    );
 
-            lblMantenimiento.setText(
-                    String.valueOf(
-                            r.enMantenimiento()
-                    )
-            );
+                    lblMantenimiento.setText(
+                            String.valueOf(
+                                    r.enMantenimiento()
+                            )
+                    );
 
-            lblBaja.setText(
-                    String.valueOf(
-                            r.deBaja()
-                    )
-            );
+                    // 4 TARJETAS SECUNDARIAS
 
-            lblPrestamosActivos.setText(
-                    String.valueOf(
-                            r.prestamosActivos()
-                    )
-            );
+                    lblDanados.setText(
+                            String.valueOf(
+                                    r.danados()
+                            )
+                    );
 
-            lblPrestamosVencidos.setText(
-                    String.valueOf(
-                            r.prestamosVencidos()
-                    )
-            );
-        });
+                    lblBaja.setText(
+                            String.valueOf(
+                                    r.deBaja()
+                            )
+                    );
+
+                    lblPrestamosActivos.setText(
+                            String.valueOf(
+                                    r.prestamosActivos()
+                            )
+                    );
+
+                    lblPrestamosVencidos.setText(
+                            String.valueOf(
+                                    r.prestamosVencidos()
+                            )
+                    );
+
+                    // BARRAS DE DISTRIBUCIÓN
+
+                    actualizarDistribucion(r);
+                }
+        );
     }
 
-    // ==========================================
-    // ABRIR FORMULARIOS
-    // ==========================================
+    // =====================================================
+    // DISTRIBUCIÓN DEL INVENTARIO
+    // =====================================================
+
+    private void actualizarDistribucion(
+            ResumenDashboard r
+    ) {
+
+        int total =
+                Math.max(
+                        1,
+                        r.totalEquipos()
+                );
+
+        actualizarBarra(
+                barDisponibles,
+                r.disponibles(),
+                total
+        );
+
+        actualizarBarra(
+                barPrestados,
+                r.prestados(),
+                total
+        );
+
+        actualizarBarra(
+                barDanados,
+                r.danados(),
+                total
+        );
+
+        actualizarBarra(
+                barMantenimiento,
+                r.enMantenimiento(),
+                total
+        );
+
+        actualizarBarra(
+                barBaja,
+                r.deBaja(),
+                total
+        );
+    }
+
+    private void actualizarBarra(
+            JProgressBar barra,
+            int valor,
+            int total
+    ) {
+
+        barra.setMinimum(0);
+
+        barra.setMaximum(total);
+
+        barra.setValue(
+                Math.max(
+                        0,
+                        Math.min(valor, total)
+                )
+        );
+
+        barra.setString(
+                valor + " equipo(s)"
+        );
+    }
+
+    // =====================================================
+    // NAVEGACIÓN
+    // =====================================================
 
     private void abrir(
             Runnable mostrarFormulario
@@ -739,11 +1120,62 @@ public class FrmPrincipal {
         mostrarFormulario.run();
     }
 
-    // ==========================================
-    // MOSTRAR MENÚ PRINCIPAL
-    // ==========================================
+    // =====================================================
+    // CERRAR SESIÓN
+    // =====================================================
+
+    private void cerrarSesion() {
+
+        int respuesta =
+                JOptionPane.showConfirmDialog(
+                        ventana,
+                        "¿Deseas cerrar la sesión actual?",
+                        "Cerrar sesión",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        new LoginController().cerrarSesion();
+
+        ventana.dispose();
+
+        new Login().mostrar();
+    }
+
+    // =====================================================
+    // SALIR
+    // =====================================================
+
+    private void salirSistema() {
+
+        int respuesta =
+                JOptionPane.showConfirmDialog(
+                        ventana,
+                        "¿Deseas salir de SIGELAB?",
+                        "Salir del sistema",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+
+            System.exit(0);
+        }
+    }
+
+    // =====================================================
+    // MOSTRAR VENTANA
+    // =====================================================
 
     public void mostrar() {
+
+        ventana.setExtendedState(
+                JFrame.MAXIMIZED_BOTH
+        );
 
         ventana.setVisible(true);
     }
