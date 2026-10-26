@@ -1,267 +1,640 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="SIGELAB.view.Login">
-  <grid id="c0000" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="12">
-    <margin top="24" left="36" bottom="24" right="36"/>
+
+  <grid id="c0000"
+        binding="panelPrincipal"
+        layout-manager="GridLayoutManager"
+        row-count="1"
+        column-count="2"
+        same-size-horizontally="false"
+        same-size-vertically="false"
+        hgap="0"
+        vgap="0">
+
+    <margin top="0" left="0" bottom="0" right="0"/>
+
     <constraints>
-      <xy x="20" y="20" width="760" height="620"/>
+      <xy x="20" y="20" width="1100" height="700"/>
     </constraints>
+
     <properties>
-      <background color="-592138"/>
-      <minimumSize width="650" height="570"/>
-      <preferredSize width="760" height="620"/>
+      <preferredSize width="1100" height="700"/>
     </properties>
+
     <border type="none"/>
+
     <children>
 
-      <!-- ENCABEZADO CON SELECTOR DE TEMA -->
-      <grid id="c0001" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="10" vgap="0">
-        <margin top="5" left="5" bottom="5" right="5"/>
+      <!-- ====================================== -->
+      <!-- PANEL IZQUIERDO: IDENTIDAD SIGELAB -->
+      <!-- ====================================== -->
+
+      <grid id="c0001"
+            binding="panelIzquierdo"
+            layout-manager="GridLayoutManager"
+            row-count="7"
+            column-count="1"
+            same-size-horizontally="false"
+            same-size-vertically="false"
+            hgap="0"
+            vgap="15">
+
+        <margin top="35" left="45" bottom="35" right="45"/>
+
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <opaque value="false"/>
-        </properties>
-        <border type="none"/>
-        <children>
-
-          <component id="c0013" class="javax.swing.JLabel" binding="lblEncabezado">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Arial" size="12" style="1"/>
-              <foreground color="-15782586"/>
-              <text value="SIGELAB | INSTITUTIONAL CORE LABORATORY SUITE"/>
-            </properties>
-          </component>
-
-          <component id="c0014" class="javax.swing.JCheckBox" binding="chkModoOscuro">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Arial" size="12" style="1"/>
-              <foreground color="-15782586"/>
-              <opaque value="false"/>
-              <selected value="true"/>
-              <text value="Modo oscuro"/>
-            </properties>
-          </component>
-
-        </children>
-      </grid>
-
-      <!-- TITULO -->
-      <component id="c0002" class="javax.swing.JLabel" binding="lblTitulo">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font name="Arial" size="32" style="1"/>
-          <foreground color="-15782586"/>
-          <text value="SIGELAB"/>
-        </properties>
-      </component>
-
-      <!-- SUBTITULO -->
-      <component id="c0003" class="javax.swing.JLabel" binding="lblSubtitulo">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font name="Arial" size="12"/>
-          <foreground color="-10262403"/>
-          <text value="Sistema de Gestión y Control de Laboratorios Universitarios"/>
-        </properties>
-      </component>
-
-      <!-- CREDENCIALES -->
-      <grid id="c0004" binding="panelCredenciales" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="12" vgap="12">
-        <margin top="20" left="25" bottom="20" right="25"/>
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="500" height="230"/>
+          <grid row="0" column="0" row-span="1" col-span="1"
+                vsize-policy="3" hsize-policy="3"
+                anchor="0" fill="3" indent="0"
+                use-parent-layout="false">
+            <preferred-size width="520" height="-1"/>
+            <minimum-size width="350" height="-1"/>
           </grid>
         </constraints>
+
         <properties>
-          <background color="-1"/>
+          <background color="-15520415"/>
         </properties>
-        <border type="etched" title="Credenciales de acceso">
-          <font name="Arial" size="14" style="1"/>
-          <title-color color="-15782586"/>
-        </border>
+
+        <border type="none"/>
+
         <children>
 
-          <component id="c0005" class="javax.swing.JLabel" binding="lblUsuario">
+          <!-- MARCA INSTITUCIONAL -->
+
+          <component id="c0002"
+                     class="javax.swing.JLabel"
+                     binding="lblMarca">
+
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
             </constraints>
+
             <properties>
-              <font name="Arial" size="12" style="1"/>
-              <foreground color="-15782586"/>
-              <text value="Usuario o código institucional"/>
+              <font name="Arial" size="22" style="1"/>
+              <foreground color="-1"/>
+              <text value="SIGELAB"/>
             </properties>
+
           </component>
 
-          <component id="c0006" class="javax.swing.JTextField" binding="txtUsuario">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="400" height="38"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font name="Arial" size="14"/>
-              <toolTipText value="Ingrese su nombre de usuario"/>
-            </properties>
-          </component>
+          <!-- ESPACIO SUPERIOR -->
 
-          <component id="c0007" class="javax.swing.JLabel" binding="lblContrasena">
+          <vspacer id="c0003">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Arial" size="12" style="1"/>
-              <foreground color="-15782586"/>
-              <text value="Contraseña"/>
-            </properties>
-          </component>
-
-          <component id="c0008" class="javax.swing.JPasswordField" binding="pwdContrasena">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="320" height="38"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font name="Arial" size="14"/>
-            </properties>
-          </component>
-
-          <component id="c0009" class="javax.swing.JCheckBox" binding="chkMostrarContrasena">
-            <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-1"/>
-              <font name="Arial" size="11"/>
-              <text value="Mostrar"/>
-            </properties>
-          </component>
-
-          <vspacer id="c000a">
-            <constraints>
-              <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1"
+                    vsize-policy="6" hsize-policy="1"
+                    anchor="0" fill="2" indent="0"
+                    use-parent-layout="false"/>
             </constraints>
           </vspacer>
 
-          <component id="c000b" class="javax.swing.JLabel" binding="lblAyuda">
+          <!-- IDENTIDAD VISUAL -->
+
+          <component id="c0004"
+                     class="javax.swing.JLabel"
+                     binding="lblIconoInstitucional">
+
             <constraints>
-              <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
             </constraints>
+
             <properties>
-              <font name="Arial" size="11"/>
-              <foreground color="-10262403"/>
-              <text value="Ingrese sus credenciales institucionales para continuar."/>
-            </properties>
-          </component>
-
-        </children>
-      </grid>
-
-      <!-- RECONOCIMIENTO FACIAL -->
-      <grid id="c000c" binding="panelFacial" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="8">
-        <margin top="15" left="20" bottom="15" right="20"/>
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-1050378"/>
-        </properties>
-        <border type="etched" title="Segundo factor de autenticación">
-          <font name="Arial" size="12" style="1"/>
-          <title-color color="-15782586"/>
-        </border>
-        <children>
-
-          <component id="c000d" class="javax.swing.JLabel" binding="lblFacialTitulo">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Arial" size="12" style="1"/>
-              <foreground color="-15782586"/>
-              <text value="Reconocimiento facial de guardia"/>
-            </properties>
-          </component>
-
-          <component id="c000e" class="javax.swing.JLabel" binding="lblEstadoFacial">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font name="Arial" size="11"/>
-              <foreground color="-10262403"/>
-              <text value="Estado: integración facial pendiente"/>
-            </properties>
-          </component>
-
-        </children>
-      </grid>
-
-      <!-- BOTONES -->
-      <grid id="c000f" binding="panelBotones" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="12" vgap="0">
-        <margin top="5" left="10" bottom="5" right="10"/>
-        <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-592138"/>
-        </properties>
-        <border type="none"/>
-        <children>
-
-          <component id="c0010" class="javax.swing.JButton" binding="btnIngresar">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="300" height="44"/>
-              </grid>
-            </constraints>
-            <properties>
-              <background color="-15782586"/>
-              <font name="Arial" size="13" style="1"/>
+              <font name="Arial" size="36" style="1"/>
               <foreground color="-1"/>
-              <text value="Ingresar al sistema"/>
+              <text value="SIGELAB"/>
             </properties>
+
           </component>
 
-          <component id="c0011" class="javax.swing.JButton" binding="btnSalir">
+          <!-- MENSAJE PRINCIPAL -->
+
+          <component id="c0005"
+                     class="javax.swing.JLabel"
+                     binding="lblMensajePrincipal">
+
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="100" height="44"/>
-              </grid>
+              <grid row="3" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
             </constraints>
+
+            <properties>
+              <font name="Arial" size="22" style="1"/>
+              <foreground color="-1"/>
+              <text value="Gestión inteligente de laboratorios"/>
+            </properties>
+
+          </component>
+
+          <!-- DESCRIPCIÓN -->
+
+          <component id="c0006"
+                     class="javax.swing.JLabel"
+                     binding="lblDescripcion">
+
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
             <properties>
               <font name="Arial" size="12"/>
-              <text value="Salir"/>
+              <foreground color="-1"/>
+              <text value="Inventario | Préstamos | Mantenimiento | Seguridad"/>
             </properties>
+
           </component>
+
+          <!-- CARACTERÍSTICAS -->
+
+          <component id="c0007"
+                     class="javax.swing.JLabel"
+                     binding="lblCaracteristicas">
+
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="12"/>
+              <foreground color="-1"/>
+              <text value="Control institucional seguro y centralizado"/>
+            </properties>
+
+          </component>
+
+          <!-- ESPACIO INFERIOR -->
+
+          <vspacer id="c0008">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1"
+                    vsize-policy="6" hsize-policy="1"
+                    anchor="0" fill="2" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
 
         </children>
       </grid>
 
-      <!-- PIE DE PAGINA -->
-      <component id="c0012" class="javax.swing.JLabel" binding="lblPiePagina">
+      <!-- ====================================== -->
+      <!-- PANEL DERECHO: INICIO DE SESIÓN -->
+      <!-- ====================================== -->
+
+      <grid id="c0009"
+            binding="panelDerecho"
+            layout-manager="GridLayoutManager"
+            row-count="10"
+            column-count="1"
+            same-size-horizontally="false"
+            same-size-vertically="false"
+            hgap="0"
+            vgap="14">
+
+        <margin top="35" left="55" bottom="35" right="55"/>
+
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1"
+                vsize-policy="3" hsize-policy="3"
+                anchor="0" fill="3" indent="0"
+                use-parent-layout="false">
+            <preferred-size width="580" height="-1"/>
+            <minimum-size width="430" height="-1"/>
+          </grid>
         </constraints>
+
         <properties>
-          <font name="Arial" size="11"/>
-          <foreground color="-10262403"/>
-          <horizontalAlignment value="0"/>
-          <text value="Acceso institucional protegido | SIGELAB Desktop"/>
+          <background color="-15920606"/>
         </properties>
-      </component>
+
+        <border type="none"/>
+
+        <children>
+
+          <!-- SELECTOR SOL Y LUNA -->
+
+          <grid id="c000a"
+                binding="panelSelectorTema"
+                layout-manager="GridLayoutManager"
+                row-count="1"
+                column-count="3"
+                same-size-horizontally="false"
+                same-size-vertically="false"
+                hgap="5"
+                vgap="0">
+
+            <margin top="0" left="0" bottom="0" right="0"/>
+
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="0" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <opaque value="false"/>
+            </properties>
+
+            <border type="none"/>
+
+            <children>
+
+              <hspacer id="c000b">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1"
+                        vsize-policy="1" hsize-policy="6"
+                        anchor="0" fill="1" indent="0"
+                        use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+
+              <component id="c000c"
+                         class="javax.swing.JButton"
+                         binding="btnModoClaro">
+
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="0"
+                        anchor="0" fill="1" indent="0"
+                        use-parent-layout="false">
+                    <preferred-size width="52" height="42"/>
+                  </grid>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="20"/>
+                  <text value="☀"/>
+                  <toolTipText value="Activar modo claro"/>
+                </properties>
+
+              </component>
+
+              <component id="c000d"
+                         class="javax.swing.JButton"
+                         binding="btnModoOscuro">
+
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="0"
+                        anchor="0" fill="1" indent="0"
+                        use-parent-layout="false">
+                    <preferred-size width="52" height="42"/>
+                  </grid>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="20"/>
+                  <text value="☾"/>
+                  <toolTipText value="Activar modo oscuro"/>
+                </properties>
+
+              </component>
+
+            </children>
+          </grid>
+
+          <!-- TÍTULO DEL LOGIN -->
+
+          <component id="c000e"
+                     class="javax.swing.JLabel"
+                     binding="lblTitulo">
+
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="28" style="1"/>
+              <text value="Iniciar sesión"/>
+            </properties>
+
+          </component>
+
+          <!-- SUBTÍTULO -->
+
+          <component id="c000f"
+                     class="javax.swing.JLabel"
+                     binding="lblSubtitulo">
+
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="12"/>
+              <text value="Bienvenido al Sistema de Gestión de Laboratorios"/>
+            </properties>
+
+          </component>
+
+          <!-- ETIQUETA USUARIO -->
+
+          <component id="c0010"
+                     class="javax.swing.JLabel"
+                     binding="lblUsuario">
+
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="12" style="1"/>
+              <text value="Usuario institucional"/>
+            </properties>
+
+          </component>
+
+          <!-- CAMPO USUARIO -->
+
+          <component id="c0011"
+                     class="javax.swing.JTextField"
+                     binding="txtUsuario">
+
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="6"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false">
+                <preferred-size width="350" height="42"/>
+              </grid>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="14"/>
+              <toolTipText value="Ingrese su usuario institucional"/>
+            </properties>
+
+          </component>
+
+          <!-- ETIQUETA CONTRASEÑA -->
+
+          <component id="c0012"
+                     class="javax.swing.JLabel"
+                     binding="lblContrasena">
+
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="12" style="1"/>
+              <text value="Contraseña"/>
+            </properties>
+
+          </component>
+
+          <!-- CONTRASEÑA Y MOSTRAR -->
+
+          <grid id="c0013"
+                layout-manager="GridLayoutManager"
+                row-count="1"
+                column-count="2"
+                same-size-horizontally="false"
+                same-size-vertically="false"
+                hgap="10"
+                vgap="0">
+
+            <margin top="0" left="0" bottom="0" right="0"/>
+
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="0" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <opaque value="false"/>
+            </properties>
+
+            <border type="none"/>
+
+            <children>
+
+              <component id="c0014"
+                         class="javax.swing.JPasswordField"
+                         binding="pwdContrasena">
+
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="6"
+                        anchor="8" fill="1" indent="0"
+                        use-parent-layout="false">
+                    <preferred-size width="300" height="42"/>
+                  </grid>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="14"/>
+                </properties>
+
+              </component>
+
+              <component id="c0015"
+                         class="javax.swing.JCheckBox"
+                         binding="chkMostrarContrasena">
+
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="0"
+                        anchor="8" fill="0" indent="0"
+                        use-parent-layout="false"/>
+                </constraints>
+
+                <properties>
+                  <opaque value="false"/>
+                  <text value="Mostrar"/>
+                </properties>
+
+              </component>
+
+            </children>
+          </grid>
+
+          <!-- FACTOR FACIAL -->
+
+          <grid id="c0016"
+                binding="panelFacial"
+                layout-manager="GridLayoutManager"
+                row-count="2"
+                column-count="1"
+                same-size-horizontally="false"
+                same-size-vertically="false"
+                hgap="0"
+                vgap="8">
+
+            <margin top="15" left="15" bottom="15" right="15"/>
+
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="1"
+                    vsize-policy="3" hsize-policy="3"
+                    anchor="0" fill="3" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties/>
+
+            <border type="etched" title="Segundo factor de autenticación"/>
+
+            <children>
+
+              <component id="c0017"
+                         class="javax.swing.JLabel"
+                         binding="lblFacialTitulo">
+
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="3"
+                        anchor="8" fill="1" indent="0"
+                        use-parent-layout="false"/>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="12" style="1"/>
+                  <text value="Reconocimiento facial de guardia"/>
+                </properties>
+
+              </component>
+
+              <component id="c0018"
+                         class="javax.swing.JLabel"
+                         binding="lblEstadoFacial">
+
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="3"
+                        anchor="8" fill="1" indent="0"
+                        use-parent-layout="false"/>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="11"/>
+                  <text value="Estado: integración facial pendiente"/>
+                </properties>
+
+              </component>
+
+            </children>
+          </grid>
+
+          <!-- BOTONES -->
+
+          <grid id="c0019"
+                layout-manager="GridLayoutManager"
+                row-count="1"
+                column-count="2"
+                same-size-horizontally="false"
+                same-size-vertically="false"
+                hgap="12"
+                vgap="0">
+
+            <margin top="0" left="0" bottom="0" right="0"/>
+
+            <constraints>
+              <grid row="8" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="0" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <opaque value="false"/>
+            </properties>
+
+            <border type="none"/>
+
+            <children>
+
+              <component id="c001a"
+                         class="javax.swing.JButton"
+                         binding="btnIngresar">
+
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="3"
+                        anchor="0" fill="1" indent="0"
+                        use-parent-layout="false">
+                    <preferred-size width="300" height="45"/>
+                  </grid>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="13" style="1"/>
+                  <text value="Ingresar al sistema"/>
+                </properties>
+
+              </component>
+
+              <component id="c001b"
+                         class="javax.swing.JButton"
+                         binding="btnSalir">
+
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1"
+                        vsize-policy="0" hsize-policy="0"
+                        anchor="0" fill="1" indent="0"
+                        use-parent-layout="false">
+                    <preferred-size width="100" height="45"/>
+                  </grid>
+                </constraints>
+
+                <properties>
+                  <font name="Arial" size="12"/>
+                  <text value="Salir"/>
+                </properties>
+
+              </component>
+
+            </children>
+          </grid>
+
+          <!-- PIE -->
+
+          <component id="c001c"
+                     class="javax.swing.JLabel"
+                     binding="lblPiePagina">
+
+            <constraints>
+              <grid row="9" column="0" row-span="1" col-span="1"
+                    vsize-policy="0" hsize-policy="3"
+                    anchor="8" fill="1" indent="0"
+                    use-parent-layout="false"/>
+            </constraints>
+
+            <properties>
+              <font name="Arial" size="11"/>
+              <text value="Acceso institucional protegido | SIGELAB Desktop"/>
+            </properties>
+
+          </component>
+
+        </children>
+      </grid>
 
     </children>
   </grid>

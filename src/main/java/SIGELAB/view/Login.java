@@ -1,4 +1,3 @@
-
 package SIGELAB.view;
 
 import SIGELAB.controller.LoginController;
@@ -19,23 +18,25 @@ import java.util.Arrays;
 public class Login {
 
     // ========================================
-    // COMPONENTES DEL LOGIN.FORM
+    // COMPONENTES DE LOGIN.FORM
     // ========================================
 
     private JPanel panelPrincipal;
-
-    private JPanel panelCredenciales;
+    private JPanel panelIzquierdo;
+    private JPanel panelDerecho;
+    private JPanel panelSelectorTema;
     private JPanel panelFacial;
-    private JPanel panelBotones;
 
-    private JLabel lblEncabezado;
+    private JLabel lblMarca;
+    private JLabel lblIconoInstitucional;
+    private JLabel lblMensajePrincipal;
+    private JLabel lblDescripcion;
+    private JLabel lblCaracteristicas;
+
     private JLabel lblTitulo;
     private JLabel lblSubtitulo;
-
     private JLabel lblUsuario;
     private JLabel lblContrasena;
-    private JLabel lblAyuda;
-
     private JLabel lblFacialTitulo;
     private JLabel lblEstadoFacial;
     private JLabel lblPiePagina;
@@ -44,8 +45,9 @@ public class Login {
     private JPasswordField pwdContrasena;
 
     private JCheckBox chkMostrarContrasena;
-    private JCheckBox chkModoOscuro;
 
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JButton btnIngresar;
     private JButton btnSalir;
 
@@ -68,45 +70,44 @@ public class Login {
                 "SIGELAB - Inicio de sesión"
         );
 
-        ventana.setContentPane(panelPrincipal);
+        ventana.setContentPane(
+                panelPrincipal
+        );
 
         ventana.setDefaultCloseOperation(
                 JFrame.EXIT_ON_CLOSE
         );
 
-        // Calcular inicialmente el tamaño de los componentes.
-        ventana.pack();
-
-// Maximizar dentro del área de trabajo de Windows.
-// La barra de tareas permanece visible.
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
         configurarEventos();
 
-        // Recuperar tema guardado.
-        chkModoOscuro.setSelected(
-                TemaSIGELAB.esOscuro()
-        );
-
-        // Aplicar los colores al iniciar.
         aplicarTema();
+
+        ventana.pack();
+
+        // Maximizada, respetando barra de tareas.
+        ventana.setExtendedState(
+                JFrame.MAXIMIZED_BOTH
+        );
 
         ventana.getRootPane().setDefaultButton(
                 btnIngresar
         );
 
-        // Segundo factor: reconocimiento facial en Azure.
-        // Se "despierta" la API mientras el usuario escribe su contraseña.
+        // Inicializa el segundo factor sin alterar el diseño Split Screen.
         if (ServicioFacial.habilitado()) {
-            lblEstadoFacial.setText("Estado: se verificará su rostro con la cámara después de la contraseña");
+            lblEstadoFacial.setText(
+                    "Estado: se verificará su rostro después de la contraseña"
+            );
             ServicioFacial.despertar();
         } else {
-            lblEstadoFacial.setText("Estado: reconocimiento facial desactivado (config.properties)");
+            lblEstadoFacial.setText(
+                    "Estado: reconocimiento facial desactivado (config.properties)"
+            );
         }
     }
 
     // ========================================
-    // CONFIGURACIÓN DE EVENTOS
+    // EVENTOS
     // ========================================
 
     private void configurarEventos() {
@@ -129,7 +130,7 @@ public class Login {
     }
 
     // ========================================
-    // MOSTRAR / OCULTAR CONTRASEÑA
+    // MOSTRAR CONTRASEÑA
     // ========================================
 
     private void configurarMostrarContrasena() {
@@ -139,34 +140,38 @@ public class Login {
 
         chkMostrarContrasena.addActionListener(e -> {
 
-            if (chkMostrarContrasena.isSelected()) {
+            boolean mostrar =
+                    chkMostrarContrasena.isSelected();
 
-                pwdContrasena.setEchoChar(
-                        (char) 0
-                );
-
-            } else {
-
-                pwdContrasena.setEchoChar(
-                        caracterOriginal
-                );
-            }
+            pwdContrasena.setEchoChar(
+                    mostrar
+                            ? (char) 0
+                            : caracterOriginal
+            );
         });
     }
 
     // ========================================
-    // SELECTOR DE TEMA
+    // SELECTOR SOL Y LUNA
     // ========================================
 
     private void configurarSelectorTema() {
 
-        chkModoOscuro.addActionListener(e -> {
-
-            boolean oscuro =
-                    chkModoOscuro.isSelected();
+        // SOL: modo claro
+        btnModoClaro.addActionListener(e -> {
 
             TemaSIGELAB.establecerModoOscuro(
-                    oscuro
+                    false
+            );
+
+            aplicarTema();
+        });
+
+        // LUNA: modo oscuro
+        btnModoOscuro.addActionListener(e -> {
+
+            TemaSIGELAB.establecerModoOscuro(
+                    true
             );
 
             aplicarTema();
@@ -174,57 +179,95 @@ public class Login {
     }
 
     // ========================================
-    // APLICAR TEMA A LA INTERFAZ
+    // APLICAR TEMA
     // ========================================
 
     private void aplicarTema() {
 
-        Color fondo = TemaSIGELAB.fondo();
-        Color panel = TemaSIGELAB.panel();
-        Color texto = TemaSIGELAB.texto();
-        Color secundario = TemaSIGELAB.textoSecundario();
-        Color primario = TemaSIGELAB.primario();
-        Color borde = TemaSIGELAB.borde();
-        Color campo = TemaSIGELAB.campo();
+        boolean oscuro =
+                TemaSIGELAB.esOscuro();
+
+        Color fondo =
+                TemaSIGELAB.fondo();
+
+        Color panel =
+                TemaSIGELAB.panel();
+
+        Color texto =
+                TemaSIGELAB.texto();
+
+        Color secundario =
+                TemaSIGELAB.textoSecundario();
+
+        Color primario =
+                TemaSIGELAB.primario();
+
+        Color borde =
+                TemaSIGELAB.borde();
+
+        Color campo =
+                TemaSIGELAB.campo();
 
         // ------------------------------------
-        // PANEL PRINCIPAL
+        // FONDOS
         // ------------------------------------
 
         panelPrincipal.setBackground(fondo);
 
-        panelBotones.setBackground(fondo);
+        panelIzquierdo.setBackground(
+                oscuro
+                        ? new Color(18, 61, 97)
+                        : new Color(220, 237, 248)
+        );
 
-        // ------------------------------------
-        // PANELES INTERNOS
-        // ------------------------------------
-
-        panelCredenciales.setBackground(panel);
+        panelDerecho.setBackground(fondo);
 
         panelFacial.setBackground(panel);
 
+        panelSelectorTema.setOpaque(false);
+
         // ------------------------------------
-        // ENCABEZADO
+        // IDENTIDAD IZQUIERDA
         // ------------------------------------
 
-        lblEncabezado.setForeground(texto);
+        Color textoIzquierdo =
+                oscuro
+                        ? Color.WHITE
+                        : new Color(17, 45, 71);
+
+        lblMarca.setForeground(textoIzquierdo);
+
+        lblIconoInstitucional.setForeground(
+                textoIzquierdo
+        );
+
+        lblMensajePrincipal.setForeground(
+                textoIzquierdo
+        );
+
+        lblDescripcion.setForeground(
+                oscuro
+                        ? new Color(181, 211, 232)
+                        : new Color(66, 102, 128)
+        );
+
+        lblCaracteristicas.setForeground(
+                oscuro
+                        ? new Color(181, 211, 232)
+                        : new Color(66, 102, 128)
+        );
+
+        // ------------------------------------
+        // TITULOS DE ACCESO
+        // ------------------------------------
 
         lblTitulo.setForeground(texto);
 
         lblSubtitulo.setForeground(secundario);
 
-        chkModoOscuro.setForeground(texto);
-        chkModoOscuro.setOpaque(false);
-
-        // ------------------------------------
-        // ETIQUETAS
-        // ------------------------------------
-
         lblUsuario.setForeground(texto);
 
         lblContrasena.setForeground(texto);
-
-        lblAyuda.setForeground(secundario);
 
         lblFacialTitulo.setForeground(texto);
 
@@ -233,106 +276,87 @@ public class Login {
         lblPiePagina.setForeground(secundario);
 
         // ------------------------------------
-        // CAMPOS DE TEXTO
+        // CAMPOS
         // ------------------------------------
 
-        txtUsuario.setBackground(campo);
-        txtUsuario.setForeground(texto);
-        txtUsuario.setCaretColor(texto);
-
-        txtUsuario.setBorder(
-                BorderFactory.createLineBorder(
-                        borde,
-                        1
-                )
+        configurarCampo(
+                txtUsuario,
+                campo,
+                texto,
+                borde
         );
 
-        pwdContrasena.setBackground(campo);
-        pwdContrasena.setForeground(texto);
-        pwdContrasena.setCaretColor(texto);
-
-        pwdContrasena.setBorder(
-                BorderFactory.createLineBorder(
-                        borde,
-                        1
-                )
+        configurarCampo(
+                pwdContrasena,
+                campo,
+                texto,
+                borde
         );
 
-        // ------------------------------------
-        // MOSTRAR CONTRASEÑA
-        // ------------------------------------
-
-        chkMostrarContrasena.setBackground(panel);
         chkMostrarContrasena.setForeground(texto);
+        chkMostrarContrasena.setOpaque(false);
 
         // ------------------------------------
-        // BOTÓN INGRESAR
+        // BOTON PRINCIPAL
         // ------------------------------------
 
         btnIngresar.setBackground(primario);
-
-        btnIngresar.setForeground(
-                TemaSIGELAB.textoSobrePrimario()
-        );
-
+        btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
+        btnIngresar.setOpaque(true);
 
         // ------------------------------------
-        // BOTÓN SALIR
+        // BOTON SALIR
         // ------------------------------------
 
-        btnSalir.setBackground(panel);
-        btnSalir.setForeground(texto);
+        btnSalir.setBackground(
+                oscuro
+                        ? new Color(39, 59, 86)
+                        : new Color(221, 230, 238)
+        );
+
+        btnSalir.setForeground(
+                oscuro
+                        ? Color.WHITE
+                        : TemaSIGELAB.texto()
+        );
+
         btnSalir.setFocusPainted(false);
+        btnSalir.setOpaque(true);
 
         // ------------------------------------
-        // BORDES DE LOS PANELES
+        // SOL Y LUNA
         // ------------------------------------
 
-        actualizarBorde(
-                panelCredenciales,
-                "Credenciales de acceso"
+        configurarBotonTema(
+                btnModoClaro,
+                !oscuro
         );
 
-        actualizarBorde(
-                panelFacial,
-                "Segundo factor de autenticación"
+        configurarBotonTema(
+                btnModoOscuro,
+                oscuro
         );
 
         // ------------------------------------
-        // ACTUALIZAR INTERFAZ
+        // FACTOR FACIAL
         // ------------------------------------
-
-        panelPrincipal.revalidate();
-        panelPrincipal.repaint();
-    }
-
-    // ========================================
-    // BORDES CON TÍTULO
-    // ========================================
-
-    private void actualizarBorde(
-            JPanel panel,
-            String titulo
-    ) {
 
         Border linea =
                 BorderFactory.createLineBorder(
-                        TemaSIGELAB.borde(),
+                        borde,
                         1
                 );
 
-        TitledBorder bordeTitulo =
+        TitledBorder bordeFacial =
                 BorderFactory.createTitledBorder(
                         linea,
-                        titulo
+                        "Segundo factor de autenticación"
                 );
 
-        bordeTitulo.setTitleColor(
-                TemaSIGELAB.texto()
-        );
+        bordeFacial.setTitleColor(texto);
 
-        bordeTitulo.setTitleFont(
+        bordeFacial.setTitleFont(
                 new Font(
                         "Arial",
                         Font.BOLD,
@@ -340,11 +364,84 @@ public class Login {
                 )
         );
 
-        panel.setBorder(bordeTitulo);
+        panelFacial.setBorder(bordeFacial);
+
+        // ------------------------------------
+        // ACTUALIZAR
+        // ------------------------------------
+
+        panelPrincipal.revalidate();
+        panelPrincipal.repaint();
     }
 
     // ========================================
-    // INICIO DE SESIÓN
+    // CONFIGURAR CAMPOS
+    // ========================================
+
+    private void configurarCampo(
+            JTextField componente,
+            Color fondo,
+            Color texto,
+            Color borde
+    ) {
+
+        componente.setBackground(fondo);
+        componente.setForeground(texto);
+        componente.setCaretColor(texto);
+
+        componente.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(
+                                borde,
+                                1
+                        ),
+                        BorderFactory.createEmptyBorder(
+                                8, 12, 8, 12
+                        )
+                )
+        );
+    }
+
+    // ========================================
+    // CONFIGURAR BOTONES SOL Y LUNA
+    // ========================================
+
+    private void configurarBotonTema(
+            JButton boton,
+            boolean activo
+    ) {
+
+        boton.setBackground(
+                activo
+                        ? TemaSIGELAB.primario()
+                        : TemaSIGELAB.panel()
+        );
+
+        boton.setForeground(
+                activo
+                        ? Color.WHITE
+                        : TemaSIGELAB.textoSecundario()
+        );
+
+        boton.setFocusPainted(false);
+
+        boton.setOpaque(true);
+
+        boton.setToolTipText(
+                boton == btnModoClaro
+                        ? "Activar modo claro"
+                        : "Activar modo oscuro"
+        );
+
+        boton.setCursor(
+                Cursor.getPredefinedCursor(
+                        Cursor.HAND_CURSOR
+                )
+        );
+    }
+
+    // ========================================
+    // INICIO DE SESION
     // ========================================
 
     private void ingresar() {
@@ -357,20 +454,22 @@ public class Login {
 
         try {
 
-            // Paso 1: usuario, contraseña y estado ACTIVO
+            // Primero comprobar credenciales y estado de la cuenta.
             Usuario usuario = controller.validarCredenciales(
                     nombreUsuario,
                     contrasena
             );
 
-            // Paso 2 (RN-02): reconocimiento facial
-            lblEstadoFacial.setText("Estado: verificando el rostro de " + usuario.getNombreUsuario() + "...");
+            // RN-02: segundo factor facial antes de completar la sesión.
+            lblEstadoFacial.setText(
+                    "Estado: verificando el rostro de "
+                            + usuario.getNombreUsuario() + "..."
+            );
 
             VerificacionFacial.Resultado resultado =
                     VerificacionFacial.verificarEnLogin(ventana, usuario);
 
             switch (resultado) {
-
                 case APROBADO:
                     controller.completarLogin(usuario);
                     new FrmPrincipal().mostrar();
@@ -378,16 +477,25 @@ public class Login {
                     return;
 
                 case RECHAZADO:
-                    controller.registrarFalloFacial(usuario, "El rostro no coincide o no pasó la prueba de vida");
-                    lblEstadoFacial.setText("Estado: rostro no reconocido. Intente de nuevo.");
+                    controller.registrarFalloFacial(
+                            usuario,
+                            "El rostro no coincide o no pasó la prueba de vida"
+                    );
+                    lblEstadoFacial.setText(
+                            "Estado: rostro no reconocido. Intente de nuevo."
+                    );
                     break;
 
                 case CANCELADO:
-                    lblEstadoFacial.setText("Estado: verificación facial cancelada.");
+                    lblEstadoFacial.setText(
+                            "Estado: verificación facial cancelada."
+                    );
                     break;
 
                 default:
-                    lblEstadoFacial.setText("Estado: servicio facial no disponible.");
+                    lblEstadoFacial.setText(
+                            "Estado: servicio facial no disponible."
+                    );
                     break;
             }
 
@@ -422,7 +530,7 @@ public class Login {
     }
 
     // ========================================
-    // MOSTRAR VENTANA
+    // MOSTRAR LOGIN
     // ========================================
 
     public void mostrar() {
