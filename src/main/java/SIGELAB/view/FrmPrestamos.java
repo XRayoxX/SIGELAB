@@ -10,10 +10,17 @@ import SIGELAB.util.Dialogos;
 import SIGELAB.util.Fechas;
 import SIGELAB.util.Sesion;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
@@ -26,9 +33,61 @@ public class FrmPrestamos {
 
     private static final int DIAS_PRESTAMO_SUGERIDOS = 3;
 
-    // Componentes vinculados desde FrmPrestamos.form
+    // =====================================================
+    // PALETA OFICIAL FORMAL — LABORATORY COMMAND CENTER
+    // =====================================================
+    private static final Color OSCURO_FONDO = new Color(13, 20, 32);
+    private static final Color OSCURO_NAVEGACION = new Color(17, 28, 43);
+    private static final Color OSCURO_TARJETA = new Color(24, 35, 51);
+    private static final Color OSCURO_BORDE = new Color(42, 58, 76);
+    private static final Color OSCURO_TEXTO = new Color(227, 234, 242);
+    private static final Color OSCURO_SECUNDARIO = new Color(151, 167, 184);
+    private static final Color OSCURO_SELECCION = new Color(32, 69, 96);
+
+    private static final Color CLARO_FONDO = new Color(244, 247, 250);
+    private static final Color CLARO_NAVEGACION = new Color(236, 242, 247);
+    private static final Color CLARO_TARJETA = Color.WHITE;
+    private static final Color CLARO_BORDE = new Color(215, 224, 233);
+    private static final Color CLARO_TEXTO = new Color(35, 51, 67);
+    private static final Color CLARO_SECUNDARIO = new Color(100, 117, 135);
+    private static final Color CLARO_SELECCION = new Color(216, 231, 241);
+
+    private static final Color AZUL_PRINCIPAL = new Color(54, 125, 170);
+
+    // =====================================================
+    // CONTENEDORES Y TARJETAS VINCULADOS DESDE .FORM
+    // =====================================================
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel panelContenido;
+    private JPanel panelEncabezado;
+    private JPanel cardEncabezadoPrestamo;
+    private JPanel cardAgregarEquipos;
+    private JPanel panelControlesEquipo;
+    private JPanel cardDetallePrestamo;
+    private JPanel panelAcciones;
+    private JPanel cardHistorialPrestamos;
+    private JPanel panelBusqueda;
+
+    private JScrollPane scrollObservaciones;
+    private JScrollPane scrollDetalle;
+    private JScrollPane scrollPrestamos;
+
+    // =====================================================
+    // ETIQUETAS DE SECCIÓN Y TEMA
+    // =====================================================
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionEncabezado;
+    private JLabel lblSeccionAgregar;
+    private JLabel lblSeccionDetalle;
+    private JLabel lblSeccionHistorial;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
+
+    // =====================================================
+    // COMPONENTES FUNCIONALES ORIGINALES
+    // =====================================================
     private JTextField txtNoPrestamo;
     private JTextField txtEstado;
     private JComboBox cmbSolicitante;
@@ -51,6 +110,9 @@ public class FrmPrestamos {
     private JButton btnBuscar;
     private JTable tblPrestamos;
 
+    // =====================================================
+    // ESTADO Y CONTROLADOR DEL MÓDULO
+    // =====================================================
     private final JFrame ventana;
     private final DefaultTableModel modeloDetalle;
     private final DefaultTableModel modeloPrestamos;
@@ -64,13 +126,14 @@ public class FrmPrestamos {
         ventana = new JFrame("SIGELAB - Préstamos de Equipo De Computo");
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ventana.setMinimumSize(new Dimension(920, 620));
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         modeloDetalle = TablaUtil.configurar(tblDetalle, "ID", "Código", "Equipo", "Tipo", "Laboratorio", "Estado");
         modeloPrestamos = TablaUtil.configurar(tblPrestamos, "No.", "Solicitante", "Fecha préstamo", "Fecha esperada",
                 "Registrado por", "Estado", "Pendientes");
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        configurarScroll();
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
@@ -80,6 +143,10 @@ public class FrmPrestamos {
             }
         });
         btnRegresar.addActionListener(e -> ventana.dispose());
+
+        // Selector de tema Claro / Oscuro sincronizado con el resto del sistema
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
 
         btnNuevo.addActionListener(e -> nuevo());
         btnLimpiar.addActionListener(e -> nuevo());
@@ -96,6 +163,8 @@ public class FrmPrestamos {
             }
         });
 
+        aplicarTema();
+
         ejecutar(() -> {
             DefaultComboBoxModel<Object> solicitantes = new DefaultComboBoxModel<>();
             controller.solicitantesActivos().forEach(solicitantes::addElement);
@@ -106,8 +175,14 @@ public class FrmPrestamos {
     }
 
     public void mostrar() {
+        aplicarTema();
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ventana.setVisible(true);
     }
+
+    // =====================================================
+    // LÓGICA DE NEGOCIO ORIGINAL INTACTA
+    // =====================================================
 
     // Prepara el formulario para registrar un préstamo nuevo
     private void nuevo() {
@@ -238,9 +313,363 @@ public class FrmPrestamos {
         btnAgregarEquipo.setEnabled(nuevoPrestamo);
         btnQuitarEquipo.setEnabled(nuevoPrestamo);
         btnConfirmarPrestamo.setEnabled(nuevoPrestamo);
+        estilizarControlesSegunEstado();
     }
 
     private void ejecutar(Runnable accion) {
         Dialogos.ejecutar(ventana, accion);
+    }
+
+    // =====================================================
+    // SCROLL Y ADAPTABILIDAD
+    // =====================================================
+    private void configurarScroll() {
+        scrollContenido.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollContenido.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollContenido.getVerticalScrollBar().setUnitIncrement(20);
+        scrollContenido.getHorizontalScrollBar().setUnitIncrement(20);
+        scrollContenido.setBorder(null);
+    }
+
+    // =====================================================
+    // TEMA CLARO / OSCURO OFICIAL SIGELAB
+    // =====================================================
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        boolean oscuro = TemaSIGELAB.esOscuro();
+
+        Color fondo = oscuro ? OSCURO_FONDO : CLARO_FONDO;
+        Color navegacion = oscuro ? OSCURO_NAVEGACION : CLARO_NAVEGACION;
+        Color tarjeta = oscuro ? OSCURO_TARJETA : CLARO_TARJETA;
+        Color borde = oscuro ? OSCURO_BORDE : CLARO_BORDE;
+        Color texto = oscuro ? OSCURO_TEXTO : CLARO_TEXTO;
+        Color secundario = oscuro ? OSCURO_SECUNDARIO : CLARO_SECUNDARIO;
+        Color seleccion = oscuro ? OSCURO_SELECCION : CLARO_SELECCION;
+
+        // Fondos generales
+        panelPrincipal.setBackground(fondo);
+        panelContenido.setBackground(fondo);
+        panelEncabezado.setBackground(fondo);
+        panelAcciones.setBackground(fondo);
+        panelControlesEquipo.setBackground(tarjeta);
+        panelBusqueda.setBackground(tarjeta);
+
+        scrollContenido.setBackground(fondo);
+        scrollContenido.getViewport().setBackground(fondo);
+        scrollContenido.getVerticalScrollBar().setBackground(fondo);
+        scrollContenido.getHorizontalScrollBar().setBackground(fondo);
+
+        // Etiquetas generales en modo secundario
+        aplicarTextoBase(panelContenido, secundario);
+
+        // Tarjetas independientes
+        JPanel[] tarjetas = {
+                cardEncabezadoPrestamo,
+                cardAgregarEquipos,
+                cardDetallePrestamo,
+                cardHistorialPrestamos
+        };
+        for (JPanel card : tarjetas) {
+            configurarTarjeta(card, tarjeta, borde);
+        }
+
+        // Encabezado del módulo
+        lblTitulo.setFont(fuente(Font.BOLD, 28));
+        lblTitulo.setForeground(texto);
+
+        lblSubtitulo.setFont(fuente(Font.PLAIN, 12));
+        lblSubtitulo.setForeground(secundario);
+
+        // Títulos de secciones dentro de tarjetas
+        JLabel[] titulosSeccion = {
+                lblSeccionEncabezado,
+                lblSeccionAgregar,
+                lblSeccionDetalle,
+                lblSeccionHistorial
+        };
+        for (JLabel sec : titulosSeccion) {
+            sec.setFont(fuente(Font.BOLD, 12));
+            sec.setForeground(texto);
+        }
+
+        // Etiqueta de equipo identificado destacada
+        lblEquipoIdentificado.setFont(fuente(Font.BOLD, 13));
+        lblEquipoIdentificado.setForeground(oscuro ? new Color(118, 185, 228) : AZUL_PRINCIPAL);
+
+        // Botones Sol / Luna
+        configurarBotonTema(btnModoClaro, !oscuro, tarjeta, texto, borde);
+        configurarBotonTema(btnModoOscuro, oscuro, tarjeta, texto, borde);
+
+        // Campos de texto, ComboBox y TextArea
+        JTextField[] campos = {
+                txtNoPrestamo,
+                txtEstado,
+                txtUsuarioRegistra,
+                txtFechaPrestamo,
+                txtFechaEsperadaDevolucion,
+                txtCodigoEquipo,
+                txtBuscar
+        };
+        for (JTextField campo : campos) {
+            configurarCampoTexto(campo, oscuro, navegacion, tarjeta, texto, secundario, borde);
+        }
+
+        configurarComboBox(cmbSolicitante, oscuro, navegacion, texto, borde);
+        configurarComboBox(cmbFiltroEstado, oscuro, navegacion, texto, borde);
+        configurarAreaTexto(txaObservaciones, scrollObservaciones, oscuro, navegacion, texto, borde);
+
+        // Botones principales (Azul oficial #367DAA)
+        configurarBotonPrincipal(btnConfirmarPrestamo);
+        configurarBotonPrincipal(btnAgregarEquipo);
+        configurarBotonPrincipal(btnBuscar);
+
+        // Botones secundarios (Neutros y discretos)
+        configurarBotonSecundario(btnLeerQr, oscuro, navegacion, texto, borde);
+        configurarBotonSecundario(btnNuevo, oscuro, tarjeta, texto, borde);
+        configurarBotonSecundario(btnLimpiar, oscuro, tarjeta, texto, borde);
+        configurarBotonSecundario(btnRegresar, oscuro, tarjeta, texto, borde);
+
+        // Botón de acción delicada (Quitar equipo del detalle)
+        configurarBotonAdvertencia(btnQuitarEquipo, oscuro);
+
+        // Tablas
+        configurarTabla(tblDetalle, scrollDetalle, oscuro, tarjeta, navegacion, texto, secundario, borde, seleccion);
+        configurarTabla(tblPrestamos, scrollPrestamos, oscuro, tarjeta, navegacion, texto, secundario, borde, seleccion);
+
+        estilizarControlesSegunEstado();
+
+        panelPrincipal.revalidate();
+        panelPrincipal.repaint();
+    }
+
+    private void estilizarControlesSegunEstado() {
+        boolean oscuro = TemaSIGELAB.esOscuro();
+        Color fondoEditable = oscuro ? OSCURO_NAVEGACION : Color.WHITE;
+        Color fondoSoloLectura = oscuro ? new Color(15, 23, 36) : CLARO_NAVEGACION;
+        Color textoActivo = oscuro ? OSCURO_TEXTO : CLARO_TEXTO;
+        Color textoInactivo = oscuro ? OSCURO_SECUNDARIO : CLARO_SECUNDARIO;
+
+        JTextField[] todos = {
+                txtNoPrestamo,
+                txtEstado,
+                txtUsuarioRegistra,
+                txtFechaPrestamo,
+                txtFechaEsperadaDevolucion,
+                txtCodigoEquipo,
+                txtBuscar
+        };
+        for (JTextField f : todos) {
+            if (f == null) continue;
+            f.setBackground(f.isEditable() ? fondoEditable : fondoSoloLectura);
+            f.setForeground(f.isEditable() ? textoActivo : textoInactivo);
+        }
+
+        // Destacar visualmente el campo Estado
+        txtEstado.setFont(fuente(Font.BOLD, 12));
+        txtEstado.setForeground(oscuro ? new Color(118, 185, 228) : AZUL_PRINCIPAL);
+
+        if (txaObservaciones != null) {
+            txaObservaciones.setBackground(txaObservaciones.isEditable() ? fondoEditable : fondoSoloLectura);
+            txaObservaciones.setForeground(txaObservaciones.isEditable() ? textoActivo : textoInactivo);
+        }
+    }
+
+    // =====================================================
+    // MÉTODOS AUXILIARES DE ESTILO VISUAL
+    // =====================================================
+    private Font fuente(int estilo, int tamano) {
+        return new Font("Segoe UI", estilo, tamano);
+    }
+
+    private void configurarTarjeta(JPanel panel, Color fondo, Color borde) {
+        panel.setOpaque(true);
+        panel.setBackground(fondo);
+        panel.setBorder(new LineBorder(borde, 1, true));
+    }
+
+    private void configurarCampoTexto(
+            JTextField campo,
+            boolean oscuro,
+            Color fondoInput,
+            Color fondoTarjeta,
+            Color texto,
+            Color secundario,
+            Color borde
+    ) {
+        campo.setFont(fuente(Font.PLAIN, 13));
+        campo.setCaretColor(texto);
+        campo.setBackground(campo.isEditable() ? (oscuro ? fondoInput : Color.WHITE) : (oscuro ? new Color(15, 23, 36) : fondoInput));
+        campo.setForeground(campo.isEditable() ? texto : secundario);
+        campo.setBorder(new CompoundBorder(
+                new LineBorder(borde, 1, true),
+                new EmptyBorder(6, 10, 6, 10)
+        ));
+    }
+
+    private void configurarComboBox(
+            JComboBox<?> combo,
+            boolean oscuro,
+            Color fondoInput,
+            Color texto,
+            Color borde
+    ) {
+        combo.setFont(fuente(Font.PLAIN, 13));
+        combo.setBackground(oscuro ? fondoInput : Color.WHITE);
+        combo.setForeground(texto);
+        combo.setBorder(new LineBorder(borde, 1, true));
+    }
+
+    private void configurarAreaTexto(
+            JTextArea area,
+            JScrollPane scroll,
+            boolean oscuro,
+            Color fondoInput,
+            Color texto,
+            Color borde
+    ) {
+        Color bg = oscuro ? fondoInput : Color.WHITE;
+        area.setFont(fuente(Font.PLAIN, 13));
+        area.setBackground(bg);
+        area.setForeground(texto);
+        area.setCaretColor(texto);
+        area.setBorder(new EmptyBorder(6, 10, 6, 10));
+
+        scroll.setBackground(bg);
+        scroll.getViewport().setBackground(bg);
+        scroll.setBorder(new LineBorder(borde, 1, true));
+    }
+
+    private void configurarBotonPrincipal(JButton boton) {
+        boton.setOpaque(true);
+        boton.setContentAreaFilled(true);
+        boton.setFocusPainted(false);
+        boton.setBackground(AZUL_PRINCIPAL);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(fuente(Font.BOLD, 12));
+        boton.setBorder(new EmptyBorder(9, 18, 9, 18));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    private void configurarBotonSecundario(
+            JButton boton,
+            boolean oscuro,
+            Color fondo,
+            Color texto,
+            Color borde
+    ) {
+        boton.setOpaque(true);
+        boton.setContentAreaFilled(true);
+        boton.setFocusPainted(false);
+        boton.setBackground(fondo);
+        boton.setForeground(texto);
+        boton.setFont(fuente(Font.BOLD, 12));
+        boton.setBorder(new CompoundBorder(
+                new LineBorder(borde, 1, true),
+                new EmptyBorder(8, 16, 8, 16)
+        ));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    private void configurarBotonAdvertencia(JButton boton, boolean oscuro) {
+        Color fondoAdv = oscuro ? new Color(62, 34, 41) : new Color(251, 235, 235);
+        Color bordeAdv = oscuro ? new Color(122, 58, 68) : new Color(218, 168, 168);
+        Color textoAdv = oscuro ? new Color(235, 165, 165) : new Color(156, 52, 52);
+
+        boton.setOpaque(true);
+        boton.setContentAreaFilled(true);
+        boton.setFocusPainted(false);
+        boton.setBackground(fondoAdv);
+        boton.setForeground(textoAdv);
+        boton.setFont(fuente(Font.BOLD, 12));
+        boton.setBorder(new CompoundBorder(
+                new LineBorder(bordeAdv, 1, true),
+                new EmptyBorder(8, 16, 8, 16)
+        ));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    private void configurarBotonTema(
+            JButton boton,
+            boolean activo,
+            Color fondo,
+            Color texto,
+            Color borde
+    ) {
+        boton.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 20));
+        boton.setOpaque(true);
+        boton.setFocusPainted(false);
+        boton.setBackground(activo ? AZUL_PRINCIPAL : fondo);
+        boton.setForeground(activo ? Color.WHITE : texto);
+        boton.setBorder(new LineBorder(activo ? AZUL_PRINCIPAL : borde, 1, true));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    private void configurarTabla(
+            JTable tabla,
+            JScrollPane scroll,
+            boolean oscuro,
+            Color tarjeta,
+            Color encabezadoFondo,
+            Color texto,
+            Color secundario,
+            Color borde,
+            Color seleccion
+    ) {
+        tabla.setFont(fuente(Font.PLAIN, 12));
+        tabla.setRowHeight(30);
+        tabla.setBackground(tarjeta);
+        tabla.setForeground(texto);
+        tabla.setGridColor(borde);
+        tabla.setShowHorizontalLines(true);
+        tabla.setShowVerticalLines(false);
+        tabla.setSelectionBackground(seleccion);
+        tabla.setSelectionForeground(oscuro ? Color.WHITE : texto);
+        tabla.setFillsViewportHeight(true);
+
+        JTableHeader header = tabla.getTableHeader();
+        if (header != null) {
+            header.setReorderingAllowed(false);
+            header.setPreferredSize(new Dimension(header.getWidth(), 34));
+            header.setDefaultRenderer(new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(
+                        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
+                ) {
+                    JLabel lbl = (JLabel) super.getTableCellRendererComponent(
+                            table, value, isSelected, hasFocus, row, column
+                    );
+                    lbl.setOpaque(true);
+                    lbl.setBackground(encabezadoFondo);
+                    lbl.setForeground(secundario);
+                    lbl.setFont(fuente(Font.BOLD, 11));
+                    lbl.setBorder(new CompoundBorder(
+                            new LineBorder(borde, 1, false),
+                            new EmptyBorder(6, 10, 6, 10)
+                    ));
+                    return lbl;
+                }
+            });
+        }
+
+        scroll.setBackground(tarjeta);
+        scroll.getViewport().setBackground(tarjeta);
+        scroll.setBorder(new LineBorder(borde, 1, true));
+    }
+
+    private void aplicarTextoBase(Container contenedor, Color secundario) {
+        for (Component componente : contenedor.getComponents()) {
+            if (componente instanceof JLabel) {
+                JLabel etiqueta = (JLabel) componente;
+                etiqueta.setForeground(secundario);
+                etiqueta.setFont(fuente(Font.PLAIN, 12));
+            }
+            if (componente instanceof Container) {
+                aplicarTextoBase((Container) componente, secundario);
+            }
+        }
     }
 }
