@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Valores que imprime deploy-azure.ps1 al terminar -->
+    <string name="facial_api_url" translatable="false">https://sigelab-facial-api.CAMBIAR.azurecontainerapps.io</string>
+    <string name="facial_api_key" translatable="false">CAMBIAR</string>
+</resources>
