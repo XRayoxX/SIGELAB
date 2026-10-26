@@ -1,7 +1,5 @@
 package SIGELAB.util;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,8 +11,6 @@ import java.util.Properties;
  * así la contraseña no queda escrita dentro del código ni se sube a Git.
  */
 public final class ConexionBD {
-
-    private static final String ARCHIVO = "/config.properties";
 
     // Azure SQL serverless responde con este código mientras la base pausada "despierta"
     private static final int ERROR_BASE_NO_DISPONIBLE = 40613;
@@ -28,24 +24,20 @@ public final class ConexionBD {
     private ConexionBD() {
     }
 
-    // Lee config.properties una sola vez (la primera vez que alguien pide una conexión)
+    // Lee config.properties una sola vez (la primera vez que alguien pide una conexión).
+    // Configuracion lo busca junto al ejecutable y, si no está, dentro del proyecto.
     private static synchronized void cargarConfiguracion() {
         if (url != null) {
             return;
         }
-        try (InputStream entrada = ConexionBD.class.getResourceAsStream(ARCHIVO)) {
-            if (entrada == null) {
-                throw new DataAccessException(
-                        "No se encontró config.properties. Copie config.properties.example como config.properties y configure la conexión.");
-            }
-            Properties propiedades = new Properties();
-            propiedades.load(entrada);
-            url = obligatoria(propiedades, "db.url");
-            usuario = obligatoria(propiedades, "db.usuario");
-            contrasena = obligatoria(propiedades, "db.contrasena");
-        } catch (IOException e) {
-            throw new DataAccessException("No se pudo leer la configuración de la base de datos.", e);
+        if (!Configuracion.existe()) {
+            throw new DataAccessException(
+                    "No se encontró config.properties. Copie config.properties.example como config.properties y configure la conexión.");
         }
+        Properties propiedades = Configuracion.get();
+        url = obligatoria(propiedades, "db.url");
+        usuario = obligatoria(propiedades, "db.usuario");
+        contrasena = obligatoria(propiedades, "db.contrasena");
     }
 
     private static String obligatoria(Properties propiedades, String clave) {

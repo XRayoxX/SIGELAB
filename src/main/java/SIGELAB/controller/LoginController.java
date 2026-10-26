@@ -5,23 +5,29 @@ import SIGELAB.service.AuthService;
 
 /**
  * Puente entre la ventana Login y AuthService.
+ *
+ * El inicio de sesión tiene dos pasos:
+ *  1) validarCredenciales: usuario + contraseña + estado ACTIVO (RN-01).
+ *  2) Verificación facial (RN-02): la ventana Login usa SIGELAB.facial.VerificacionFacial.
+ *     Solo si el rostro es aprobado se llama a completarLogin.
  */
 public class LoginController {
 
     private final AuthService service = new AuthService();
 
-    /**
-     * Ejecuta el login completo y devuelve el usuario autenticado.
-     * Lanza BusinessException con un mensaje para el usuario si algo no se cumple.
-     */
-    public Usuario iniciarSesion(String nombreUsuario, char[] contrasena) {
-        Usuario usuario = service.validarCredenciales(nombreUsuario, new String(contrasena));
+    /** Paso 1. Lanza BusinessException con un mensaje para el usuario si algo no se cumple. */
+    public Usuario validarCredenciales(String nombreUsuario, char[] contrasena) {
+        return service.validarCredenciales(nombreUsuario, new String(contrasena));
+    }
 
-        // TODO RN-02 (Etapa 4): aquí se llamará al servicio facial (Python + OpenCV).
-        //      Si el rostro no corresponde al usuario, lanzar BusinessException y no completar el login.
-
+    /** Paso final: abre la sesión y registra LOGIN_EXITOSO en la auditoría. */
+    public void completarLogin(Usuario usuario) {
         service.completarLogin(usuario);
-        return usuario;
+    }
+
+    /** Registra LOGIN_FACIAL_FALLIDO en la auditoría. */
+    public void registrarFalloFacial(Usuario usuario, String detalle) {
+        service.registrarFalloFacial(usuario, detalle);
     }
 
     public void cerrarSesion() {

@@ -2,6 +2,9 @@
 package SIGELAB.view;
 
 import SIGELAB.controller.LoginController;
+import SIGELAB.facial.ServicioFacial;
+import SIGELAB.facial.VerificacionFacial;
+import SIGELAB.model.Usuario;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.DataAccessException;
 import SIGELAB.util.TemaSIGELAB;
@@ -91,6 +94,15 @@ public class Login {
         ventana.getRootPane().setDefaultButton(
                 btnIngresar
         );
+
+        // Segundo factor: reconocimiento facial en Azure.
+        // Se "despierta" la API mientras el usuario escribe su contraseña.
+        if (ServicioFacial.habilitado()) {
+            lblEstadoFacial.setText("Estado: se verificará su rostro con la cámara después de la contraseña");
+            ServicioFacial.despertar();
+        } else {
+            lblEstadoFacial.setText("Estado: reconocimiento facial desactivado (config.properties)");
+        }
     }
 
     // ========================================
@@ -345,14 +357,41 @@ public class Login {
 
         try {
 
-            controller.iniciarSesion(
+            // Paso 1: usuario, contraseña y estado ACTIVO
+            Usuario usuario = controller.validarCredenciales(
                     nombreUsuario,
                     contrasena
             );
 
-            new FrmPrincipal().mostrar();
+            // Paso 2 (RN-02): reconocimiento facial
+            lblEstadoFacial.setText("Estado: verificando el rostro de " + usuario.getNombreUsuario() + "...");
 
-            ventana.dispose();
+            VerificacionFacial.Resultado resultado =
+                    VerificacionFacial.verificarEnLogin(ventana, usuario);
+
+            switch (resultado) {
+
+                case APROBADO:
+                    controller.completarLogin(usuario);
+                    new FrmPrincipal().mostrar();
+                    ventana.dispose();
+                    return;
+
+                case RECHAZADO:
+                    controller.registrarFalloFacial(usuario, "El rostro no coincide o no pasó la prueba de vida");
+                    lblEstadoFacial.setText("Estado: rostro no reconocido. Intente de nuevo.");
+                    break;
+
+                case CANCELADO:
+                    lblEstadoFacial.setText("Estado: verificación facial cancelada.");
+                    break;
+
+                default:
+                    lblEstadoFacial.setText("Estado: servicio facial no disponible.");
+                    break;
+            }
+
+            pwdContrasena.setText("");
 
         } catch (BusinessException ex) {
 

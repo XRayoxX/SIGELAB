@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Reglas del inicio de sesión.
  * Paso 1: usuario + contraseña + estado ACTIVO (RN-01).
- * Paso 2: validación facial (RN-02) -> se integrará con el servicio de Python + OpenCV.
+ * Paso 2: validación facial (RN-02) -> API de reconocimiento facial en Azure (ver SIGELAB.facial).
  */
 public class AuthService {
 
@@ -59,6 +59,12 @@ public class AuthService {
         Sesion.iniciar(usuario);
         auditoriaRepository.registrar(usuario.getIdUsuario(), usuario.getNombreUsuario(), AccionAuditoria.LOGIN_EXITOSO,
                 "Usuario", usuario.getIdUsuario(), "Inicio de sesión correcto");
+    }
+
+    // RN-02: la contraseña era correcta pero el rostro no coincidió (o no pasó la prueba de vida)
+    public void registrarFalloFacial(Usuario usuario, String detalle) {
+        auditoriaRepository.registrar(usuario.getIdUsuario(), usuario.getNombreUsuario(), AccionAuditoria.LOGIN_FACIAL_FALLIDO,
+                "Usuario", usuario.getIdUsuario(), detalle);
     }
 
     public void cerrarSesion() {
