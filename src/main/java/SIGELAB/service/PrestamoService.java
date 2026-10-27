@@ -31,6 +31,7 @@ public class PrestamoService {
     private final SolicitanteRepository solicitanteRepository = new SolicitanteRepository();
     private final EquipoService equipoService = new EquipoService();
     private final AuditoriaService auditoria = new AuditoriaService();
+    private final CorreoService correoService = new CorreoService();
 
     /**
      * Valida si un equipo puede agregarse a la lista del préstamo que se está armando.
@@ -69,7 +70,7 @@ public class PrestamoService {
         }
 
         int idUsuario = Sesion.getIdUsuario();
-        return Transaccion.ejecutar(cn -> {
+        int numeroPrestamo = Transaccion.ejecutar(cn -> {
             int idPrestamo = repository.insertarEncabezado(cn, prestamo, idUsuario);
             StringBuilder codigos = new StringBuilder();
             for (Equipo e : equipos) {
@@ -88,6 +89,10 @@ public class PrestamoService {
                     "Préstamo a " + prestamo.getSolicitante().getCarne() + " con " + equipos.size() + " equipo(s): " + codigos);
             return idPrestamo;
         });
+
+        // Solo después del COMMIT: se avisa al solicitante qué equipos se llevó
+        correoService.notificarPrestamo(numeroPrestamo, prestamo, equipos);
+        return numeroPrestamo;
     }
 
     public List<Prestamo> listar(String texto, String filtro) {

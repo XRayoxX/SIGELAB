@@ -34,7 +34,12 @@ $dependencias = @(
     # Webcam para el reconocimiento facial (webcam-capture y sus dependencias)
     'com\github\sarxos\webcam-capture\0.3.12\webcam-capture-0.3.12.jar',
     'com\nativelibs4java\bridj\0.7.0\bridj-0.7.0.jar',
-    'org\slf4j\slf4j-api\1.7.2\slf4j-api-1.7.2.jar'
+    'org\slf4j\slf4j-api\1.7.2\slf4j-api-1.7.2.jar',
+    # Correo (Jakarta Mail / Angus) para las notificaciones
+    'org\eclipse\angus\angus-mail\2.0.3\angus-mail-2.0.3.jar',
+    'org\eclipse\angus\angus-activation\2.0.2\angus-activation-2.0.2.jar',
+    'jakarta\mail\jakarta.mail-api\2.1.3\jakarta.mail-api-2.1.3.jar',
+    'jakarta\activation\jakarta.activation-api\2.1.3\jakarta.activation-api-2.1.3.jar'
 ) | ForEach-Object { Join-Path $m2 $_ }
 
 # Si Maven descargó otra versión de alguna dependencia, se usa la que esté en ~\.m2

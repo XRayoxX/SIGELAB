@@ -22,6 +22,7 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository = new UsuarioRepository();
     private final AuditoriaRepository auditoriaRepository = new AuditoriaRepository();
+    private final CorreoService correoService = new CorreoService();
 
     public Usuario validarCredenciales(String nombreUsuario, String contrasena) {
         String usuarioEscrito = nombreUsuario == null ? "" : nombreUsuario.trim();
@@ -65,6 +66,8 @@ public class AuthService {
     public void registrarFalloFacial(Usuario usuario, String detalle) {
         auditoriaRepository.registrar(usuario.getIdUsuario(), usuario.getNombreUsuario(), AccionAuditoria.LOGIN_FACIAL_FALLIDO,
                 "Usuario", usuario.getIdUsuario(), detalle);
+        // Se avisa al dueño de la cuenta por si no fue él quien intentó ingresar
+        correoService.notificarFalloFacial(usuario);
     }
 
     public void cerrarSesion() {
