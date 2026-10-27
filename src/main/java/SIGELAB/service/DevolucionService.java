@@ -11,6 +11,7 @@ import SIGELAB.model.Prestamo;
 import SIGELAB.repository.DevolucionRepository;
 import SIGELAB.repository.EquipoRepository;
 import SIGELAB.repository.PrestamoRepository;
+import SIGELAB.repository.SolicitanteRepository;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.Sesion;
 import SIGELAB.util.Transaccion;
@@ -26,6 +27,8 @@ public class DevolucionService {
     private final DevolucionRepository devolucionRepository = new DevolucionRepository();
     private final EquipoRepository equipoRepository = new EquipoRepository();
     private final AuditoriaService auditoria = new AuditoriaService();
+    private final SolicitanteRepository solicitanteRepository = new SolicitanteRepository();
+    private final CorreoService correoService = new CorreoService();
 
     public List<Prestamo> prestamosActivos(String texto) {
         String busqueda = texto == null || texto.isBlank() ? null : texto.trim();
@@ -58,9 +61,12 @@ public class DevolucionService {
         }
 
         int idUsuario = Sesion.getIdUsuario();
-        return Transaccion.ejecutar(cn -> {
+        // Arreglo de 1 posición: permite sacar el detalle de la lambda para usarlo en el correo
+        DetallePrestamo[] devuelto = new DetallePrestamo[1];
+        int pendientes = Transaccion.ejecutar(cn -> {
             DetallePrestamo detalle = prestamoRepository.buscarDetalle(cn, idDetallePrestamo)
                     .orElseThrow(() -> new BusinessException("El equipo seleccionado no pertenece a ningún préstamo."));
+            devuelto[0] = detalle;
             String codigo = detalle.getEquipo().getCodigoInventario();
 
             // RN-11: no se puede devolver dos veces
@@ -86,13 +92,27 @@ public class DevolucionService {
                     "Equipo " + codigo + " devuelto " + condicion + " -> " + nuevoEstado + (obs == null ? "" : ". " + obs));
 
             // RN-16: el préstamo sigue ACTIVO mientras quede al menos un equipo pendiente
-            int pendientes = prestamoRepository.contarPendientes(cn, detalle.getIdPrestamo());
-            if (pendientes == 0) {
+            int quedan = prestamoRepository.contarPendientes(cn, detalle.getIdPrestamo());
+            if (quedan == 0) {
                 prestamoRepository.finalizar(cn, detalle.getIdPrestamo());
                 auditoria.registrar(cn, AccionAuditoria.PRESTAMO_FINALIZADO, "Prestamo", detalle.getIdPrestamo(),
                         "Todos los equipos fueron devueltos");
             }
-            return pendientes;
+            return quedan;
         });
+
+        notificarDevolucion(devuelto[0], condicion, pendientes);
+        return pendientes;
+    }
+
+    // Solo después del COMMIT: avisa al solicitante que el equipo ya fue entregado.
+    // Si falla la consulta del correo, la devolución ya quedó guardada y no se interrumpe.
+    private void notificarDevolucion(DetallePrestamo detalle, CondicionDevolucion condicion, int pendientes) {
+        try {
+            solicitanteRepository.buscarPorPrestamo(detalle.getIdPrestamo()).ifPresent(s ->
+                    correoService.notificarDevolucion(s, detalle.getIdPrestamo(), detalle.getEquipo(), condicion, pendientes));
+        } catch (RuntimeException e) {
+            System.err.println("No se pudo preparar el correo de devolución: " + e.getMessage());
+        }
     }
 }
