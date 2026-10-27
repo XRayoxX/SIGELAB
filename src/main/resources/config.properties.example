@@ -13,3 +13,15 @@ db.contrasena=SU_CONTRASENA
 # db.url=jdbc:sqlserver://localhost:1433;databaseName=Sigelab;encrypt=true;trustServerCertificate=true
 # db.usuario=sigelabumg
 # db.contrasena=sigelab123
+
+# --- Reconocimiento facial (API en Azure) ---
+# facial.habilitado=true
+# facial.api.url=https://SU_API.azurecontainerapps.io
+# facial.api.key=SU_API_KEY
+
+# --- Notificaciones por correo (Gmail) ---
+# correo.contrasena es una "contraseña de aplicación" de Google, NO la contraseña normal de la cuenta.
+# correo.habilitado=false desactiva el envío de correos (por ejemplo, sin internet).
+correo.habilitado=true
+correo.remitente=SU_CORREO@gmail.com
+correo.contrasena=SU_CONTRASENA_DE_APLICACION

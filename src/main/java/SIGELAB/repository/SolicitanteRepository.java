@@ -46,6 +46,13 @@ public class SolicitanteRepository {
         return lista.isEmpty() ? Optional.empty() : Optional.of(lista.get(0));
     }
 
+    // Solicitante dueño de un préstamo (se usa para avisarle por correo)
+    public Optional<Solicitante> buscarPorPrestamo(int idPrestamo) {
+        List<Solicitante> lista = consultar(SELECT + "WHERE IdSolicitante = (SELECT IdSolicitante FROM dbo.Prestamo WHERE IdPrestamo = ?)",
+                String.valueOf(idPrestamo));
+        return lista.isEmpty() ? Optional.empty() : Optional.of(lista.get(0));
+    }
+
     public int insertar(Solicitante s) {
         String sql = "INSERT INTO dbo.Solicitante (Carne, Nombre, Apellido, Tipo, Correo, Telefono, Estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
