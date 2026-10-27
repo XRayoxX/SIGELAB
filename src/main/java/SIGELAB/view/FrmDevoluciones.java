@@ -7,8 +7,10 @@ import SIGELAB.model.DetallePrestamo;
 import SIGELAB.model.Prestamo;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.Dialogos;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.Fechas;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +25,20 @@ public class FrmDevoluciones {
 
     // Componentes vinculados desde FrmDevoluciones.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardPrestamos;
+    private JPanel cardDatosPrestamo;
+    private JPanel cardEquipos;
+    private JPanel cardDevolucion;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionPrestamos;
+    private JLabel lblSeccionDatos;
+    private JLabel lblSeccionEquipos;
+    private JLabel lblSeccionDevolucion;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JTextField txtBuscar;
     private JButton btnBuscar;
     private JTable tblPrestamosActivos;
@@ -56,9 +71,10 @@ public class FrmDevoluciones {
 
         modeloPrestamos = TablaUtil.configurar(tblPrestamosActivos, "No.", "Solicitante", "Fecha préstamo", "Fecha esperada", "Pendientes", "Vencido");
         modeloEquipos = TablaUtil.configurar(tblEquiposPrestamo, "ID detalle", "Código", "Equipo", "Estado", "Condición", "Fecha devolución");
+        configurarEstilo();
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
@@ -90,6 +106,33 @@ public class FrmDevoluciones {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardPrestamos, cardDatosPrestamo, cardEquipos, cardDevolucion);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionPrestamos, lblSeccionDatos, lblSeccionEquipos, lblSeccionDevolucion);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnRegistrarDevolucion, btnBuscar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     private void buscar() {

@@ -6,6 +6,7 @@ import SIGELAB.facial.VerificacionFacial;
 import SIGELAB.model.Usuario;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.DataAccessException;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -82,12 +83,8 @@ public class Login {
 
         aplicarTema();
 
-        ventana.pack();
-
-        // Maximizada, respetando barra de tareas.
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         ventana.getRootPane().setDefaultButton(
                 btnIngresar

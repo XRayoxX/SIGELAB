@@ -9,8 +9,10 @@ import SIGELAB.facial.ServicioFacial;
 import SIGELAB.facial.VerificacionFacial;
 import SIGELAB.model.Usuario;
 import SIGELAB.util.Dialogos;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.Sesion;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +24,20 @@ public class FrmUsuarios {
 
     // Componentes vinculados desde FrmUsuarios.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardBusqueda;
+    private JPanel cardDatos;
+    private JPanel cardAcceso;
+    private JPanel cardRegistros;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionBusqueda;
+    private JLabel lblSeccionDatos;
+    private JLabel lblSeccionAcceso;
+    private JLabel lblSeccionRegistros;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JTextField txtId;
     private JTextField txtUsuario;
     private JTextField txtNombre;
@@ -63,9 +78,10 @@ public class FrmUsuarios {
         // El nombre de usuario lo genera la base de datos a partir del nombre completo
         txtUsuario.setEditable(false);
         txtUsuario.setToolTipText("Se genera automáticamente al guardar (ejemplo: Juan Carlos Pérez López -> jperez; si ya existe: jcperez, jcperezl, jcperezl2...)");
+        configurarEstilo();
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
@@ -120,6 +136,34 @@ public class FrmUsuarios {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardBusqueda, cardDatos, cardAcceso, cardRegistros);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionBusqueda, lblSeccionDatos, lblSeccionAcceso, lblSeccionRegistros);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnGuardar, btnActualizar, btnBuscar);
+        EstiloFormulario.botonPeligro(btnDesactivar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     // ========================================

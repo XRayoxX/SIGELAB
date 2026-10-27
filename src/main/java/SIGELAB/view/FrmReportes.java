@@ -9,6 +9,7 @@ import SIGELAB.util.Dialogos;
 import SIGELAB.util.ExportarPdfUtil;
 import SIGELAB.util.ExportarUtil;
 import SIGELAB.util.Fechas;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -165,9 +166,7 @@ public class FrmReportes {
                 new Dimension(760, 520)
         );
 
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        EstiloFormulario.pantallaCompleta(ventana);
 
         ventana.addWindowListener(new WindowAdapter() {
 
@@ -194,9 +193,7 @@ public class FrmReportes {
 
         aplicarTema();
 
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        EstiloFormulario.pantallaCompleta(ventana);
 
         ventana.setVisible(true);
     }

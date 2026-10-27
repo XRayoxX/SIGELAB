@@ -9,6 +9,7 @@ import SIGELAB.util.BusinessException;
 import SIGELAB.util.Dialogos;
 import SIGELAB.util.TablaUtil;
 import SIGELAB.util.EstiloFormulario;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +26,20 @@ public class FrmEquipos {
 
     // Componentes vinculados desde FrmEquipos.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardBusqueda;
+    private JPanel cardDatos;
+    private JPanel cardQr;
+    private JPanel cardRegistros;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionBusqueda;
+    private JLabel lblSeccionDatos;
+    private JLabel lblSeccionQr;
+    private JLabel lblSeccionRegistros;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JTextField txtId;
     private JTextField txtCodigoInventario;
     private JTextField txtNombre;
@@ -76,25 +90,10 @@ public class FrmEquipos {
                 "Estado"
         );
 
-// =====================================
-// APLICAR TEMA SIGELAB DARK TECH
-// =====================================
+        configurarEstilo();
 
-        EstiloFormulario.aplicar(
-                panelPrincipal
-        );
-
-// =====================================
-// CONFIGURAR VENTANA
-// =====================================
-
-        ventana.pack();
-
-// Abrir maximizada respetando la
-// barra de tareas de Windows.
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
@@ -143,6 +142,33 @@ public class FrmEquipos {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardBusqueda, cardDatos, cardQr, cardRegistros);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionBusqueda, lblSeccionDatos, lblSeccionQr, lblSeccionRegistros);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnGuardar, btnActualizar, btnBuscar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     private void cargarCombos() {

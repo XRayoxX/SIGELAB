@@ -1,210 +1,319 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="SIGELAB.view.FrmAuditoria">
-  <grid id="c0000" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="10" left="10" bottom="10" right="10"/>
+  <grid id="c0000" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+    <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="950" height="650"/>
+      <xy x="20" y="20" width="1100" height="820"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="c0001" class="javax.swing.JLabel" binding="lblTitulo">
+      <scrollpane id="scroll" binding="scrollContenido">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font size="18" style="1"/>
-          <text value="Auditoría del Sistema"/>
-        </properties>
-      </component>
-      <grid id="c0002" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-        <border type="etched" title="Filtros de búsqueda"/>
-        <children>
-          <component id="c0003" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Usuario:"/>
-            </properties>
-          </component>
-          <component id="c0004" class="javax.swing.JComboBox" binding="cmbUsuario">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="c0005" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Entidad:"/>
-            </properties>
-          </component>
-          <component id="c0006" class="javax.swing.JComboBox" binding="cmbEntidad">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <model>
-                <item value="TODAS"/>
-                <item value="Usuario"/>
-                <item value="Laboratorio"/>
-                <item value="TipoEquipo"/>
-                <item value="Equipo"/>
-                <item value="Prestamo"/>
-                <item value="Devolucion"/>
-                <item value="Mantenimiento"/>
-              </model>
-            </properties>
-          </component>
-          <component id="c0007" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Acción:"/>
-            </properties>
-          </component>
-          <component id="c0008" class="javax.swing.JComboBox" binding="cmbAccion">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <model>
-                <item value="TODAS"/>
-                <item value="LOGIN_EXITOSO"/>
-                <item value="LOGIN_FALLIDO"/>
-                <item value="LOGIN_FACIAL_FALLIDO"/>
-                <item value="USUARIO_CREADO"/>
-                <item value="USUARIO_MODIFICADO"/>
-                <item value="USUARIO_DESACTIVADO"/>
-                <item value="LABORATORIO_CREADO"/>
-                <item value="LABORATORIO_MODIFICADO"/>
-                <item value="EQUIPO_CREADO"/>
-                <item value="EQUIPO_MODIFICADO"/>
-                <item value="PRESTAMO_CREADO"/>
-                <item value="PRESTAMO_FINALIZADO"/>
-                <item value="EQUIPO_DEVUELTO"/>
-                <item value="EQUIPO_ENVIADO_MANTENIMIENTO"/>
-                <item value="MANTENIMIENTO_FINALIZADO"/>
-              </model>
-            </properties>
-          </component>
-          <component id="c0009" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Fecha desde:"/>
-            </properties>
-          </component>
-          <component id="c000a" class="javax.swing.JTextField" binding="txtFechaDesde">
-            <constraints>
-              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <toolTipText value="Formato: dd/MM/yyyy"/>
-            </properties>
-          </component>
-          <component id="c000b" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Fecha hasta:"/>
-            </properties>
-          </component>
-          <component id="c000c" class="javax.swing.JTextField" binding="txtFechaHasta">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties>
-              <toolTipText value="Formato: dd/MM/yyyy"/>
-            </properties>
-          </component>
-        </children>
-      </grid>
-      <grid id="c000d" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="5" left="5" bottom="5" right="5"/>
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c000e" class="javax.swing.JButton" binding="btnBuscar">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Buscar"/>
-            </properties>
-          </component>
-          <component id="c000f" class="javax.swing.JButton" binding="btnLimpiar">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Limpiar filtros"/>
-            </properties>
-          </component>
-          <component id="c0010" class="javax.swing.JButton" binding="btnExportar">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Exportar"/>
-            </properties>
-          </component>
-          <component id="c0011" class="javax.swing.JButton" binding="btnRegresar">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Regresar"/>
-            </properties>
-          </component>
-          <hspacer id="c0012">
-            <constraints>
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-        </children>
-      </grid>
-      <scrollpane id="c0013">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="-1" height="300"/>
-          </grid>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children>
-          <component id="c0014" class="javax.swing.JTable" binding="tblAuditoria">
+          <grid id="contenido" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="14">
+            <margin top="24" left="28" bottom="24" right="28"/>
             <constraints/>
             <properties/>
-          </component>
+            <border type="none"/>
+            <children>
+              <!-- 1. ENCABEZADO DEL MÓDULO -->
+              <grid id="cabecera" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="8" vgap="4">
+                <margin top="0" left="0" bottom="4" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c0001" class="javax.swing.JLabel" binding="lblTitulo">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Auditoría del Sistema"/>
+                    </properties>
+                  </component>
+                  <component id="btnSol" class="javax.swing.JButton" binding="btnModoClaro">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="43" height="35"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="☀"/>
+                      <toolTipText value="Modo claro"/>
+                    </properties>
+                  </component>
+                  <component id="btnLuna" class="javax.swing.JButton" binding="btnModoOscuro">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="43" height="35"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="☾"/>
+                      <toolTipText value="Modo oscuro"/>
+                    </properties>
+                  </component>
+                  <component id="subtitulo" class="javax.swing.JLabel" binding="lblSubtitulo">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="ADMINISTRACIÓN  |  Trazabilidad de inicios de sesión y operaciones importantes: quién, cuándo y sobre qué registro"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <!-- 2. TARJETA: FILTROS DE BÚSQUEDA -->
+              <grid id="c0002" binding="cardFiltros" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="14" vgap="10">
+                <margin top="18" left="20" bottom="18" right="20"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="secFil" class="javax.swing.JLabel" binding="lblSeccionFiltros">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="FILTROS DE BÚSQUEDA"/>
+                    </properties>
+                  </component>
+                  <component id="c0003" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Usuario:"/>
+                    </properties>
+                  </component>
+                  <component id="c0004" class="javax.swing.JComboBox" binding="cmbUsuario">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="34"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="c0005" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Entidad:"/>
+                    </properties>
+                  </component>
+                  <component id="c0006" class="javax.swing.JComboBox" binding="cmbEntidad">
+                    <constraints>
+                      <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="34"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <model>
+                        <item value="TODAS"/>
+                        <item value="Usuario"/>
+                        <item value="Laboratorio"/>
+                        <item value="TipoEquipo"/>
+                        <item value="Equipo"/>
+                        <item value="Prestamo"/>
+                        <item value="Devolucion"/>
+                        <item value="Mantenimiento"/>
+                      </model>
+                    </properties>
+                  </component>
+                  <component id="c0007" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Acción:"/>
+                    </properties>
+                  </component>
+                  <component id="c0008" class="javax.swing.JComboBox" binding="cmbAccion">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="34"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <model>
+                        <item value="TODAS"/>
+                        <item value="LOGIN_EXITOSO"/>
+                        <item value="LOGIN_FALLIDO"/>
+                        <item value="LOGIN_FACIAL_FALLIDO"/>
+                        <item value="USUARIO_CREADO"/>
+                        <item value="USUARIO_MODIFICADO"/>
+                        <item value="USUARIO_DESACTIVADO"/>
+                        <item value="LABORATORIO_CREADO"/>
+                        <item value="LABORATORIO_MODIFICADO"/>
+                        <item value="EQUIPO_CREADO"/>
+                        <item value="EQUIPO_MODIFICADO"/>
+                        <item value="PRESTAMO_CREADO"/>
+                        <item value="PRESTAMO_FINALIZADO"/>
+                        <item value="EQUIPO_DEVUELTO"/>
+                        <item value="EQUIPO_ENVIADO_MANTENIMIENTO"/>
+                        <item value="MANTENIMIENTO_FINALIZADO"/>
+                      </model>
+                    </properties>
+                  </component>
+                  <component id="c0009" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Fecha desde:"/>
+                    </properties>
+                  </component>
+                  <component id="c000a" class="javax.swing.JTextField" binding="txtFechaDesde">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="34"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <toolTipText value="Formato: dd/MM/yyyy"/>
+                    </properties>
+                  </component>
+                  <component id="c000b" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Fecha hasta:"/>
+                    </properties>
+                  </component>
+                  <component id="c000c" class="javax.swing.JTextField" binding="txtFechaHasta">
+                    <constraints>
+                      <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="34"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <toolTipText value="Formato: dd/MM/yyyy"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <!-- 3. ACCIONES Y EXPORTACIÓN -->
+              <grid id="c000d" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="10" vgap="0">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c000e" class="javax.swing.JButton" binding="btnBuscar">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="38"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Buscar"/>
+                    </properties>
+                  </component>
+                  <component id="c000f" class="javax.swing.JButton" binding="btnLimpiar">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="38"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Limpiar filtros"/>
+                    </properties>
+                  </component>
+                  <component id="c0010" class="javax.swing.JButton" binding="btnExportar">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="38"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Exportar"/>
+                    </properties>
+                  </component>
+                  <hspacer id="c0011">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="c0012" class="javax.swing.JButton" binding="btnRegresar">
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="38"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Regresar"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <!-- 4. TARJETA: RESULTADOS -->
+              <grid id="c0013" binding="cardResultados" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="12" vgap="10">
+                <margin top="16" left="20" bottom="20" right="20"/>
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="secRes" class="javax.swing.JLabel" binding="lblSeccionResultados">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="REGISTROS DE AUDITORÍA"/>
+                    </properties>
+                  </component>
+                  <component id="c0014" class="javax.swing.JLabel" binding="lblTotalRegistros">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Total de registros: 0"/>
+                    </properties>
+                  </component>
+                  <scrollpane id="c0015">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="320"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="c0016" class="javax.swing.JTable" binding="tblAuditoria">
+                        <constraints/>
+                        <properties/>
+                      </component>
+                    </children>
+                  </scrollpane>
+                </children>
+              </grid>
+              <!-- 5. INDICACIONES -->
+              <component id="indic" class="javax.swing.JLabel" binding="lblIndicaciones">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Las fechas se escriben con formato dd/MM/yyyy. Exportar guarda en CSV los registros que se muestran en la tabla."/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </scrollpane>
-      <component id="c0015" class="javax.swing.JLabel" binding="lblTotalRegistros">
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Total de registros: 0"/>
-        </properties>
-      </component>
     </children>
   </grid>
 </form>
