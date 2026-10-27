@@ -22,6 +22,15 @@
             <version>7.0.3</version>
         </dependency>
 
+
+        <!-- Apache PDFBox: exportación de reportes a PDF -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.6</version>
+        </dependency>
+
+
         <!-- Driver JDBC de Microsoft SQL Server -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
