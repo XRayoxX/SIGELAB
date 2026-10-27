@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/"
+      version="1"
+      bind-to-class="SIGELAB.view.FrmEscanearQr">
+
+  <grid id="panelRaiz"
+        binding="panelPrincipal"
+        layout-manager="GridLayoutManager"
+        row-count="4"
+        column-count="1"
+        same-size-horizontally="false"
+        same-size-vertically="false"
+        hgap="0"
+        vgap="12">
+
+    <margin top="22"
+            left="24"
+            bottom="22"
+            right="24"/>
+
+    <constraints>
+      <xy x="20" y="20" width="740" height="570"/>
+    </constraints>
+
+    <properties/>
+    <border type="none"/>
+
+    <children>
+
+      <component id="titulo"
+                 class="javax.swing.JLabel"
+                 binding="lblTitulo">
+
+        <constraints>
+          <grid row="0"
+                column="0"
+                row-span="1"
+                col-span="1"
+                vsize-policy="0"
+                hsize-policy="7"
+                anchor="0"
+                fill="1"
+                indent="0"
+                use-parent-layout="false"/>
+        </constraints>
+
+        <properties>
+          <text value="ESCÁNER DE CÓDIGOS QR"/>
+          <horizontalAlignment value="0"/>
+        </properties>
+
+      </component>
+
+      <component id="estado"
+                 class="javax.swing.JLabel"
+                 binding="lblEstado">
+
+        <constraints>
+          <grid row="1"
+                column="0"
+                row-span="1"
+                col-span="1"
+                vsize-policy="0"
+                hsize-policy="7"
+                anchor="0"
+                fill="1"
+                indent="0"
+                use-parent-layout="false"/>
+        </constraints>
+
+        <properties>
+          <text value="Preparando cámara..."/>
+          <horizontalAlignment value="0"/>
+        </properties>
+
+      </component>
+
+      <component id="vista"
+                 class="javax.swing.JLabel"
+                 binding="lblVista">
+
+        <constraints>
+          <grid row="2"
+                column="0"
+                row-span="1"
+                col-span="1"
+                vsize-policy="7"
+                hsize-policy="7"
+                anchor="0"
+                fill="3"
+                indent="0"
+                use-parent-layout="false">
+            <preferred-size width="640" height="380"/>
+          </grid>
+        </constraints>
+
+        <properties>
+          <text value="Vista previa de la cámara"/>
+          <horizontalAlignment value="0"/>
+          <verticalAlignment value="0"/>
+        </properties>
+
+      </component>
+
+      <component id="cerrar"
+                 class="javax.swing.JButton"
+                 binding="btnCerrar">
+
+        <constraints>
+          <grid row="3"
+                column="0"
+                row-span="1"
+                col-span="1"
+                vsize-policy="0"
+                hsize-policy="0"
+                anchor="0"
+                fill="0"
+                indent="0"
+                use-parent-layout="false">
+            <preferred-size width="180" height="40"/>
+          </grid>
+        </constraints>
+
+        <properties>
+          <text value="Cancelar escaneo"/>
+        </properties>
+
+      </component>
+
+    </children>
+  </grid>
+</form>

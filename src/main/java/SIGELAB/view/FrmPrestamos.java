@@ -29,6 +29,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import SIGELAB.view.FrmEscanearQr;
+
 public class FrmPrestamos {
 
     private static final int DIAS_PRESTAMO_SUGERIDOS = 3;
@@ -224,14 +226,87 @@ public class FrmPrestamos {
     }
 
     // Lee el QR desde una imagen; el código obtenido se procesa igual que si se hubiera escrito
+
     private void leerQr() {
-        JFileChooser selector = new JFileChooser();
-        selector.setDialogTitle("Seleccione la imagen del código QR");
-        selector.setFileFilter(new FileNameExtensionFilter("Imágenes (png, jpg)", "png", "jpg", "jpeg"));
-        if (selector.showOpenDialog(ventana) == JFileChooser.APPROVE_OPTION) {
-            txtCodigoEquipo.setText(controller.leerCodigoQr(selector.getSelectedFile()));
-            agregarEquipo();
+
+        if (!txtNoPrestamo.getText().isBlank()) {
+            throw new BusinessException(
+                    "Está viendo un préstamo registrado. "
+                            + "Presione Nuevo antes de escanear un equipo."
+            );
         }
+
+        String[] opciones = {
+                "Cámara web",
+                "Seleccionar imagen",
+                "Cancelar"
+        };
+
+        int seleccion = JOptionPane.showOptionDialog(
+                ventana,
+                "Seleccione cómo desea identificar el equipo:",
+                "SIGELAB - Lectura de código QR",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]
+        );
+
+        String codigo = null;
+
+        if (seleccion == 0) {
+
+            // OPCIÓN 1: CÁMARA WEB
+            codigo = FrmEscanearQr.mostrarYLeer(ventana);
+
+        } else if (seleccion == 1) {
+
+            // OPCIÓN 2: ARCHIVO DE IMAGEN
+            JFileChooser selector = new JFileChooser();
+
+            selector.setDialogTitle(
+                    "Seleccione una imagen que contenga el código QR"
+            );
+
+            selector.setFileFilter(
+                    new FileNameExtensionFilter(
+                            "Imágenes QR (*.png, *.jpg, *.jpeg)",
+                            "png",
+                            "jpg",
+                            "jpeg"
+                    )
+            );
+
+            selector.setAcceptAllFileFilterUsed(false);
+
+            if (selector.showOpenDialog(ventana)
+                    == JFileChooser.APPROVE_OPTION) {
+
+                codigo = controller.leerCodigoQr(
+                        selector.getSelectedFile()
+                );
+            }
+
+        } else {
+
+            // El usuario canceló.
+            return;
+        }
+
+        if (codigo == null || codigo.isBlank()) {
+            return;
+        }
+
+        // Mostrar el código identificado.
+        txtCodigoEquipo.setText(codigo.trim());
+
+        // Utilizar las validaciones existentes:
+        // - Equipo registrado en SQL Server
+        // - Estado DISPONIBLE
+        // - Equipo no duplicado
+        // - Mostrar información del equipo
+        agregarEquipo();
     }
 
     private void quitarEquipo() {
