@@ -471,7 +471,7 @@ public class Login {
 
             switch (resultado) {
                 case APROBADO:
-                    controller.completarLogin(usuario);
+                    controller.completarLogin(usuario, resultado);
                     new FrmPrincipal().mostrar();
                     ventana.dispose();
                     return;
@@ -492,7 +492,12 @@ public class Login {
                     );
                     break;
 
-                default:
+                case NO_DISPONIBLE:
+                    controller.registrarFalloFacial(
+                            usuario,
+                            "Servicio facial no disponible o sin configuración"
+                    );
+
                     lblEstadoFacial.setText(
                             "Estado: servicio facial no disponible."
                     );
