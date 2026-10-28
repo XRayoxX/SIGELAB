@@ -24,7 +24,9 @@
           <grid id="menu" binding="panelNavegacion" layout-manager="GridLayoutManager" row-count="20" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="5">
             <margin top="24" left="17" bottom="20" right="17"/>
             <constraints/>
-            <properties/>
+            <properties>
+              <background color="-14597150"/>
+            </properties>
             <border type="none"/>
             <children>
 
@@ -67,28 +69,40 @@
                 <constraints>
                   <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Préstamos"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Préstamos"/>
+                </properties>
               </component>
 
               <component id="devoluciones" class="javax.swing.JButton" binding="btnDevoluciones">
                 <constraints>
                   <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Devoluciones"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Devoluciones"/>
+                </properties>
               </component>
 
               <component id="equipos" class="javax.swing.JButton" binding="btnEquipos">
                 <constraints>
                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Equipos"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Equipos"/>
+                </properties>
               </component>
 
               <component id="mantenimiento" class="javax.swing.JButton" binding="btnMantenimiento">
                 <constraints>
                   <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Mantenimiento"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Mantenimiento"/>
+                </properties>
               </component>
 
               <component id="catalogos" class="javax.swing.JLabel" binding="lblCatalogos">
@@ -102,21 +116,30 @@
                 <constraints>
                   <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Tipos de equipo"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Tipos de equipo"/>
+                </properties>
               </component>
 
               <component id="laboratorios" class="javax.swing.JButton" binding="btnLaboratorios">
                 <constraints>
                   <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Laboratorios"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Laboratorios"/>
+                </properties>
               </component>
 
               <component id="solicitantes" class="javax.swing.JButton" binding="btnSolicitantes">
                 <constraints>
                   <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Solicitantes"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Solicitantes"/>
+                </properties>
               </component>
 
               <component id="gestion" class="javax.swing.JLabel" binding="lblGestion">
@@ -130,21 +153,30 @@
                 <constraints>
                   <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Reportes"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Reportes"/>
+                </properties>
               </component>
 
               <component id="usuarios" class="javax.swing.JButton" binding="btnUsuarios">
                 <constraints>
                   <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Usuarios"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Usuarios"/>
+                </properties>
               </component>
 
               <component id="auditoria" class="javax.swing.JButton" binding="btnAuditoria">
                 <constraints>
                   <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Auditoría"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Auditoría"/>
+                </properties>
               </component>
 
               <component id="espacio" class="javax.swing.JLabel">
@@ -160,14 +192,20 @@
                 <constraints>
                   <grid row="18" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Cerrar sesión"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Cerrar sesión"/>
+                </properties>
               </component>
 
               <component id="salir" class="javax.swing.JButton" binding="btnSalir">
                 <constraints>
                   <grid row="19" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties><text value="Salir de SIGELAB"/></properties>
+                <properties>
+                  <background color="-460552"/>
+                  <text value="Salir de SIGELAB"/>
+                </properties>
               </component>
 
             </children>
@@ -187,7 +225,9 @@
           <grid id="contenido" binding="panelContenido" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="14">
             <margin top="25" left="28" bottom="26" right="28"/>
             <constraints/>
-            <properties/>
+            <properties>
+              <background color="-3289651"/>
+            </properties>
             <border type="none"/>
             <children>
 
@@ -214,7 +254,10 @@
                         <preferred-size width="43" height="35"/>
                       </grid>
                     </constraints>
-                    <properties><text value="☀"/></properties>
+                    <properties>
+          <background color="-460552"/>
+          <text value="☀"/>
+        </properties>
                   </component>
 
                   <component id="luna" class="javax.swing.JButton" binding="btnModoOscuro">
@@ -223,7 +266,10 @@
                         <preferred-size width="43" height="35"/>
                       </grid>
                     </constraints>
-                    <properties><text value="☾"/></properties>
+                    <properties>
+                      <background color="-460552"/>
+                      <text value="☾"/>
+                    </properties>
                   </component>
 
                   <component id="usuario" class="javax.swing.JLabel" binding="lblUsuarioActual">
@@ -244,7 +290,10 @@
                     <constraints>
                       <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties><text value="Actualizar"/></properties>
+                    <properties>
+                      <background color="-460552"/>
+                      <text value="Actualizar"/>
+                    </properties>
                   </component>
 
                 </children>

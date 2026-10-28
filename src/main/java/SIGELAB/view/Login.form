@@ -52,7 +52,7 @@
         </constraints>
 
         <properties>
-          <background color="-15520415"/>
+          <background color="-14597150"/>
         </properties>
 
         <border type="none"/>
@@ -216,7 +216,7 @@
         </constraints>
 
         <properties>
-          <background color="-15920606"/>
+          <background color="-3289651"/>
         </properties>
 
         <border type="none"/>
@@ -275,6 +275,7 @@
                 </constraints>
 
                 <properties>
+                  <background color="-460552"/>
                   <font name="Arial" size="20"/>
                   <text value="☀"/>
                   <toolTipText value="Activar modo claro"/>
@@ -296,6 +297,7 @@
                 </constraints>
 
                 <properties>
+                  <background color="-460552"/>
                   <font name="Arial" size="20"/>
                   <text value="☾"/>
                   <toolTipText value="Activar modo oscuro"/>
@@ -584,7 +586,9 @@
                 </constraints>
 
                 <properties>
+                  <background color="-14597150"/>
                   <font name="Arial" size="13" style="1"/>
+                  <foreground color="-1"/>
                   <text value="Ingresar al sistema"/>
                 </properties>
 
@@ -604,6 +608,7 @@
                 </constraints>
 
                 <properties>
+                  <background color="-460552"/>
                   <font name="Arial" size="12"/>
                   <text value="Salir"/>
                 </properties>

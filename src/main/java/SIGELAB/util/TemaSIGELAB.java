@@ -41,7 +41,7 @@ public final class TemaSIGELAB {
     public static Color fondo() {
         return modoOscuro
                 ? new Color(12, 19, 34)
-                : new Color(243, 247, 251);
+                : new Color(245, 250, 245);
     }
 
     public static Color panel() {
@@ -53,19 +53,19 @@ public final class TemaSIGELAB {
     public static Color navegacion() {
         return modoOscuro
                 ? new Color(17, 29, 48)
-                : new Color(17, 45, 71);
+                : new Color(21, 87, 36);
     }
 
     public static Color primario() {
         return modoOscuro
                 ? new Color(20, 140, 194)
-                : new Color(22, 123, 168);
+                : new Color(25, 135, 84);
     }
 
     public static Color acento() {
         return modoOscuro
                 ? new Color(56, 189, 248)
-                : new Color(36, 96, 138);
+                : new Color(255, 193, 7);
     }
 
     // =====================================

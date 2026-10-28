@@ -214,7 +214,7 @@ public class Login {
         panelIzquierdo.setBackground(
                 oscuro
                         ? new Color(18, 61, 97)
-                        : new Color(220, 237, 248)
+                        : new Color(21, 87, 36)
         );
 
         panelDerecho.setBackground(fondo);
@@ -232,26 +232,26 @@ public class Login {
                         ? Color.WHITE
                         : new Color(17, 45, 71);
 
-        lblMarca.setForeground(textoIzquierdo);
+        lblMarca.setForeground(Color.WHITE);
 
         lblIconoInstitucional.setForeground(
-                textoIzquierdo
+                Color.WHITE
         );
 
         lblMensajePrincipal.setForeground(
-                textoIzquierdo
+                Color.WHITE
         );
 
         lblDescripcion.setForeground(
                 oscuro
                         ? new Color(181, 211, 232)
-                        : new Color(66, 102, 128)
+                        : new Color(220, 237, 226)
         );
 
         lblCaracteristicas.setForeground(
                 oscuro
                         ? new Color(181, 211, 232)
-                        : new Color(66, 102, 128)
+                        : new Color(220, 237, 226)
         );
 
         // ------------------------------------
@@ -297,7 +297,7 @@ public class Login {
         // BOTON PRINCIPAL
         // ------------------------------------
 
-        btnIngresar.setBackground(primario);
+        btnIngresar.setBackground(new Color(25, 135, 84));
         btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
         btnIngresar.setOpaque(true);
@@ -309,13 +309,13 @@ public class Login {
         btnSalir.setBackground(
                 oscuro
                         ? new Color(39, 59, 86)
-                        : new Color(221, 230, 238)
+                        : new Color(255, 193, 7)
         );
 
         btnSalir.setForeground(
                 oscuro
                         ? Color.WHITE
-                        : TemaSIGELAB.texto()
+                        : new Color(33, 37, 41)
         );
 
         btnSalir.setFocusPainted(false);
@@ -410,14 +410,14 @@ public class Login {
 
         boton.setBackground(
                 activo
-                        ? TemaSIGELAB.primario()
-                        : TemaSIGELAB.panel()
+                        ? new Color(25, 135, 84)
+                        : new Color(255, 193, 7)
         );
 
         boton.setForeground(
                 activo
                         ? Color.WHITE
-                        : TemaSIGELAB.textoSecundario()
+                        : new Color(33, 37, 41)
         );
 
         boton.setFocusPainted(false);
