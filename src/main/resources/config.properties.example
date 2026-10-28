@@ -1,15 +1,1 @@
-# Plantilla de configuración de SIGELAB.
-# 1) Copie este archivo como config.properties (en esta misma carpeta).
-# 2) Escriba su usuario y contraseña reales SOLO en config.properties.
-# config.properties está en .gitignore: nunca se sube al repositorio.
 
-# --- Azure SQL Database (serverless) ---
-# loginTimeout=60: la base serverless se pausa sola y tarda en "despertar" en la primera conexión.
-db.url=jdbc:sqlserver://sigelabumg.database.windows.net:1433;databaseName=sigelabadministrador;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=60
-db.usuario=SU_USUARIO_DE_AZURE
-db.contrasena=SU_CONTRASENA
-
-# --- SQL Server local (para trabajar sin internet) ---
-# db.url=jdbc:sqlserver://localhost:1433;databaseName=Sigelab;encrypt=true;trustServerCertificate=true
-# db.usuario=sigelab_app
-# db.contrasena=SU_CONTRASENA
