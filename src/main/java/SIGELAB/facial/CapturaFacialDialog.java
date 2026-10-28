@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -140,22 +141,66 @@ public class CapturaFacialDialog extends JDialog {
     }
 
     private void iniciar() {
+        instruccion.setText("Buscando cámaras...");
+        new SwingWorker<List<Webcam>, Void>() {
+            @Override
+            protected List<Webcam> doInBackground() throws Exception {
+                return Webcam.getWebcams(15, java.util.concurrent.TimeUnit.SECONDS);
+            }
+
+            @Override
+            protected void done() {
+                if (cancelado) {
+                    return;
+                }
+                try {
+                    List<Webcam> camaras = get();
+                    if (camaras.isEmpty()) {
+                        terminarConError("No se encontró ninguna cámara en esta computadora.");
+                        return;
+                    }
+                    if (camaras.size() == 1) {
+                        webcam = camaras.get(0);
+                    } else {
+                        String[] nombres = camaras.stream().map(Webcam::getName).toArray(String[]::new);
+                        String seleccion = (String) JOptionPane.showInputDialog(
+                                CapturaFacialDialog.this,
+                                "Seleccione la cámara que desea usar para el reconocimiento facial:",
+                                "Elegir cámara", JOptionPane.QUESTION_MESSAGE,
+                                null, nombres, nombres[0]);
+                        if (seleccion == null) {
+                            cancelado = true;
+                            cerrar();
+                            return;
+                        }
+                        webcam = camaras.get(java.util.Arrays.asList(nombres).indexOf(seleccion));
+                    }
+                    if (!cancelado) {
+                        abrirCamaraSeleccionada();
+                    }
+                } catch (Exception ex) {
+                    Throwable causa = ex.getCause() != null ? ex.getCause() : ex;
+                    terminarConError("No se pudo preparar la cámara: " + causa.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    private void abrirCamaraSeleccionada() {
+        instruccion.setText("Iniciando cámara: " + webcam.getName());
         try {
-            webcam = Webcam.getDefault();
+            if (java.util.Arrays.asList(webcam.getViewSizes()).contains(WebcamResolution.VGA.getSize())) {
+                webcam.setViewSize(WebcamResolution.VGA.getSize());
+            }
+            panel = new WebcamPanel(webcam);
+            panel.setMirrored(true); // solo la vista previa se ve como espejo; las fotos se envían sin espejo
+            panel.setFPSDisplayed(false);
+            add(panel, BorderLayout.CENTER);
+            revalidate();
+            new Captura().execute();
         } catch (RuntimeException ex) {
-            webcam = null;
+            terminarConError("No se pudo abrir la cámara seleccionada: " + ex.getMessage());
         }
-        if (webcam == null) {
-            terminarConError("No se encontró ninguna cámara en esta computadora.");
-            return;
-        }
-        webcam.setViewSize(WebcamResolution.VGA.getSize());
-        panel = new WebcamPanel(webcam);
-        panel.setMirrored(true); // solo la vista previa se ve como espejo; las fotos se envían sin espejo
-        panel.setFPSDisplayed(false);
-        add(panel, BorderLayout.CENTER);
-        revalidate();
-        new Captura().execute();
     }
 
     /** Toma fotos y llama a la API fuera del hilo de Swing. */
