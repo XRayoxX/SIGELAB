@@ -20,6 +20,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -154,6 +158,7 @@ public class FrmPrestamos {
         btnLimpiar.addActionListener(e -> nuevo());
         btnAgregarEquipo.addActionListener(e -> ejecutar(this::agregarEquipo));
         txtCodigoEquipo.addActionListener(e -> btnAgregarEquipo.doClick());   // Enter (o lector de QR tipo teclado)
+        corregirGuionDelLector(txtCodigoEquipo);
         btnLeerQr.addActionListener(e -> ejecutar(this::leerQr));
         btnQuitarEquipo.addActionListener(e -> ejecutar(this::quitarEquipo));
         btnConfirmarPrestamo.addActionListener(e -> ejecutar(this::confirmar));
@@ -204,6 +209,27 @@ public class FrmPrestamos {
         }
         habilitarEdicion(true);
         txtCodigoEquipo.requestFocus();
+    }
+
+    /**
+     * La pistola lectora (Zebra DS2278) "teclea" como teclado de EE. UU. y, con Windows en
+     * español latinoamericano, el guion llega como apóstrofo (CAM-001 -> CAM'001).
+     * Este filtro cambia ' por - en el momento en que el texto entra al campo.
+     */
+    private void corregirGuionDelLector(JTextField campo) {
+        ((AbstractDocument) campo.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String texto, AttributeSet attr)
+                    throws BadLocationException {
+                super.insertString(fb, offset, texto == null ? null : texto.replace('\'', '-'), attr);
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int largo, String texto, AttributeSet attrs)
+                    throws BadLocationException {
+                super.replace(fb, offset, largo, texto == null ? null : texto.replace('\'', '-'), attrs);
+            }
+        });
     }
 
     private void agregarEquipo() {

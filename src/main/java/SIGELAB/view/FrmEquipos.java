@@ -7,9 +7,11 @@ import SIGELAB.model.Laboratorio;
 import SIGELAB.model.TipoEquipo;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.Dialogos;
+import SIGELAB.util.ImpresoraZebra;
 import SIGELAB.util.TablaUtil;
 import SIGELAB.util.EstiloFormulario;
 
+import javax.print.PrintService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.WindowAdapter;
@@ -39,6 +41,7 @@ public class FrmEquipos {
     private JLabel lblCodigoQr;
     private JButton btnGenerarQr;
     private JButton btnGuardarQr;
+    private JButton btnImprimirQr;
     private JButton btnNuevo;
     private JButton btnGuardar;
     private JButton btnActualizar;
@@ -122,6 +125,7 @@ public class FrmEquipos {
         }));
         btnGenerarQr.addActionListener(e -> ejecutar(this::generarQr));
         btnGuardarQr.addActionListener(e -> ejecutar(this::guardarQr));
+        btnImprimirQr.addActionListener(e -> ejecutar(this::imprimirQr));
         btnVerHistorial.addActionListener(e -> ejecutar(() -> {
             String codigo = txtCodigoInventario.getText().trim();
             TablaUtil.mostrarEnDialogo(ventana, "Historial del equipo " + codigo, controller.historial(codigo));
@@ -260,6 +264,43 @@ public class FrmEquipos {
             controller.guardarQr(qrActual, archivo);
             Dialogos.info(ventana, "QR guardado en " + archivo.getAbsolutePath());
         }
+    }
+
+    // Pide la impresora (se sugiere la Zebra) y cuántas copias, y manda la etiqueta
+    private void imprimirQr() {
+        if (txtId.getText().isBlank()) {
+            throw new BusinessException("Seleccione en la tabla un equipo ya guardado para imprimir su QR.");
+        }
+        PrintService[] impresoras = ImpresoraZebra.listar();
+        if (impresoras.length == 0) {
+            throw new BusinessException("No hay impresoras instaladas en Windows. Instale el driver de la Zebra iMZ320.");
+        }
+
+        JComboBox<String> cmbImpresora = new JComboBox<>();
+        for (PrintService p : impresoras) {
+            cmbImpresora.addItem(p.getName());
+        }
+        PrintService sugerida = ImpresoraZebra.sugerida();
+        if (sugerida != null) {
+            cmbImpresora.setSelectedItem(sugerida.getName());
+        }
+        JSpinner spnCopias = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+
+        JPanel panel = new JPanel(new java.awt.GridLayout(0, 1, 4, 4));
+        panel.add(new JLabel("Impresora:"));
+        panel.add(cmbImpresora);
+        panel.add(new JLabel("Copias:"));
+        panel.add(spnCopias);
+
+        int opcion = JOptionPane.showConfirmDialog(ventana, panel,
+                "Imprimir QR de " + txtCodigoInventario.getText().trim(),
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (opcion != JOptionPane.OK_OPTION) {
+            return;
+        }
+        PrintService elegida = impresoras[cmbImpresora.getSelectedIndex()];
+        controller.imprimirQr(txtCodigoInventario.getText(), elegida, (Integer) spnCopias.getValue());
+        Dialogos.info(ventana, "Etiqueta enviada a " + elegida.getName() + ".");
     }
 
     private void limpiarQr() {

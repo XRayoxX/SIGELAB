@@ -8,8 +8,10 @@ import SIGELAB.model.TipoEquipo;
 import SIGELAB.service.EquipoService;
 import SIGELAB.service.LaboratorioService;
 import SIGELAB.service.TipoEquipoService;
+import SIGELAB.util.ImpresoraZebra;
 import SIGELAB.util.QrUtil;
 
+import javax.print.PrintService;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
@@ -55,5 +57,11 @@ public class EquipoController {
 
     public void guardarQr(BufferedImage imagen, File archivo) {
         QrUtil.guardarPng(imagen, archivo);
+    }
+
+    // Etiqueta para la impresora Zebra: QR + código + nombre del equipo
+    public void imprimirQr(String codigoInventario, PrintService impresora, int copias) {
+        Equipo equipo = service.identificarPorCodigo(codigoInventario);
+        ImpresoraZebra.imprimirEtiquetaQr(impresora, equipo.getCodigoInventario(), equipo.getNombre(), copias);
     }
 }

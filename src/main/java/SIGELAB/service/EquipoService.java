@@ -39,7 +39,7 @@ public class EquipoService {
      * Solo consulta: no cambia ningún estado (RN-19).
      */
     public Equipo identificarPorCodigo(String codigoInventario) {
-        String codigo = codigoInventario == null ? "" : codigoInventario.trim().toUpperCase();
+        String codigo = normalizarCodigo(codigoInventario);
         if (codigo.isEmpty()) {
             throw new BusinessException("Escriba o lea el código de inventario del equipo.");
         }
@@ -75,8 +75,17 @@ public class EquipoService {
         return reporteRepository.historialEquipo(equipo.getCodigoInventario());
     }
 
+    /**
+     * Mayúsculas y sin espacios. Además cambia ' por -:
+     * la pistola lectora (Zebra DS2278) "teclea" como teclado de EE. UU., y con Windows en
+     * español latinoamericano la tecla del guion sale como apóstrofo (CAM-001 llega como CAM'001).
+     */
+    private String normalizarCodigo(String codigo) {
+        return codigo == null ? "" : codigo.trim().toUpperCase().replace('\'', '-');
+    }
+
     private void validar(Equipo e) {
-        e.setCodigoInventario(e.getCodigoInventario() == null ? null : e.getCodigoInventario().trim().toUpperCase());
+        e.setCodigoInventario(e.getCodigoInventario() == null ? null : normalizarCodigo(e.getCodigoInventario()));
         e.setNombre(limpio(e.getNombre()));
         e.setMarca(limpio(e.getMarca()));
         e.setModelo(limpio(e.getModelo()));
