@@ -55,7 +55,9 @@
                     bottom="26" right="28"/>
 
             <constraints/>
-            <properties/>
+            <properties>
+              <background color="-3289651"/>
+            </properties>
             <border type="none"/>
 
             <children>

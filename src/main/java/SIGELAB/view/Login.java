@@ -6,6 +6,7 @@ import SIGELAB.facial.VerificacionFacial;
 import SIGELAB.model.Usuario;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.DataAccessException;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -82,12 +83,8 @@ public class Login {
 
         aplicarTema();
 
-        ventana.pack();
-
-        // Maximizada, respetando barra de tareas.
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         ventana.getRootPane().setDefaultButton(
                 btnIngresar
@@ -217,7 +214,7 @@ public class Login {
         panelIzquierdo.setBackground(
                 oscuro
                         ? new Color(18, 61, 97)
-                        : new Color(220, 237, 248)
+                        : new Color(21, 87, 36)
         );
 
         panelDerecho.setBackground(fondo);
@@ -235,26 +232,26 @@ public class Login {
                         ? Color.WHITE
                         : new Color(17, 45, 71);
 
-        lblMarca.setForeground(textoIzquierdo);
+        lblMarca.setForeground(Color.WHITE);
 
         lblIconoInstitucional.setForeground(
-                textoIzquierdo
+                Color.WHITE
         );
 
         lblMensajePrincipal.setForeground(
-                textoIzquierdo
+                Color.WHITE
         );
 
         lblDescripcion.setForeground(
                 oscuro
                         ? new Color(181, 211, 232)
-                        : new Color(66, 102, 128)
+                        : new Color(220, 237, 226)
         );
 
         lblCaracteristicas.setForeground(
                 oscuro
                         ? new Color(181, 211, 232)
-                        : new Color(66, 102, 128)
+                        : new Color(220, 237, 226)
         );
 
         // ------------------------------------
@@ -300,7 +297,7 @@ public class Login {
         // BOTON PRINCIPAL
         // ------------------------------------
 
-        btnIngresar.setBackground(primario);
+        btnIngresar.setBackground(new Color(25, 135, 84));
         btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
         btnIngresar.setOpaque(true);
@@ -312,13 +309,13 @@ public class Login {
         btnSalir.setBackground(
                 oscuro
                         ? new Color(39, 59, 86)
-                        : new Color(221, 230, 238)
+                        : new Color(255, 193, 7)
         );
 
         btnSalir.setForeground(
                 oscuro
                         ? Color.WHITE
-                        : TemaSIGELAB.texto()
+                        : new Color(33, 37, 41)
         );
 
         btnSalir.setFocusPainted(false);
@@ -413,14 +410,14 @@ public class Login {
 
         boton.setBackground(
                 activo
-                        ? TemaSIGELAB.primario()
-                        : TemaSIGELAB.panel()
+                        ? new Color(25, 135, 84)
+                        : new Color(255, 193, 7)
         );
 
         boton.setForeground(
                 activo
                         ? Color.WHITE
-                        : TemaSIGELAB.textoSecundario()
+                        : new Color(33, 37, 41)
         );
 
         boton.setFocusPainted(false);
@@ -471,7 +468,7 @@ public class Login {
 
             switch (resultado) {
                 case APROBADO:
-                    controller.completarLogin(usuario);
+                    controller.completarLogin(usuario, resultado);
                     new FrmPrincipal().mostrar();
                     ventana.dispose();
                     return;
@@ -492,7 +489,12 @@ public class Login {
                     );
                     break;
 
-                default:
+                case NO_DISPONIBLE:
+                    controller.registrarFalloFacial(
+                            usuario,
+                            "Servicio facial no disponible o sin configuración"
+                    );
+
                     lblEstadoFacial.setText(
                             "Estado: servicio facial no disponible."
                     );

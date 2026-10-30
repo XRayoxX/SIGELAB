@@ -12,12 +12,24 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import SIGELAB.util.EstiloFormulario;
+import SIGELAB.util.TemaSIGELAB;
 
 public class FrmLaboratorios {
 
     // Componentes vinculados desde FrmLaboratorios.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardBusqueda;
+    private JPanel cardDatos;
+    private JPanel cardRegistros;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionBusqueda;
+    private JLabel lblSeccionDatos;
+    private JLabel lblSeccionRegistros;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JTextField txtId;
     private JTextField txtCodigo;
     private JTextField txtNombre;
@@ -53,13 +65,11 @@ public class FrmLaboratorios {
         spnCapacidad.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
 
         // Aplicar la paleta oficial SIGELAB.
-        EstiloFormulario.aplicar(panelPrincipal);
+        configurarEstilo();
 
-// Calcular tamaño inicial.
-        ventana.pack();
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
-// Maximizar respetando la barra de tareas.
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
             @Override
@@ -87,6 +97,34 @@ public class FrmLaboratorios {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardBusqueda, cardDatos, cardRegistros);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionBusqueda, lblSeccionDatos, lblSeccionRegistros);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnGuardar, btnActualizar, btnBuscar);
+        EstiloFormulario.botonPeligro(btnDesactivar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     private void guardar() {

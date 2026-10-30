@@ -7,6 +7,7 @@ import SIGELAB.model.ResumenDashboard;
 import SIGELAB.model.Usuario;
 import SIGELAB.util.Dialogos;
 import SIGELAB.util.Sesion;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -180,10 +181,8 @@ public class FrmPrincipal {
                 new Dimension(800, 500)
         );
 
-        // Maximiza respetando la barra de tareas.
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows.
+        EstiloFormulario.pantallaCompleta(ventana);
 
         configurarScroll();
 
@@ -202,6 +201,8 @@ public class FrmPrincipal {
                     public void componentShown(
                             ComponentEvent e
                     ) {
+                        // Si el tema se cambió dentro de un módulo, el menú lo refleja al volver
+                        aplicarTema();
                         cargarResumen();
                     }
                 }
@@ -1173,9 +1174,7 @@ public class FrmPrincipal {
 
     public void mostrar() {
 
-        ventana.setExtendedState(
-                JFrame.MAXIMIZED_BOTH
-        );
+        EstiloFormulario.pantallaCompleta(ventana);
 
         ventana.setVisible(true);
     }

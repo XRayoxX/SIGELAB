@@ -8,8 +8,10 @@ import SIGELAB.enums.TipoMantenimiento;
 import SIGELAB.model.Equipo;
 import SIGELAB.model.Mantenimiento;
 import SIGELAB.util.Dialogos;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.Fechas;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +24,18 @@ public class FrmMantenimiento {
 
     // Componentes vinculados desde FrmMantenimiento.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardIngreso;
+    private JPanel cardCierre;
+    private JPanel cardHistorial;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionIngreso;
+    private JLabel lblSeccionCierre;
+    private JLabel lblSeccionHistorial;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JTextField txtId;
     private JComboBox cmbEquipo;
     private JTextField txtEstadoEquipo;
@@ -56,9 +69,10 @@ public class FrmMantenimiento {
 
         modeloTabla = TablaUtil.configurar(tblMantenimientos, "ID", "Código", "Equipo", "Tipo", "Responsable",
                 "Fecha ingreso", "Fecha salida", "Resultado", "Estado");
+        configurarEstilo();
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
@@ -94,6 +108,33 @@ public class FrmMantenimiento {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardIngreso, cardCierre, cardHistorial);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionIngreso, lblSeccionCierre, lblSeccionHistorial);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnEnviarMantenimiento, btnFinalizar, btnBuscar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     // Prepara el formulario para enviar un equipo a mantenimiento

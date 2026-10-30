@@ -10,6 +10,7 @@ import SIGELAB.util.Dialogos;
 import SIGELAB.util.Fechas;
 import SIGELAB.util.Sesion;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -133,7 +134,7 @@ public class FrmPrestamos {
         ventana.setContentPane(panelPrincipal);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventana.setMinimumSize(new Dimension(920, 620));
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        EstiloFormulario.pantallaCompleta(ventana);
 
         modeloDetalle = TablaUtil.configurar(tblDetalle, "ID", "Código", "Equipo", "Tipo", "Laboratorio", "Estado");
         modeloPrestamos = TablaUtil.configurar(tblPrestamos, "No.", "Solicitante", "Fecha préstamo", "Fecha esperada",
@@ -183,7 +184,7 @@ public class FrmPrestamos {
 
     public void mostrar() {
         aplicarTema();
-        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        EstiloFormulario.pantallaCompleta(ventana);
         ventana.setVisible(true);
     }
 

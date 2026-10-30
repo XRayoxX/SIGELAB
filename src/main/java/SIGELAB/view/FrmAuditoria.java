@@ -3,9 +3,11 @@ package SIGELAB.view;
 import SIGELAB.controller.AuditoriaController;
 import SIGELAB.model.Auditoria;
 import SIGELAB.util.Dialogos;
+import SIGELAB.util.EstiloFormulario;
 import SIGELAB.util.ExportarUtil;
 import SIGELAB.util.Fechas;
 import SIGELAB.util.TablaUtil;
+import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +20,16 @@ public class FrmAuditoria {
 
     // Componentes vinculados desde FrmAuditoria.form
     private JPanel panelPrincipal;
+    private JScrollPane scrollContenido;
+    private JPanel cardFiltros;
+    private JPanel cardResultados;
     private JLabel lblTitulo;
+    private JLabel lblSubtitulo;
+    private JLabel lblSeccionFiltros;
+    private JLabel lblSeccionResultados;
+    private JLabel lblIndicaciones;
+    private JButton btnModoClaro;
+    private JButton btnModoOscuro;
     private JComboBox cmbUsuario;
     private JComboBox cmbEntidad;
     private JComboBox cmbAccion;
@@ -41,9 +52,10 @@ public class FrmAuditoria {
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         modeloTabla = TablaUtil.configurar(tblAuditoria, "ID", "Fecha/Hora", "Usuario", "Acción", "Entidad", "ID registro", "Descripción");
+        configurarEstilo();
 
-        ventana.pack();
-        ventana.setLocationRelativeTo(null);
+        // Pantalla completa (maximizada), respetando la barra de tareas de Windows
+        EstiloFormulario.pantallaCompleta(ventana);
 
         // Al cerrar esta ventana (con Regresar o con la X) se vuelve a mostrar el menú
         ventana.addWindowListener(new WindowAdapter() {
@@ -81,6 +93,34 @@ public class FrmAuditoria {
 
     public void mostrar() {
         ventana.setVisible(true);
+    }
+
+    // =====================================
+    // DISEÑO SIGELAB (modo claro / oscuro)
+    // =====================================
+
+    private void configurarEstilo() {
+        EstiloFormulario.configurarScroll(scrollContenido);
+        EstiloFormulario.tarjeta(cardFiltros, cardResultados);
+        EstiloFormulario.titulo(lblTitulo);
+        EstiloFormulario.subtitulo(lblSubtitulo);
+        EstiloFormulario.seccion(lblSeccionFiltros, lblSeccionResultados);
+        EstiloFormulario.destacado(lblTotalRegistros);
+        EstiloFormulario.indicacion(lblIndicaciones);
+        EstiloFormulario.botonPrincipal(btnBuscar);
+        EstiloFormulario.botonesTema(btnModoClaro, btnModoOscuro);
+        btnModoClaro.addActionListener(e -> cambiarTema(false));
+        btnModoOscuro.addActionListener(e -> cambiarTema(true));
+        aplicarTema();
+    }
+
+    private void cambiarTema(boolean modoOscuro) {
+        TemaSIGELAB.establecerModoOscuro(modoOscuro);
+        aplicarTema();
+    }
+
+    private void aplicarTema() {
+        EstiloFormulario.aplicar(panelPrincipal);
     }
 
     private void buscar() {
