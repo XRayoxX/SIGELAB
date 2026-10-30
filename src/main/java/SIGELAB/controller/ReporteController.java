@@ -21,6 +21,12 @@ public class ReporteController {
         return laboratorioService.listarActivos();
     }
 
+    // Equipos que se llevaron en un préstamo (doble clic en el reporte)
+    public ResultadoReporte detallePrestamo(int idPrestamo) {
+
+        return service.detallePrestamo(idPrestamo);
+    }
+
     public ResultadoReporte generar(
             String tipoReporte,
             Integer idLaboratorio,

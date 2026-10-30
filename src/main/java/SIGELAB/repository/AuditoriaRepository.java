@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * SQL de dbo.Auditoria (RN-18).
- * La FechaHora la pone SQL Server con su valor por defecto SYSDATETIME().
+ * La FechaHora la pone SQL Server con su valor por defecto dbo.fn_AhoraGuatemala() (script 05).
  */
 public class AuditoriaRepository {
 

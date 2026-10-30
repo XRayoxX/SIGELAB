@@ -396,6 +396,22 @@ public class FrmReportes {
                 e -> generarReporte()
         );
 
+        // Doble clic en un préstamo: ventana con los equipos que se llevó
+        tblResultados.addMouseListener(
+                new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+
+                        if (e.getClickCount() == 2
+                                && tblResultados.rowAtPoint(e.getPoint()) >= 0) {
+
+                            ejecutar(() -> verDetallePrestamo());
+                        }
+                    }
+                }
+        );
+
         btnExportarPdf.addActionListener(
                 e -> ejecutar(this::exportarPdf)
         );
@@ -626,12 +642,70 @@ public class FrmReportes {
                         + resultado.getFilas().size()
         );
 
+        boolean conPrestamos = columnaPrestamo() >= 0;
+
         lblSeccionResultados.setText(
                 "RESULTADOS | "
                         + cmbTipoReporte.getSelectedItem()
+                        + (conPrestamos
+                        ? "  (doble clic en un préstamo para ver sus equipos)"
+                        : "")
+        );
+
+        tblResultados.setToolTipText(
+                conPrestamos
+                        ? "Doble clic para ver los equipos de este préstamo"
+                        : null
         );
 
         aplicarEstiloTabla();
+    }
+
+    // =====================================================
+    // DETALLE DEL PRÉSTAMO (VENTANA EMERGENTE)
+    // =====================================================
+
+    // Columna con el número de préstamo ("No." o "No. prestamo"); -1 si el reporte no la tiene
+    private int columnaPrestamo() {
+
+        for (int i = 0; i < tblResultados.getColumnCount(); i++) {
+
+            String nombre = tblResultados.getColumnName(i);
+
+            if ("No.".equals(nombre) || "No. prestamo".equals(nombre)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void verDetallePrestamo() {
+
+        int fila = tblResultados.getSelectedRow();
+        int columna = columnaPrestamo();
+
+        if (fila < 0 || columna < 0) {
+            return;   // este reporte no muestra préstamos
+        }
+
+        Object valor = tblResultados.getValueAt(fila, columna);
+        int idPrestamo = valor instanceof Number n
+                ? n.intValue()
+                : Integer.parseInt(String.valueOf(valor).trim());
+
+        String solicitante = null;
+        for (int i = 0; i < tblResultados.getColumnCount(); i++) {
+            if ("Solicitante".equals(tblResultados.getColumnName(i))) {
+                solicitante = String.valueOf(tblResultados.getValueAt(fila, i));
+            }
+        }
+
+        FrmDetallePrestamo.mostrar(
+                ventana,
+                idPrestamo,
+                solicitante,
+                controller.detallePrestamo(idPrestamo)
+        );
     }
 
     private void limpiarResultados() {

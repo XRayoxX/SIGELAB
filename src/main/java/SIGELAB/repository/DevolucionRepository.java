@@ -15,7 +15,7 @@ public class DevolucionRepository {
 
     public void insertar(Connection cn, int idDetallePrestamo, CondicionDevolucion condicion,
                          String observaciones, int idUsuarioRecibe) {
-        // FechaDevolucion la pone SQL Server con SYSDATETIME()
+        // FechaDevolucion la pone SQL Server con dbo.fn_AhoraGuatemala() (script 05)
         String sql = "INSERT INTO dbo.Devolucion (IdDetallePrestamo, Condicion, Observaciones, IdUsuarioRecibe) "
                 + "VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
