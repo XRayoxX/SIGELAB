@@ -14,8 +14,8 @@ identificar equipos, **auditoría**, **dashboard**, **reportes** y **notificacio
 
 | Nombre completo | Carné | Usuario de GitHub |
 |---|---|---|
-| _(3590-25-1435)_ | _(Francisco Javier Letran Fausto)_ | XRayoxX / Rayo |
-| _(3590-25-19886)_ | (David Emanuel Rabanales Castillo)| drabanalesc2-collab |
+| _(Francisco Javier Letran Fausto)_ | _(3590-25-1435)_ | XRayoxX / Rayo |
+| _(David Emanuel Rabanales Castillo)_ | ( 3590-25-19886)| drabanalesc2-collab |
 
 ---
 
