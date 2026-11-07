@@ -18,7 +18,9 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,6 +29,7 @@ import java.util.Properties;
  *  - Intento fallido de inicio de sesión por reconocimiento facial (al usuario).
  *  - Préstamo registrado (al solicitante).
  *  - Equipo devuelto (al solicitante).
+ *  - Recordatorios automáticos: el préstamo vence hoy / el préstamo ya venció (al solicitante).
  *
  * Los datos de la cuenta se leen de config.properties:
  *
@@ -96,6 +99,35 @@ public class CorreoService {
                 ? "<p>Ya entregó <b>todos</b> los equipos: el préstamo quedó <b>FINALIZADO</b>. ¡Gracias!</p>"
                 : "<p>Todavía tiene <b>" + pendientes + "</b> equipo(s) pendiente(s) de devolver en este préstamo.</p>");
         enviar(s.getCorreo(), "SIGELAB - Equipo " + equipo.getCodigoInventario() + " entregado", cuerpo);
+    }
+
+    // Recordatorio automático: el préstamo vence hoy y todavía tiene equipos pendientes
+    public void notificarVenceHoy(Prestamo prestamo, List<Equipo> pendientes) {
+        Solicitante s = prestamo.getSolicitante();
+        String cuerpo = "<p>Hola <b>" + html(s.getNombreCompleto()) + "</b>,</p>"
+                + "<p><b>Recordatorio: hoy vence su préstamo No. " + prestamo.getIdPrestamo() + ".</b></p>"
+                + "<p>Todavía tiene pendientes de devolver los siguientes equipos:</p>"
+                + tabla(filas(pendientes))
+                + "<p><b>Fecha y hora límite de devolución:</b> "
+                + Fechas.formatear(prestamo.getFechaEsperadaDevolucion()) + "</p>"
+                + "<p>Por favor, entréguelos en el laboratorio antes de esa hora y en buen estado.</p>";
+        enviar(s.getCorreo(), "SIGELAB - Recordatorio: hoy vence su préstamo No. " + prestamo.getIdPrestamo(), cuerpo);
+    }
+
+    // Recordatorio automático: la fecha esperada ya pasó y todavía tiene equipos pendientes (RN-17)
+    public void notificarVencido(Prestamo prestamo, List<Equipo> pendientes) {
+        Solicitante s = prestamo.getSolicitante();
+        long dias = ChronoUnit.DAYS.between(prestamo.getFechaEsperadaDevolucion().toLocalDate(), LocalDate.now());
+        String atraso = dias <= 0 ? "hoy" : "hace " + dias + (dias == 1 ? " día" : " días");
+        String cuerpo = "<p>Hola <b>" + html(s.getNombreCompleto()) + "</b>,</p>"
+                + "<p style='color:#a32626'><b>Su préstamo No. " + prestamo.getIdPrestamo() + " ya venció.</b></p>"
+                + "<p>La fecha de devolución era el <b>" + Fechas.formatear(prestamo.getFechaEsperadaDevolucion())
+                + "</b> (venció " + atraso + ") y todavía no ha devuelto los siguientes equipos:</p>"
+                + tabla(filas(pendientes))
+                + "<p><b>Por favor, devuelva el equipo lo antes posible</b> en el laboratorio. "
+                + "Si ya lo entregó, comuníquese con el encargado del laboratorio.</p>";
+        enviar(s.getCorreo(), "SIGELAB - Su préstamo No. " + prestamo.getIdPrestamo()
+                + " venció: por favor devuelva el equipo", cuerpo);
     }
 
     // ========================================
@@ -171,6 +203,15 @@ public class CorreoService {
         return "<table border='1' cellpadding='6' style='border-collapse:collapse'>"
                 + "<tr style='background:#1f4e79;color:#fff'><th>Código</th><th>Equipo</th></tr>"
                 + filas + "</table>";
+    }
+
+    private String filas(List<Equipo> equipos) {
+        StringBuilder filas = new StringBuilder();
+        for (Equipo e : equipos) {
+            filas.append("<tr><td>").append(html(e.getCodigoInventario())).append("</td><td>")
+                    .append(html(e.getNombre())).append("</td></tr>");
+        }
+        return filas.toString();
     }
 
     // Nombre de la PC en Windows (ayuda al usuario a saber desde dónde se ingresó)
