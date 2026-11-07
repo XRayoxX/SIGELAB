@@ -24,8 +24,7 @@ public final class ConexionBD {
     private ConexionBD() {
     }
 
-    // Lee config.properties una sola vez (la primera vez que alguien pide una conexión).
-    // Configuracion lo busca junto al ejecutable y, si no está, dentro del proyecto.
+
     private static synchronized void cargarConfiguracion() {
         if (url != null) {
             return;

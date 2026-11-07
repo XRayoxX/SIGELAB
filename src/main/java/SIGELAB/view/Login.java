@@ -7,6 +7,7 @@ import SIGELAB.model.Usuario;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.DataAccessException;
 import SIGELAB.util.EstiloFormulario;
+import SIGELAB.util.LogoSIGELAB;
 import SIGELAB.util.TemaSIGELAB;
 
 import javax.swing.*;
@@ -56,6 +57,28 @@ public class Login {
     // CONTROLADOR Y VENTANA
     // ========================================
 
+    // ========================================
+    // PALETA (la misma de FrmPrestamos: blanco / gris azulado / azul)
+    // ========================================
+
+    private static final Color OSCURO_FONDO = new Color(13, 20, 32);
+    private static final Color OSCURO_TARJETA = new Color(24, 35, 51);
+    private static final Color OSCURO_CAMPO = new Color(17, 28, 43);
+    private static final Color OSCURO_BORDE = new Color(42, 58, 76);
+    private static final Color OSCURO_TEXTO = new Color(227, 234, 242);
+    private static final Color OSCURO_SECUNDARIO = new Color(151, 167, 184);
+
+    private static final Color CLARO_FONDO = Color.WHITE;
+    private static final Color CLARO_TARJETA = new Color(244, 247, 250);
+    private static final Color CLARO_CAMPO = Color.WHITE;
+    private static final Color CLARO_BORDE = new Color(215, 224, 233);
+    private static final Color CLARO_TEXTO = new Color(35, 51, 67);
+    private static final Color CLARO_SECUNDARIO = new Color(100, 117, 135);
+
+    private static final Color AZUL_PRINCIPAL = new Color(54, 125, 170);
+    // Mismo azul oscuro del fondo del logo (por si el logo no llena algún borde)
+    private static final Color AZUL_LOGO = new Color(9, 27, 48);
+
     private final JFrame ventana;
 
     private final LoginController controller =
@@ -81,6 +104,8 @@ public class Login {
 
         configurarEventos();
 
+        mostrarLogo();
+
         aplicarTema();
 
         // Pantalla completa (maximizada), respetando la barra de tareas de Windows
@@ -101,6 +126,23 @@ public class Login {
                     "Estado: reconocimiento facial desactivado (config.properties)"
             );
         }
+    }
+
+    // ========================================
+    // LOGO
+    // ========================================
+
+    // El logo llena todo el lado izquierdo. Sus textos (SIGELAB, UMG...) ya vienen en la imagen,
+    // por eso se quitan las etiquetas del .form de ese panel.
+    private void mostrarLogo() {
+        JComponent logo = LogoSIGELAB.panelLogo();
+        if (logo == null) {
+            return; // sin imagen se queda el diseño de texto del .form
+        }
+        panelIzquierdo.removeAll();
+        panelIzquierdo.setLayout(new BorderLayout());
+        panelIzquierdo.setBorder(null);
+        panelIzquierdo.add(logo, BorderLayout.CENTER);
     }
 
     // ========================================
@@ -185,25 +227,22 @@ public class Login {
                 TemaSIGELAB.esOscuro();
 
         Color fondo =
-                TemaSIGELAB.fondo();
+                oscuro ? OSCURO_FONDO : CLARO_FONDO;
 
         Color panel =
-                TemaSIGELAB.panel();
+                oscuro ? OSCURO_TARJETA : CLARO_TARJETA;
 
         Color texto =
-                TemaSIGELAB.texto();
+                oscuro ? OSCURO_TEXTO : CLARO_TEXTO;
 
         Color secundario =
-                TemaSIGELAB.textoSecundario();
-
-        Color primario =
-                TemaSIGELAB.primario();
+                oscuro ? OSCURO_SECUNDARIO : CLARO_SECUNDARIO;
 
         Color borde =
-                TemaSIGELAB.borde();
+                oscuro ? OSCURO_BORDE : CLARO_BORDE;
 
         Color campo =
-                TemaSIGELAB.campo();
+                oscuro ? OSCURO_CAMPO : CLARO_CAMPO;
 
         // ------------------------------------
         // FONDOS
@@ -211,11 +250,8 @@ public class Login {
 
         panelPrincipal.setBackground(fondo);
 
-        panelIzquierdo.setBackground(
-                oscuro
-                        ? new Color(18, 61, 97)
-                        : new Color(21, 87, 36)
-        );
+        // El lado izquierdo es el logo (siempre con su fondo azul oscuro)
+        panelIzquierdo.setBackground(AZUL_LOGO);
 
         panelDerecho.setBackground(fondo);
 
@@ -297,27 +333,23 @@ public class Login {
         // BOTON PRINCIPAL
         // ------------------------------------
 
-        btnIngresar.setBackground(new Color(25, 135, 84));
+        btnIngresar.setBackground(AZUL_PRINCIPAL);
         btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
         btnIngresar.setOpaque(true);
 
         // ------------------------------------
-        // BOTON SALIR
+        // BOTON SALIR (secundario: mismo fondo de las tarjetas, con borde)
         // ------------------------------------
 
-        btnSalir.setBackground(
-                oscuro
-                        ? new Color(39, 59, 86)
-                        : new Color(255, 193, 7)
+        btnSalir.setBackground(panel);
+        btnSalir.setForeground(texto);
+        btnSalir.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(borde, 1),
+                        BorderFactory.createEmptyBorder(8, 16, 8, 16)
+                )
         );
-
-        btnSalir.setForeground(
-                oscuro
-                        ? Color.WHITE
-                        : new Color(33, 37, 41)
-        );
-
         btnSalir.setFocusPainted(false);
         btnSalir.setOpaque(true);
 
@@ -408,16 +440,19 @@ public class Login {
             boolean activo
     ) {
 
+        boolean oscuro = TemaSIGELAB.esOscuro();
+
+        // Activo: azul de SIGELAB. Inactivo: gris como las tarjetas.
         boton.setBackground(
                 activo
-                        ? new Color(25, 135, 84)
-                        : new Color(255, 193, 7)
+                        ? AZUL_PRINCIPAL
+                        : (oscuro ? OSCURO_TARJETA : CLARO_TARJETA)
         );
 
         boton.setForeground(
                 activo
                         ? Color.WHITE
-                        : new Color(33, 37, 41)
+                        : (oscuro ? OSCURO_TEXTO : CLARO_TEXTO)
         );
 
         boton.setFocusPainted(false);

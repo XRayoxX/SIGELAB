@@ -23,6 +23,9 @@ public class AuthService {
     private final AuditoriaRepository auditoriaRepository =
             new AuditoriaRepository();
 
+    private final CorreoService correoService =
+            new CorreoService();
+
     // RN-01: validar usuario, contraseña y estado.
     public Usuario validarCredenciales(
             String nombreUsuario,
@@ -132,6 +135,9 @@ public class AuthService {
                 usuarioActualizado.getIdUsuario(),
                 "Inicio de sesión con validación facial aprobada"
         );
+
+        // Aviso al dueño de la cuenta (se envía en segundo plano, no retrasa el ingreso)
+        correoService.notificarInicioSesion(usuarioActualizado);
     }
 
     private void validarUsuarioActivo(Usuario usuario) {
@@ -163,16 +169,21 @@ public class AuthService {
             return;
         }
 
+        String motivo = detalle == null || detalle.isBlank()
+                ? "Validación facial rechazada"
+                : detalle;
+
         auditoriaRepository.registrar(
                 usuario.getIdUsuario(),
                 usuario.getNombreUsuario(),
                 AccionAuditoria.LOGIN_FACIAL_FALLIDO,
                 "Usuario",
                 usuario.getIdUsuario(),
-                detalle == null || detalle.isBlank()
-                        ? "Validación facial rechazada"
-                        : detalle
+                motivo
         );
+
+        // Se avisa al dueño de la cuenta por si no fue él quien intentó ingresar
+        correoService.notificarFalloFacial(usuario, motivo);
     }
 
     public void cerrarSesion() {

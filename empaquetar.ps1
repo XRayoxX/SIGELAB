@@ -39,7 +39,12 @@ $dependencias = @(
     'org\eclipse\angus\angus-mail\2.0.3\angus-mail-2.0.3.jar',
     'org\eclipse\angus\angus-activation\2.0.2\angus-activation-2.0.2.jar',
     'jakarta\mail\jakarta.mail-api\2.1.3\jakarta.mail-api-2.1.3.jar',
-    'jakarta\activation\jakarta.activation-api\2.1.3\jakarta.activation-api-2.1.3.jar'
+    'jakarta\activation\jakarta.activation-api\2.1.3\jakarta.activation-api-2.1.3.jar',
+    # PDFBox: exportar reportes a PDF
+    'org\apache\pdfbox\pdfbox\3.0.6\pdfbox-3.0.6.jar',
+    'org\apache\pdfbox\pdfbox-io\3.0.6\pdfbox-io-3.0.6.jar',
+    'org\apache\pdfbox\fontbox\3.0.6\fontbox-3.0.6.jar',
+    'commons-logging\commons-logging\1.3.5\commons-logging-1.3.5.jar'
 ) | ForEach-Object { Join-Path $m2 $_ }
 
 # Si Maven descargó otra versión de alguna dependencia, se usa la que esté en ~\.m2
@@ -105,6 +110,7 @@ Remove-Item -Recurse -Force (Join-Path $dist 'SIGELAB') -ErrorAction SilentlyCon
 New-Item -ItemType Directory -Force $dist | Out-Null
 & jpackage --type app-image --name SIGELAB --app-version 1.0.0 --vendor 'UMG - Programacion II' `
     --input $entrada --main-jar sigelab.jar --main-class Main --dest $dist `
+    --icon (Join-Path $proyecto 'src\main\resources\sigelab.ico') `
     --java-options '-Dfile.encoding=UTF-8' `
     --jlink-options '--strip-debug --no-header-files --no-man-pages'
 if ($LASTEXITCODE -ne 0) { Fallar "jpackage no pudo crear la aplicación." }

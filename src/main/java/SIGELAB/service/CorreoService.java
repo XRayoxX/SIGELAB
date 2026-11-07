@@ -47,14 +47,26 @@ public class CorreoService {
     // NOTIFICACIONES
     // ========================================
 
-    public void notificarFalloFacial(Usuario usuario) {
+    public void notificarFalloFacial(Usuario usuario, String motivo) {
         String cuerpo = "<p>Hola <b>" + html(usuario.getNombre()) + "</b>,</p>"
                 + "<p>Se intentó iniciar sesión en SIGELAB con su usuario <b>" + html(usuario.getNombreUsuario())
-                + "</b>, pero el <b>reconocimiento facial no fue aprobado</b> (el rostro no coincide o no pasó la prueba de vida).</p>"
-                + "<p><b>Fecha y hora:</b> " + Fechas.formatear(LocalDateTime.now()) + "</p>"
+                + "</b> (la contraseña era correcta), pero <b>no se completó la verificación facial</b>.</p>"
+                + "<p><b>Motivo:</b> " + html(motivo) + "<br>"
+                + "<b>Computadora:</b> " + html(nombreComputadora()) + "<br>"
+                + "<b>Fecha y hora:</b> " + Fechas.formatear(LocalDateTime.now()) + "</p>"
                 + "<p>Si fue usted, puede ignorar este mensaje. Si no fue usted, alguien conoce su contraseña: "
                 + "cámbiela y comuníquese con el administrador.</p>";
-        enviar(usuario.getCorreo(), "SIGELAB - Intento de inicio de sesión no reconocido", cuerpo);
+        enviar(usuario.getCorreo(), "SIGELAB - Intento de inicio de sesión no completado", cuerpo);
+    }
+
+    public void notificarInicioSesion(Usuario usuario) {
+        String cuerpo = "<p>Hola <b>" + html(usuario.getNombre()) + "</b>,</p>"
+                + "<p>Se inició sesión correctamente en SIGELAB con su usuario <b>" + html(usuario.getNombreUsuario())
+                + "</b> (contraseña y reconocimiento facial aprobados).</p>"
+                + "<p><b>Computadora:</b> " + html(nombreComputadora()) + "<br>"
+                + "<b>Fecha y hora:</b> " + Fechas.formatear(LocalDateTime.now()) + "</p>"
+                + "<p>Si no fue usted, comuníquese de inmediato con el administrador.</p>";
+        enviar(usuario.getCorreo(), "SIGELAB - Inicio de sesión exitoso", cuerpo);
     }
 
     public void notificarPrestamo(int idPrestamo, Prestamo prestamo, List<Equipo> equipos) {
@@ -159,6 +171,12 @@ public class CorreoService {
         return "<table border='1' cellpadding='6' style='border-collapse:collapse'>"
                 + "<tr style='background:#1f4e79;color:#fff'><th>Código</th><th>Equipo</th></tr>"
                 + filas + "</table>";
+    }
+
+    // Nombre de la PC en Windows (ayuda al usuario a saber desde dónde se ingresó)
+    private String nombreComputadora() {
+        String nombre = System.getenv("COMPUTERNAME");
+        return nombre == null || nombre.isBlank() ? "desconocida" : nombre;
     }
 
     // Evita que un nombre con < o > rompa el HTML del correo
