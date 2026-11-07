@@ -1,15 +1,20 @@
 
 package SIGELAB.service;
 
+import SIGELAB.model.DetallePrestamo;
 import SIGELAB.model.ResultadoReporte;
 import SIGELAB.repository.ReporteFiltroRepository;
 import SIGELAB.util.BusinessException;
 import SIGELAB.util.Fechas;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public class ReporteService {
+
+    private final PrestamoService prestamoService =
+            new PrestamoService();
 
     private final ReporteFiltroRepository repository =
             new ReporteFiltroRepository();
@@ -103,6 +108,48 @@ public class ReporteService {
                 desde,
                 hasta
         );
+    }
+
+    /**
+     * Equipos incluidos en un préstamo (ventana emergente de Reportes):
+     * situación en el préstamo, condición de devolución y estado actual del equipo.
+     */
+    public ResultadoReporte detallePrestamo(int idPrestamo) {
+
+        if (idPrestamo <= 0) {
+            throw new BusinessException(
+                    "Seleccione un préstamo válido."
+            );
+        }
+
+        List<DetallePrestamo> detalles =
+                prestamoService.listarDetalles(idPrestamo);
+
+        if (detalles.isEmpty()) {
+            throw new BusinessException(
+                    "El préstamo No. " + idPrestamo
+                            + " no tiene equipos registrados."
+            );
+        }
+
+        ResultadoReporte resultado = new ResultadoReporte(List.of(
+                "Código", "Equipo", "Situación", "Condición",
+                "Fecha devolución", "Observación", "Estado actual"
+        ));
+
+        for (DetallePrestamo d : detalles) {
+            resultado.agregarFila(new Object[]{
+                    d.getEquipo().getCodigoInventario(),
+                    d.getEquipo().getNombre(),
+                    d.getEstado(),
+                    d.getCondicion() == null ? "" : d.getCondicion(),
+                    Fechas.formatear(d.getFechaDevolucion()),
+                    d.getObservacionDevolucion() == null ? "" : d.getObservacionDevolucion(),
+                    d.getEquipo().getEstado()
+            });
+        }
+
+        return resultado;
     }
 
     private String normalizar(String valor) {

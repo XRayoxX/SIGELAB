@@ -43,7 +43,7 @@ public class PrestamoRepository {
     // ---------------------------------------------------------------- escritura (transaccional)
 
     public int insertarEncabezado(Connection cn, Prestamo p, int idUsuarioRegistra) {
-        // FechaPrestamo no se envía: SQL Server pone SYSDATETIME() por defecto
+        // FechaPrestamo no se envía: SQL Server pone dbo.fn_AhoraGuatemala() por defecto (script 05)
         String sql = "INSERT INTO dbo.Prestamo (IdSolicitante, FechaEsperadaDevolucion, IdUsuarioRegistra, Estado, Observaciones) "
                 + "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = cn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -99,7 +99,7 @@ public class PrestamoRepository {
     }
 
     public void finalizar(Connection cn, int idPrestamo) {
-        String sql = "UPDATE dbo.Prestamo SET Estado = 'FINALIZADO', FechaFinalizacion = SYSDATETIME() "
+        String sql = "UPDATE dbo.Prestamo SET Estado = 'FINALIZADO', FechaFinalizacion = dbo.fn_AhoraGuatemala() "
                 + "WHERE IdPrestamo = ? AND Estado = 'ACTIVO'";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idPrestamo);

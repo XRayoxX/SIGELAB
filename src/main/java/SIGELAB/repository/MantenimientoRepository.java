@@ -51,7 +51,7 @@ public class MantenimientoRepository {
 
     // Solo cierra si sigue EN_PROCESO (no se puede finalizar dos veces)
     public boolean finalizar(Connection cn, int idMantenimiento, ResultadoMantenimiento resultado, String observaciones) {
-        String sql = "UPDATE dbo.Mantenimiento SET Estado = 'FINALIZADO', FechaSalida = SYSDATETIME(), Resultado = ?, "
+        String sql = "UPDATE dbo.Mantenimiento SET Estado = 'FINALIZADO', FechaSalida = dbo.fn_AhoraGuatemala(), Resultado = ?, "
                 + "Observaciones = ? WHERE IdMantenimiento = ? AND Estado = 'EN_PROCESO'";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, resultado.name());

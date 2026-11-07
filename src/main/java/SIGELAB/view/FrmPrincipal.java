@@ -116,6 +116,9 @@ public class FrmPrincipal {
     private final DashboardController dashboard =
             new DashboardController();
 
+    // Revisa cada hora los préstamos que vencen hoy o ya vencieron
+    private Timer temporizadorRecordatorios;
+
     // =====================================================
     // PALETA OFICIAL FORMAL
     // =====================================================
@@ -207,6 +210,48 @@ public class FrmPrincipal {
                     }
                 }
         );
+
+        iniciarRecordatorios();
+    }
+
+    // =====================================================
+    // RECORDATORIOS AUTOMÁTICOS POR CORREO
+    // =====================================================
+
+    // Al entrar un ADMIN o ENCARGADO, y luego cada hora mientras el menú siga abierto,
+    // se envían los correos de préstamos que vencen hoy o ya vencieron (sin repetirlos).
+    private void iniciarRecordatorios() {
+
+        if (!Sesion.tieneRol(RolUsuario.ADMIN, RolUsuario.ENCARGADO)) {
+            return;
+        }
+
+        enviarRecordatorios();
+
+        temporizadorRecordatorios = new Timer(
+                60 * 60 * 1000,
+                e -> enviarRecordatorios()
+        );
+        temporizadorRecordatorios.start();
+    }
+
+    private void enviarRecordatorios() {
+
+        // En segundo plano: la consulta y el envío no congelan el menú.
+        // Si falla (sin internet o sin el script 07) solo se anota en la consola.
+        Thread hilo = new Thread(() -> {
+            try {
+                int enviados = dashboard.enviarRecordatorios();
+                if (enviados > 0) {
+                    System.out.println("SIGELAB: " + enviados + " recordatorio(s) de préstamo enviado(s).");
+                }
+            } catch (RuntimeException ex) {
+                System.err.println("No se pudieron enviar los recordatorios de préstamo: " + ex.getMessage());
+            }
+        }, "recordatorios-prestamo");
+
+        hilo.setDaemon(true);
+        hilo.start();
     }
 
     // =====================================================
@@ -1138,6 +1183,10 @@ public class FrmPrincipal {
 
         if (respuesta != JOptionPane.YES_OPTION) {
             return;
+        }
+
+        if (temporizadorRecordatorios != null) {
+            temporizadorRecordatorios.stop();
         }
 
         new LoginController().cerrarSesion();

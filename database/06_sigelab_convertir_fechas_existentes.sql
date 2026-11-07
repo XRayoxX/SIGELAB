@@ -2,7 +2,8 @@
    SIGELAB - Script 06: Corregir registros guardados en hora UTC (UNA SOLA VEZ)
    Ejecutar DESPUÉS del script 05, solo en la base de Azure, y solo si sus
    registros anteriores se guardaron con la hora UTC del servidor.
-   Resta 6 horas a las fechas automáticas ya guardadas.
+   Resta 6 horas a las fechas automáticas ya guardadas (las que ponía el
+   servidor). La fecha esperada de devolución no se toca: la escribe el usuario.
    Queda marcado en la base: si se ejecuta otra vez, no hace nada.
    ========================================================================== */
 
@@ -21,8 +22,8 @@ BEGIN TRANSACTION;
 UPDATE dbo.Auditoria     SET FechaHora       = DATEADD(HOUR, -6, FechaHora);
 UPDATE dbo.Usuario       SET FechaCreacion   = DATEADD(HOUR, -6, FechaCreacion);
 UPDATE dbo.Equipo        SET FechaRegistro   = DATEADD(HOUR, -6, FechaRegistro);
+-- FechaEsperadaDevolucion NO se convierte: la escribe el usuario en hora de Guatemala
 UPDATE dbo.Prestamo      SET FechaPrestamo           = DATEADD(HOUR, -6, FechaPrestamo),
-                             FechaEsperadaDevolucion = DATEADD(HOUR, -6, FechaEsperadaDevolucion),
                              FechaFinalizacion       = DATEADD(HOUR, -6, FechaFinalizacion);
 UPDATE dbo.Devolucion    SET FechaDevolucion = DATEADD(HOUR, -6, FechaDevolucion);
 UPDATE dbo.Mantenimiento SET FechaIngreso    = DATEADD(HOUR, -6, FechaIngreso),
